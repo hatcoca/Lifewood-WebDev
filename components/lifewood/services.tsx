@@ -1,7 +1,15 @@
-"use client"
+"use client";
 
-import { Database, Brain, Layers, ShieldCheck, ArrowRight, ChevronDown } from "lucide-react"
-import { useState } from "react"
+import {
+  Database,
+  Brain,
+  Layers,
+  ShieldCheck,
+  ArrowRight,
+  ChevronDown,
+} from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
 
 const services = [
   {
@@ -9,148 +17,244 @@ const services = [
     title: "Data Annotation",
     summary: "High-quality, human-powered data labeling across modalities.",
     description:
-      "Our data annotation services span text, image, audio, and video modalities with multi-language support from native speakers worldwide. We handle everything from text classification and image segmentation to NER tagging and sentiment analysis -- delivering the precision AI models demand.",
-    features: ["Text classification", "Image segmentation", "NER tagging", "Sentiment analysis", "Audio transcription", "Video labeling"],
-    accent: "var(--lw-green)",
+      "We provide enterprise-grade data annotation services designed to power modern AI systems. Our global workforce delivers precise labeling across text, image, audio, and video datasets with consistent quality and scalability. Every dataset is carefully curated to meet strict accuracy requirements and domain-specific needs.",
+    features: [
+      "Text classification",
+      "Image segmentation",
+      "NER tagging",
+      "Sentiment analysis",
+      "Audio transcription",
+      "Video labeling",
+    ],
+    slug: "data-annotation",
   },
   {
     icon: Brain,
     title: "AI Training Data",
     summary: "Production-grade datasets for ML model development.",
     description:
-      "Custom datasets tailored to your specific use case, designed to accelerate machine learning model development. We provide bias detection, benchmark data creation, and model fine-tuning support -- ensuring your AI learns from the highest-quality sources.",
-    features: ["Custom datasets", "Model fine-tuning", "Bias detection", "Benchmark data", "RLHF data", "Prompt engineering"],
-    accent: "var(--lw-saffron)",
+      "We create high-quality training datasets tailored for machine learning and generative AI applications. From supervised learning datasets to reinforcement learning with human feedback (RLHF), we help organizations build smarter, more reliable AI systems.",
+    features: [
+      "Custom datasets",
+      "Model fine-tuning",
+      "Bias detection",
+      "Benchmark data",
+      "RLHF data",
+      "Prompt engineering",
+    ],
+    slug: "ai-training-data",
   },
   {
     icon: Layers,
     title: "Data Processing",
     summary: "End-to-end pipeline management at massive scale.",
     description:
-      "From data collection to delivery, our scalable infrastructure handles millions of data points daily. We provide data cleansing, format conversion, pipeline automation, and real-time processing capabilities that keep your AI operations running 24/7.",
-    features: ["Data cleansing", "Format conversion", "Pipeline automation", "Real-time processing", "API integration", "Cloud deployment"],
-    accent: "var(--lw-green)",
+      "Our data processing pipelines transform raw data into structured, AI-ready formats. We support large-scale data operations with automation, API integration, and real-time processing to ensure seamless data flow across systems.",
+    features: [
+      "Data cleansing",
+      "Format conversion",
+      "Pipeline automation",
+      "Real-time processing",
+      "API integration",
+      "Cloud deployment",
+    ],
+    slug: "data-processing",
   },
   {
     icon: ShieldCheck,
     title: "Quality Assurance",
     summary: "Multi-tier QC processes with 98%+ accuracy rates.",
     description:
-      "Our rigorous quality control processes ensure accuracy rates above 98% with continuous monitoring and improvement workflows. Every data point passes through multiple validation layers with comprehensive audit trails and compliance checks.",
-    features: ["Multi-tier QC", "Accuracy tracking", "Audit trails", "Compliance checks", "SLA monitoring", "Real-time dashboards"],
-    accent: "var(--lw-earth)",
+      "Quality is at the core of everything we do. Our multi-layer validation process ensures accuracy, consistency, and compliance across all datasets. We combine human review with automated checks to maintain industry-leading quality standards.",
+    features: [
+      "Multi-tier QC",
+      "Accuracy tracking",
+      "Audit trails",
+      "Compliance checks",
+      "SLA monitoring",
+      "Real-time dashboards",
+    ],
+    slug: "quality-assurance",
   },
-]
+];
 
 export function Services() {
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   const toggle = (index: number) => {
-    setExpandedIndex(expandedIndex === index ? null : index)
-  }
+    setExpandedIndex(expandedIndex === index ? null : index);
+  };
 
   return (
-    <section id="services" className="bg-[var(--lw-white)] py-28 lg:py-36">
+    <section className="bg-[var(--lw-white)] py-28 lg:py-36">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        {/* Header */}
-        <div className="mx-auto max-w-2xl text-center">
+        {/* HEADER */}
+        <div className="mx-auto max-w-3xl text-center">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lw-saffron)]">
             What we do
           </span>
-          <h2 className="mt-4 text-balance text-3xl font-bold tracking-tight text-[var(--lw-dark)] sm:text-4xl lg:text-[2.65rem]">
-            Comprehensive AI data services
+
+          <h2 className="mt-4 text-3xl font-bold text-[var(--lw-dark)] sm:text-4xl lg:text-[2.6rem]">
+            AI Data Services for Scalable Innovation
           </h2>
-          <p className="mt-5 text-[1.05rem] leading-relaxed text-[var(--lw-dark)]/55">
-            From raw data to refined AI-ready datasets. Click any service to learn more.
+
+          <p className="mt-6 text-[1.05rem] leading-relaxed text-[var(--lw-dark)]/60">
+            We deliver end-to-end data solutions that power artificial
+            intelligence. From data collection and annotation to processing and
+            validation, our services are designed to help organizations build
+            accurate, reliable, and scalable AI systems.
           </p>
         </div>
 
-        {/* Service cards -- click to expand */}
+        {/* STATS / TRUST */}
+        <div className="mt-16 grid grid-cols-2 gap-6 text-center md:grid-cols-4">
+          <div>
+            <p className="text-3xl font-bold text-[var(--lw-green)]">1M+</p>
+            <p className="text-sm text-[var(--lw-dark)]/50">Data Points / Day</p>
+          </div>
+          <div>
+            <p className="text-3xl font-bold text-[var(--lw-green)]">98%</p>
+            <p className="text-sm text-[var(--lw-dark)]/50">Accuracy Rate</p>
+          </div>
+          <div>
+            <p className="text-3xl font-bold text-[var(--lw-green)]">100+</p>
+            <p className="text-sm text-[var(--lw-dark)]/50">Global Clients</p>
+          </div>
+          <div>
+            <p className="text-3xl font-bold text-[var(--lw-green)]">24/7</p>
+            <p className="text-sm text-[var(--lw-dark)]/50">Operations</p>
+          </div>
+        </div>
+
+        {/* SERVICES */}
         <div className="mt-16 grid gap-4 md:grid-cols-2">
           {services.map((service, i) => {
-            const isOpen = expandedIndex === i
+            const isOpen = expandedIndex === i;
+
             return (
               <div
                 key={service.title}
-                className={`group relative overflow-hidden rounded-[1.5rem] border transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+                className={`rounded-2xl border transition-all duration-300 ${
                   isOpen
-                    ? "border-[var(--lw-green)]/15 bg-[var(--lw-white)] shadow-[0_20px_60px_rgba(19,48,32,0.08)]"
-                    : "border-[var(--lw-dark)]/[0.03] bg-[var(--lw-sea-salt)] hover:border-[var(--lw-green)]/10 hover:shadow-[0_8px_32px_rgba(19,48,32,0.04)]"
+                    ? "border-[var(--lw-green)]/20 bg-white shadow-xl"
+                    : "border-[var(--lw-dark)]/5 bg-[var(--lw-sea-salt)]"
                 }`}
               >
-                {/* Clickable header area */}
+                {/* HEADER */}
                 <button
                   onClick={() => toggle(i)}
-                  className="flex w-full items-start justify-between p-8 text-left lg:p-10"
+                  className="flex w-full items-start justify-between p-8 text-left"
                 >
-                  <div className="flex-1">
-                    <div className="flex items-center gap-4">
-                      <div
-                        className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition-colors duration-300 ${
-                          isOpen ? "bg-[var(--lw-green)]/10" : "bg-[var(--lw-green)]/[0.05]"
-                        }`}
-                      >
-                        <service.icon size={22} className="text-[var(--lw-green)]" strokeWidth={1.5} />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-semibold text-[var(--lw-dark)]">{service.title}</h3>
-                        <p className="mt-1 text-[0.88rem] text-[var(--lw-dark)]/45">{service.summary}</p>
-                      </div>
+                  <div className="flex gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--lw-green)]/10">
+                      <service.icon size={22} className="text-[var(--lw-green)]" />
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-semibold text-[var(--lw-dark)]">
+                        {service.title}
+                      </h3>
+                      <p className="text-sm text-[var(--lw-dark)]/50">
+                        {service.summary}
+                      </p>
                     </div>
                   </div>
-                  <div
-                    className={`ml-4 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
-                      isOpen
-                        ? "border-[var(--lw-green)]/20 bg-[var(--lw-green)]/[0.06] rotate-180"
-                        : "border-[var(--lw-dark)]/[0.06] bg-transparent"
+
+                  <ChevronDown
+                    className={`transition-transform ${
+                      isOpen ? "rotate-180 text-[var(--lw-green)]" : ""
                     }`}
-                  >
-                    <ChevronDown size={16} className={`transition-colors ${isOpen ? "text-[var(--lw-green)]" : "text-[var(--lw-dark)]/30"}`} />
-                  </div>
+                  />
                 </button>
 
-                {/* Expandable content */}
+                {/* CONTENT */}
                 <div
-                  className={`grid transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                    isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                  className={`overflow-hidden transition-all duration-500 ${
+                    isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
                   }`}
                 >
-                  <div className="overflow-hidden">
-                    <div className="px-8 pb-8 lg:px-10 lg:pb-10">
-                      {/* Divider */}
-                      <div className="mb-6 h-px bg-[var(--lw-dark)]/[0.04]" />
+                  <div className="px-8 pb-8">
+                    <div className="mb-4 h-px bg-[var(--lw-dark)]/10" />
 
-                      <p className="text-[0.92rem] leading-[1.75] text-[var(--lw-dark)]/55">
-                        {service.description}
-                      </p>
+                    <p className="text-sm leading-relaxed text-[var(--lw-dark)]/60">
+                      {service.description}
+                    </p>
 
-                      {/* Feature tags */}
-                      <div className="mt-6 flex flex-wrap gap-2">
-                        {service.features.map((feature) => (
-                          <span
-                            key={feature}
-                            className="rounded-full bg-[var(--lw-green)]/[0.04] px-3.5 py-1.5 text-[0.75rem] font-medium text-[var(--lw-green)]"
-                          >
-                            {feature}
-                          </span>
-                        ))}
-                      </div>
+                    {/* FEATURES */}
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {service.features.map((f) => (
+                        <span
+                          key={f}
+                          className="rounded-full bg-[var(--lw-green)]/10 px-3 py-1 text-xs text-[var(--lw-green)]"
+                        >
+                          {f}
+                        </span>
+                      ))}
+                    </div>
 
-                      <a
-                        href="#contact"
-                        className="mt-6 inline-flex items-center gap-1.5 text-[0.84rem] font-semibold text-[var(--lw-green)] transition-colors hover:text-[var(--lw-saffron)]"
+                    {/* CTA */}
+                    <div className="mt-5 flex gap-4">
+                      <Link
+                        href={`/services/${service.slug}`}
+                        className="text-sm font-semibold text-[var(--lw-green)] hover:text-[var(--lw-saffron)]"
                       >
-                        Learn more
-                        <ArrowRight size={14} />
-                      </a>
+                        Learn more →
+                      </Link>
+
+                      <Link
+                        href="/contacts"
+                        className="text-sm text-[var(--lw-dark)]/40 hover:text-[var(--lw-green)]"
+                      >
+                        Contact us
+                      </Link>
                     </div>
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
+        </div>
+
+        {/* PROCESS SECTION (LIFEWOOD STYLE) */}
+        <div className="mt-24 text-center">
+          <h3 className="text-2xl font-semibold text-[var(--lw-dark)]">
+            Our Approach
+          </h3>
+          <p className="mt-4 text-[var(--lw-dark)]/60">
+            A structured workflow ensuring quality, scalability, and efficiency.
+          </p>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-4">
+            {[
+              "Data Collection",
+              "Annotation",
+              "Quality Control",
+              "Delivery",
+            ].map((step, i) => (
+              <div
+                key={step}
+                className="rounded-xl border bg-white p-6 text-sm shadow-sm"
+              >
+                <p className="font-semibold text-[var(--lw-green)]">
+                  0{i + 1}
+                </p>
+                <p className="mt-2 text-[var(--lw-dark)]">{step}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* FINAL CTA */}
+        <div className="mt-20 text-center">
+          <Link
+            href="/contacts"
+            className="inline-flex items-center gap-2 rounded-full bg-[var(--lw-green)] px-8 py-4 text-sm font-semibold text-white hover:brightness-110"
+          >
+            Get Started with Lifewood
+            <ArrowRight size={16} />
+          </Link>
         </div>
       </div>
     </section>
-  )
+  );
 }

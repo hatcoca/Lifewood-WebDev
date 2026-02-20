@@ -1,18 +1,17 @@
 "use client";
 
 import { Navbar } from "@/components/lifewood/navbar";
-import { Hero } from "@/components/lifewood/hero";
-import { About } from "@/components/lifewood/about";
+import { Projects } from "@/components/lifewood/projects";
 import { Footer } from "@/components/lifewood/footer";
 
-export default function Home() {
+export default function ProjectsPage() {
   return (
     <main className="min-h-screen overflow-x-hidden">
       <Navbar />
-      <Hero />
-      <About />
+      <div className="pt-20">
+        <Projects />
+      </div>
       <Footer />
     </main>
   );
 }
-    
