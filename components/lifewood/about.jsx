@@ -36,7 +36,7 @@ const pillars = [
 ]
 
 export function About() {
-  const [expandedPillar, setExpandedPillar] = useState<number | null>(null)
+  const [expandedPillar, setExpandedPillar] = useState(null)
   const [showMore, setShowMore] = useState(false)
 
   return (
@@ -78,9 +78,8 @@ export function About() {
 
             {/* Expandable additional text */}
             <div
-              className={`grid transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                showMore ? "grid-rows-[1fr] mt-5 opacity-100" : "grid-rows-[0fr] opacity-0"
-              }`}
+              className={`grid transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${showMore ? "grid-rows-[1fr] mt-5 opacity-100" : "grid-rows-[0fr] opacity-0"
+                }`}
             >
               <div className="overflow-hidden">
                 <p className="text-[1.05rem] leading-[1.75] text-[var(--lw-dark)]/60">
@@ -120,16 +119,14 @@ export function About() {
               <button
                 key={pillar.title}
                 onClick={() => setExpandedPillar(isOpen ? null : i)}
-                className={`group rounded-[1.25rem] p-7 text-left transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                  isOpen
+                className={`group rounded-[1.25rem] p-7 text-left transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen
                     ? "bg-[var(--lw-green)] shadow-[0_16px_48px_rgba(4,98,65,0.2)]"
                     : "bg-[var(--lw-white)] shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(19,48,32,0.07)]"
-                }`}
+                  }`}
               >
                 <div
-                  className={`mb-4 inline-flex h-11 w-11 items-center justify-center rounded-[0.75rem] transition-colors duration-300 ${
-                    isOpen ? "bg-white/15" : "bg-[var(--lw-green)]/[0.05] group-hover:bg-[var(--lw-green)]/[0.09]"
-                  }`}
+                  className={`mb-4 inline-flex h-11 w-11 items-center justify-center rounded-[0.75rem] transition-colors duration-300 ${isOpen ? "bg-white/15" : "bg-[var(--lw-green)]/[0.05] group-hover:bg-[var(--lw-green)]/[0.09]"
+                    }`}
                 >
                   <pillar.icon
                     size={22}
@@ -138,16 +135,14 @@ export function About() {
                   />
                 </div>
                 <h3
-                  className={`text-[1.05rem] font-semibold transition-colors ${
-                    isOpen ? "text-white" : "text-[var(--lw-dark)]"
-                  }`}
+                  className={`text-[1.05rem] font-semibold transition-colors ${isOpen ? "text-white" : "text-[var(--lw-dark)]"
+                    }`}
                 >
                   {pillar.title}
                 </h3>
                 <p
-                  className={`mt-2 text-[0.84rem] leading-relaxed transition-colors ${
-                    isOpen ? "text-white/70" : "text-[var(--lw-dark)]/45"
-                  }`}
+                  className={`mt-2 text-[0.84rem] leading-relaxed transition-colors ${isOpen ? "text-white/70" : "text-[var(--lw-dark)]/45"
+                    }`}
                 >
                   {isOpen ? pillar.description : pillar.summary}
                 </p>

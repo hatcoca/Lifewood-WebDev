@@ -3,11 +3,11 @@
 import { useState, useEffect, useRef, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { 
+import {
   Menu, X, ChevronDown, ArrowUpRight,
-  Database, 
-  Filter, 
-  Braces, 
+  Database,
+  Filter,
+  Braces,
   CheckCircle,
   TrendingUp,
   Shield,
@@ -169,9 +169,9 @@ const navItems = [
 function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
-  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null)
-  const navRef = useRef<HTMLElement>(null)
+  const [openDropdown, setOpenDropdown] = useState(null)
+  const [mobileExpanded, setMobileExpanded] = useState(null)
+  const navRef = useRef(null)
 
   /* scroll listener */
   useEffect(() => {
@@ -187,8 +187,8 @@ function Navbar() {
   }, [mobileOpen])
 
   /* close dropdown when clicking outside */
-  const handleClickOutside = useCallback((e: MouseEvent) => {
-    if (navRef.current && !navRef.current.contains(e.target as Node)) {
+  const handleClickOutside = useCallback((e) => {
+    if (navRef.current && !navRef.current.contains(e.target)) {
       setOpenDropdown(null)
     }
   }, [])
@@ -198,23 +198,22 @@ function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [handleClickOutside])
 
-  const toggleDropdown = (label: string) => {
+  const toggleDropdown = (label) => {
     setOpenDropdown(prev => prev === label ? null : label)
   }
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
-        scrolled
-          ? "glass border-b border-[var(--lw-green)]/5 shadow-[0_1px_3px_rgba(4,98,65,0.04)]"
-          : "bg-[var(--lw-white)]/60 backdrop-blur-md"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${scrolled
+        ? "glass border-b border-[var(--lw-green)]/5 shadow-[0_1px_3px_rgba(4,98,65,0.04)]"
+        : "bg-[var(--lw-white)]/60 backdrop-blur-md"
+        }`}
       style={
         {
           "--lw-green": "#046241",
           "--lw-dark": "#1A2E24",
           "--lw-white": "#FFFFFF",
-        } as React.CSSProperties
+        }
       }
     >
       <nav ref={navRef} className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5 lg:px-10">
@@ -236,11 +235,10 @@ function Navbar() {
               <div key={item.label} className="relative">
                 <button
                   onClick={() => toggleDropdown(item.label)}
-                  className={`inline-flex items-center gap-1 rounded-lg px-3.5 py-2 text-[0.82rem] font-medium transition-all duration-300 ${
-                    openDropdown === item.label
-                      ? "bg-[var(--lw-green)]/[0.06] text-[var(--lw-green)]"
-                      : "text-[var(--lw-dark)]/60 hover:bg-[var(--lw-green)]/[0.03] hover:text-[var(--lw-dark)]"
-                  }`}
+                  className={`inline-flex items-center gap-1 rounded-lg px-3.5 py-2 text-[0.82rem] font-medium transition-all duration-300 ${openDropdown === item.label
+                    ? "bg-[var(--lw-green)]/[0.06] text-[var(--lw-green)]"
+                    : "text-[var(--lw-dark)]/60 hover:bg-[var(--lw-green)]/[0.03] hover:text-[var(--lw-dark)]"
+                    }`}
                 >
                   {item.label}
                   <ChevronDown
@@ -251,11 +249,10 @@ function Navbar() {
 
                 {/* Dropdown panel */}
                 <div
-                  className={`absolute left-1/2 top-full pt-2 -translate-x-1/2 transition-all duration-300 ${
-                    openDropdown === item.label
-                      ? "pointer-events-auto translate-y-0 opacity-100"
-                      : "pointer-events-none -translate-y-2 opacity-0"
-                  }`}
+                  className={`absolute left-1/2 top-full pt-2 -translate-x-1/2 transition-all duration-300 ${openDropdown === item.label
+                    ? "pointer-events-auto translate-y-0 opacity-100"
+                    : "pointer-events-none -translate-y-2 opacity-0"
+                    }`}
                 >
                   <div className="w-[320px] overflow-hidden rounded-2xl border border-[var(--lw-dark)]/[0.04] bg-[var(--lw-white)] p-2 shadow-[0_16px_48px_rgba(4,98,65,0.1)]">
                     {item.children.map((child) => (
@@ -315,18 +312,16 @@ function Navbar() {
 
       {/* Mobile overlay */}
       <div
-        className={`fixed inset-0 z-40 bg-[var(--lw-dark)]/20 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
-          mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
+        className={`fixed inset-0 z-40 bg-[var(--lw-dark)]/20 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
         onClick={() => setMobileOpen(false)}
         aria-hidden="true"
       />
 
       {/* Mobile drawer */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-40 max-h-[85vh] overflow-y-auto rounded-t-[1.75rem] bg-[var(--lw-white)] shadow-[0_-8px_40px_rgba(4,98,65,0.1)] transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] lg:hidden ${
-          mobileOpen ? "translate-y-0" : "translate-y-full"
-        }`}
+        className={`fixed bottom-0 left-0 right-0 z-40 max-h-[85vh] overflow-y-auto rounded-t-[1.75rem] bg-[var(--lw-white)] shadow-[0_-8px_40px_rgba(4,98,65,0.1)] transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] lg:hidden ${mobileOpen ? "translate-y-0" : "translate-y-full"
+          }`}
       >
         {/* Drag handle */}
         <div className="sticky top-0 z-10 flex justify-center bg-[var(--lw-white)] pt-3 pb-2">
@@ -345,15 +340,13 @@ function Navbar() {
                     {item.label}
                     <ChevronDown
                       size={16}
-                      className={`text-[var(--lw-dark)]/30 transition-transform duration-300 ${
-                        mobileExpanded === item.label ? "rotate-180" : ""
-                      }`}
+                      className={`text-[var(--lw-dark)]/30 transition-transform duration-300 ${mobileExpanded === item.label ? "rotate-180" : ""
+                        }`}
                     />
                   </button>
                   <div
-                    className={`grid transition-all duration-400 ease-out ${
-                      mobileExpanded === item.label ? "grid-rows-[1fr] pb-3 opacity-100" : "grid-rows-[0fr] opacity-0"
-                    }`}
+                    className={`grid transition-all duration-400 ease-out ${mobileExpanded === item.label ? "grid-rows-[1fr] pb-3 opacity-100" : "grid-rows-[0fr] opacity-0"
+                      }`}
                   >
                     <div className="overflow-hidden">
                       <div className="flex flex-col gap-1 pl-1">
@@ -408,7 +401,7 @@ const AnimatedBackground = () => {
       {/* Floating circles */}
       <div className="absolute top-20 left-10 w-64 h-64 bg-[var(--lw-green)]/5 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-[var(--lw-green)]/5 rounded-full blur-3xl animate-pulse animation-delay-2000" />
-      
+
       {/* Animated grid lines */}
       <div className="absolute inset-0 opacity-20">
         <svg className="absolute w-full h-full">
@@ -436,7 +429,7 @@ const AnimatedBackground = () => {
 }
 
 // Floating data card component
-const FloatingDataCard = ({ className, delay }: { className: string; delay: string }) => {
+const FloatingDataCard = ({ className, delay }) => {
   return (
     <div className={`absolute bg-white/80 backdrop-blur-sm border border-[var(--lw-green)]/20 rounded-xl p-3 shadow-[0_8px_32px_rgba(4,98,65,0.12)] animate-float ${className}`} style={{ animationDelay: delay }}>
       <div className="flex items-center gap-2">
@@ -620,7 +613,7 @@ export default function DataProcessingPage() {
   ]
 
   const tools = [
-    "Apache Spark", "Apache Flink", "Apache Kafka", "Apache Airflow", 
+    "Apache Spark", "Apache Flink", "Apache Kafka", "Apache Airflow",
     "AWS Glue", "Google Dataflow", "Azure Data Factory", "Snowflake",
     "dbt", "Fivetran", "Stitch", "Talend", "Informatica", "Matillion"
   ]
@@ -630,22 +623,22 @@ export default function DataProcessingPage() {
     "--lw-green": "#046241",
     "--lw-dark": "#1A2E24",
     "--lw-white": "#FFFFFF",
-  } as React.CSSProperties
+  }
 
   return (
     <div className="min-h-screen bg-white" style={cssVars}>
       <Navbar />
-      
+
       <main className="pt-24">
         {/* HERO SECTION WITH ANIMATED BACKGROUND */}
         <section className="relative overflow-hidden bg-gradient-to-b from-[var(--lw-green)]/[0.02] via-white to-white">
           <AnimatedBackground />
-          
+
           {/* Floating data cards */}
           <FloatingDataCard className="top-40 left-[15%]" delay="0s" />
           <FloatingDataCard className="top-60 right-[20%]" delay="1s" />
           <FloatingDataCard className="bottom-40 left-[25%]" delay="2s" />
-          
+
           <div className="relative max-w-7xl mx-auto px-6 py-16 text-center">
             <div className="inline-flex items-center gap-2 bg-[var(--lw-green)]/[0.08] border border-[var(--lw-green)]/20 px-4 py-2 rounded-full mb-8 animate-fade-in">
               <Sparkles className="w-4 h-4 text-[var(--lw-green)] animate-spin-slow" />
@@ -661,9 +654,9 @@ export default function DataProcessingPage() {
               <br />
               <span className="text-[var(--lw-green)] animate-pulse-slow">at Enterprise Scale</span>
             </h1>
-            
+
             <p className="text-xl text-[var(--lw-dark)]/60 max-w-3xl mx-auto leading-relaxed animate-fade-in animation-delay-500">
-              Transform raw data into structured, meaningful insights for AI systems. 
+              Transform raw data into structured, meaningful insights for AI systems.
               End-to-end pipeline management with 99.9% accuracy and real-time processing capabilities.
               Trusted by 200+ enterprise clients worldwide.
             </p>
@@ -671,8 +664,8 @@ export default function DataProcessingPage() {
             {/* Quick Stats with hover animations */}
             <div className="flex flex-wrap justify-center gap-8 mt-12">
               {stats.map((stat, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="flex items-center gap-3 bg-white px-6 py-3 rounded-full border border-[var(--lw-green)]/20 shadow-[0_4px_20px_rgba(4,98,65,0.15)] hover:shadow-[0_8px_30px_rgba(4,98,65,0.25)] transition-all duration-300 hover:-translate-y-1 animate-fade-in"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
@@ -695,7 +688,7 @@ export default function DataProcessingPage() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {dataTypes.map((type, index) => (
-              <div 
+              <div
                 key={index}
                 className="p-4 bg-[var(--lw-green)]/[0.02] border border-[var(--lw-green)]/10 rounded-xl hover:bg-[var(--lw-green)]/[0.04] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(4,98,65,0.1)] animate-fade-in"
                 style={{ animationDelay: `${index * 50}ms` }}
@@ -721,7 +714,7 @@ export default function DataProcessingPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
-              <div 
+              <div
                 key={index}
                 className="group relative bg-white border border-[var(--lw-green)]/20 rounded-3xl overflow-hidden hover:shadow-[0_20px_40px_rgba(4,98,65,0.2)] transition-all duration-500 hover:-translate-y-2 animate-fade-in"
                 style={{ animationDelay: `${index * 50}ms` }}
@@ -736,15 +729,15 @@ export default function DataProcessingPage() {
                     <div className="w-1 h-10 bg-[var(--lw-green)]/30 rounded-full animate-pulse" style={{ animationDelay: '0.6s' }} />
                     <div className="w-1 h-14 bg-[var(--lw-green)]/40 rounded-full animate-pulse" style={{ animationDelay: '0.8s' }} />
                   </div>
-                  
+
                   {/* Moving data dots */}
                   <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[var(--lw-green)]/50 to-transparent animate-slide" />
-                  
+
                   <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 text-xs font-medium text-[var(--lw-green)] border border-[var(--lw-green)]/20">
                     {feature.stats}
                   </div>
                 </div>
-                
+
                 <div className="p-6">
                   <div className="flex items-start gap-3 mb-4">
                     <div className="w-12 h-12 bg-[var(--lw-green)]/[0.08] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform group-hover:shadow-[0_4px_12px_rgba(4,98,65,0.2)]">
@@ -752,11 +745,11 @@ export default function DataProcessingPage() {
                     </div>
                     <h3 className="text-lg font-semibold text-[var(--lw-dark)] flex-1">{feature.title}</h3>
                   </div>
-                  
+
                   <p className="text-[var(--lw-dark)]/60 text-sm mb-4 border-l-2 border-[var(--lw-green)]/30 pl-3">
                     {feature.description}
                   </p>
-                  
+
                   <ul className="space-y-2 mb-4">
                     {feature.details.map((detail, idx) => (
                       <li key={idx} className="flex items-start gap-2 text-[var(--lw-dark)]/70">
@@ -792,8 +785,8 @@ export default function DataProcessingPage() {
 
             <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
               {pipelineStages.map((stage, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="text-center group animate-fade-in"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
@@ -814,8 +807,8 @@ export default function DataProcessingPage() {
             {/* Quality Metrics with green shadows */}
             <div className="grid md:grid-cols-4 gap-6 mt-16">
               {qualityMetrics.map((metric, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="bg-white/5 rounded-xl p-4 border border-white/10 hover:shadow-[0_8px_20px_rgba(4,98,65,0.2)] transition-all duration-300 hover:-translate-y-1 animate-fade-in"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
@@ -841,7 +834,7 @@ export default function DataProcessingPage() {
             </div>
             <div className="flex flex-wrap justify-center gap-3">
               {tools.map((tool, index) => (
-                <div 
+                <div
                   key={index}
                   className="px-4 py-2 bg-white border border-[var(--lw-green)]/20 rounded-full text-sm text-[var(--lw-dark)]/70 hover:border-[var(--lw-green)]/40 hover:bg-[var(--lw-green)]/[0.02] hover:shadow-[0_4px_12px_rgba(4,98,65,0.1)] transition-all duration-300 hover:-translate-y-1 animate-fade-in"
                   style={{ animationDelay: `${index * 50}ms` }}
@@ -865,7 +858,7 @@ export default function DataProcessingPage() {
 
             <div className="flex flex-wrap justify-center gap-3">
               {industries.map((industry, index) => (
-                <div 
+                <div
                   key={index}
                   className="px-6 py-3 bg-[var(--lw-green)]/[0.08] border border-[var(--lw-green)]/20 rounded-full text-[var(--lw-dark)] font-medium hover:bg-[var(--lw-green)] hover:text-white hover:shadow-[0_8px_20px_rgba(4,98,65,0.3)] transition-all duration-300 hover:-translate-y-1 cursor-pointer animate-fade-in"
                   style={{ animationDelay: `${index * 50}ms` }}
@@ -896,7 +889,7 @@ export default function DataProcessingPage() {
                   { icon: <CheckCircle className="w-3 h-3" />, label: "SOC2 Type II" },
                   { icon: <Globe className="w-3 h-3" />, label: "CCPA" }
                 ].map((item, index) => (
-                  <div 
+                  <div
                     key={index}
                     className="flex items-center gap-2 px-4 py-2 bg-white border border-[var(--lw-green)]/20 rounded-full hover:shadow-[0_4px_12px_rgba(4,98,65,0.1)] transition-all duration-300 hover:-translate-y-1"
                   >
@@ -916,7 +909,7 @@ export default function DataProcessingPage() {
             <p className="text-[var(--lw-dark)]/60 max-w-2xl mx-auto mb-8 animate-fade-in animation-delay-200">
               Join Lifewood's data processing team and help build the infrastructure for AI
             </p>
-            
+
             <Link href="/apply">
               <button className="group bg-[var(--lw-green)] hover:bg-[var(--lw-green)]/90 text-white px-10 py-4 rounded-full text-lg font-medium transition-all duration-300 shadow-[0_10px_30px_rgba(4,98,65,0.3)] hover:shadow-[0_15px_40px_rgba(4,98,65,0.4)] inline-flex items-center gap-3 hover:-translate-y-1">
                 <Edit3 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
@@ -924,7 +917,7 @@ export default function DataProcessingPage() {
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </Link>
-            
+
             <p className="mt-6 text-sm text-[var(--lw-dark)]/40 animate-fade-in animation-delay-400">
               <HardDrive className="inline mr-2 w-4 h-4 text-[var(--lw-green)] animate-pulse-slow" />
               Processing 50TB+ daily for 200+ enterprise clients

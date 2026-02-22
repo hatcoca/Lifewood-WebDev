@@ -32,7 +32,7 @@ const navItems = [
       },
     ],
   },
-/* ──────────────────────────── nav data ──────────────────────────── */
+  /* ──────────────────────────── nav data ──────────────────────────── */
 
   {
     label: "Projects",
@@ -78,9 +78,9 @@ const navItems = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
-  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null)
-  const navRef = useRef<HTMLElement>(null)
+  const [openDropdown, setOpenDropdown] = useState(null)
+  const [mobileExpanded, setMobileExpanded] = useState(null)
+  const navRef = useRef(null)
 
   /* scroll listener */
   useEffect(() => {
@@ -96,8 +96,8 @@ export function Navbar() {
   }, [mobileOpen])
 
   /* close dropdown when clicking outside */
-  const handleClickOutside = useCallback((e: MouseEvent) => {
-    if (navRef.current && !navRef.current.contains(e.target as Node)) {
+  const handleClickOutside = useCallback((e) => {
+    if (navRef.current && !navRef.current.contains(e.target)) {
       setOpenDropdown(null)
     }
   }, [])
@@ -107,17 +107,16 @@ export function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [handleClickOutside])
 
-  const toggleDropdown = (label: string) => {
+  const toggleDropdown = (label) => {
     setOpenDropdown(prev => prev === label ? null : label)
   }
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
-        scrolled
-          ? "glass border-b border-[var(--lw-green)]/5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
-          : "bg-[var(--lw-white)]/60 backdrop-blur-md"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${scrolled
+        ? "glass border-b border-[var(--lw-green)]/5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
+        : "bg-[var(--lw-white)]/60 backdrop-blur-md"
+        }`}
     >
       <nav ref={navRef} className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5 lg:px-10">
         {/* ── Logo ── */}
@@ -138,11 +137,10 @@ export function Navbar() {
               <div key={item.label} className="relative">
                 <button
                   onClick={() => toggleDropdown(item.label)}
-                  className={`inline-flex items-center gap-1 rounded-lg px-3.5 py-2 text-[0.82rem] font-medium transition-all duration-300 ${
-                    openDropdown === item.label
-                      ? "bg-[var(--lw-green)]/[0.06] text-[var(--lw-green)]"
-                      : "text-[var(--lw-dark)]/60 hover:bg-[var(--lw-green)]/[0.03] hover:text-[var(--lw-dark)]"
-                  }`}
+                  className={`inline-flex items-center gap-1 rounded-lg px-3.5 py-2 text-[0.82rem] font-medium transition-all duration-300 ${openDropdown === item.label
+                    ? "bg-[var(--lw-green)]/[0.06] text-[var(--lw-green)]"
+                    : "text-[var(--lw-dark)]/60 hover:bg-[var(--lw-green)]/[0.03] hover:text-[var(--lw-dark)]"
+                    }`}
                 >
                   {item.label}
                   <ChevronDown
@@ -153,11 +151,10 @@ export function Navbar() {
 
                 {/* Dropdown panel */}
                 <div
-                  className={`absolute left-1/2 top-full pt-2 -translate-x-1/2 transition-all duration-300 ${
-                    openDropdown === item.label
-                      ? "pointer-events-auto translate-y-0 opacity-100"
-                      : "pointer-events-none -translate-y-2 opacity-0"
-                  }`}
+                  className={`absolute left-1/2 top-full pt-2 -translate-x-1/2 transition-all duration-300 ${openDropdown === item.label
+                    ? "pointer-events-auto translate-y-0 opacity-100"
+                    : "pointer-events-none -translate-y-2 opacity-0"
+                    }`}
                 >
                   <div className="w-[320px] overflow-hidden rounded-2xl border border-[var(--lw-dark)]/[0.04] bg-[var(--lw-white)] p-2 shadow-[0_16px_48px_rgba(19,48,32,0.1)]">
                     {item.children.map((child) => (
@@ -217,18 +214,16 @@ export function Navbar() {
 
       {/* ── Mobile overlay ── */}
       <div
-        className={`fixed inset-0 z-40 bg-[var(--lw-dark)]/20 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
-          mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
+        className={`fixed inset-0 z-40 bg-[var(--lw-dark)]/20 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
         onClick={() => setMobileOpen(false)}
         aria-hidden="true"
       />
 
       {/* ── Mobile drawer (iOS-style slide up sheet) ── */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-40 max-h-[85vh] overflow-y-auto rounded-t-[1.75rem] bg-[var(--lw-white)] shadow-[0_-8px_40px_rgba(0,0,0,0.1)] transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] lg:hidden ${
-          mobileOpen ? "translate-y-0" : "translate-y-full"
-        }`}
+        className={`fixed bottom-0 left-0 right-0 z-40 max-h-[85vh] overflow-y-auto rounded-t-[1.75rem] bg-[var(--lw-white)] shadow-[0_-8px_40px_rgba(0,0,0,0.1)] transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] lg:hidden ${mobileOpen ? "translate-y-0" : "translate-y-full"
+          }`}
       >
         {/* Drag handle */}
         <div className="sticky top-0 z-10 flex justify-center bg-[var(--lw-white)] pt-3 pb-2">
@@ -247,15 +242,13 @@ export function Navbar() {
                     {item.label}
                     <ChevronDown
                       size={16}
-                      className={`text-[var(--lw-dark)]/30 transition-transform duration-300 ${
-                        mobileExpanded === item.label ? "rotate-180" : ""
-                      }`}
+                      className={`text-[var(--lw-dark)]/30 transition-transform duration-300 ${mobileExpanded === item.label ? "rotate-180" : ""
+                        }`}
                     />
                   </button>
                   <div
-                    className={`grid transition-all duration-400 ease-out ${
-                      mobileExpanded === item.label ? "grid-rows-[1fr] pb-3 opacity-100" : "grid-rows-[0fr] opacity-0"
-                    }`}
+                    className={`grid transition-all duration-400 ease-out ${mobileExpanded === item.label ? "grid-rows-[1fr] pb-3 opacity-100" : "grid-rows-[0fr] opacity-0"
+                      }`}
                   >
                     <div className="overflow-hidden">
                       <div className="flex flex-col gap-1 pl-1">

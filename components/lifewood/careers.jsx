@@ -28,7 +28,7 @@ const benefits = [
 ]
 
 export function Careers() {
-  const [expanded, setExpanded] = useState<number | null>(null)
+  const [expanded, setExpanded] = useState(null)
 
   return (
     <section id="careers" className="bg-[var(--lw-white)] py-28 lg:py-36">
@@ -65,15 +65,13 @@ export function Careers() {
                 <button
                   key={b.title}
                   onClick={() => setExpanded(isOpen ? null : i)}
-                  className={`group flex items-start gap-5 rounded-[1.25rem] p-7 text-left transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                    isOpen
+                  className={`group flex items-start gap-5 rounded-[1.25rem] p-7 text-left transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen
                       ? "border border-[var(--lw-green)]/15 bg-[var(--lw-white)] shadow-[0_16px_48px_rgba(19,48,32,0.08)]"
                       : "border border-[var(--lw-dark)]/[0.03] bg-[var(--lw-sea-salt)] hover:border-[var(--lw-green)]/10 hover:shadow-[0_12px_40px_rgba(19,48,32,0.05)]"
-                  }`}
+                    }`}
                 >
-                  <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors duration-300 ${
-                    isOpen ? "bg-[var(--lw-green)]/10" : "bg-[var(--lw-green)]/[0.05]"
-                  }`}>
+                  <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors duration-300 ${isOpen ? "bg-[var(--lw-green)]/10" : "bg-[var(--lw-green)]/[0.05]"
+                    }`}>
                     <b.icon size={20} className="text-[var(--lw-green)]" strokeWidth={1.5} />
                   </div>
                   <div className="flex-1">
@@ -81,14 +79,12 @@ export function Careers() {
                       <h3 className="text-[1.02rem] font-semibold text-[var(--lw-dark)]">{b.title}</h3>
                       <ChevronDown
                         size={15}
-                        className={`shrink-0 transition-all duration-300 ${
-                          isOpen ? "rotate-180 text-[var(--lw-green)]" : "text-[var(--lw-dark)]/20"
-                        }`}
+                        className={`shrink-0 transition-all duration-300 ${isOpen ? "rotate-180 text-[var(--lw-green)]" : "text-[var(--lw-dark)]/20"
+                          }`}
                       />
                     </div>
-                    <p className={`mt-1.5 text-[0.88rem] leading-relaxed transition-colors ${
-                      isOpen ? "text-[var(--lw-dark)]/60" : "text-[var(--lw-dark)]/45"
-                    }`}>
+                    <p className={`mt-1.5 text-[0.88rem] leading-relaxed transition-colors ${isOpen ? "text-[var(--lw-dark)]/60" : "text-[var(--lw-dark)]/45"
+                      }`}>
                       {isOpen ? b.description : b.summary}
                     </p>
                   </div>

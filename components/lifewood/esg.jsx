@@ -44,10 +44,10 @@ const esgData = [
   },
 ]
 
-function CountUp({ end, suffix, customDisplay }: { end: number; suffix: string; customDisplay?: string }) {
+function CountUp({ end, suffix, customDisplay }) {
   const [count, setCount] = useState(0)
   const [started, setStarted] = useState(false)
-  const ref = useRef<HTMLSpanElement>(null)
+  const ref = useRef(null)
 
   useEffect(() => {
     const el = ref.current
@@ -80,7 +80,7 @@ function CountUp({ end, suffix, customDisplay }: { end: number; suffix: string; 
 }
 
 export function ESG() {
-  const [expanded, setExpanded] = useState<number | null>(null)
+  const [expanded, setExpanded] = useState(null)
   const [showMore, setShowMore] = useState(false)
 
   return (
@@ -102,9 +102,8 @@ export function ESG() {
 
             {/* Expandable paragraph */}
             <div
-              className={`grid transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                showMore ? "grid-rows-[1fr] mt-4 opacity-100" : "grid-rows-[0fr] opacity-0"
-              }`}
+              className={`grid transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${showMore ? "grid-rows-[1fr] mt-4 opacity-100" : "grid-rows-[0fr] opacity-0"
+                }`}
             >
               <div className="overflow-hidden">
                 <p className="text-[1.05rem] leading-relaxed text-[var(--lw-dark)]/55">
@@ -153,25 +152,22 @@ export function ESG() {
                 <button
                   key={item.label}
                   onClick={() => setExpanded(isOpen ? null : i)}
-                  className={`group rounded-[1.25rem] p-7 text-left transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                    isOpen
-                      ? "bg-[var(--lw-green)] shadow-[0_16px_48px_rgba(4,98,65,0.2)] sm:col-span-2"
-                      : "bg-[var(--lw-white)] shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(19,48,32,0.07)]"
-                  }`}
+                  className={`group rounded-[1.25rem] p-7 text-left transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen
+                    ? "bg-[var(--lw-green)] shadow-[0_16px_48px_rgba(4,98,65,0.2)] sm:col-span-2"
+                    : "bg-[var(--lw-white)] shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(19,48,32,0.07)]"
+                    }`}
                 >
                   <div className="flex items-start justify-between">
                     <div
-                      className={`mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl transition-colors duration-300 ${
-                        isOpen ? "bg-white/15" : "bg-[var(--lw-green)]/[0.05] group-hover:bg-[var(--lw-green)]/[0.09]"
-                      }`}
+                      className={`mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl transition-colors duration-300 ${isOpen ? "bg-white/15" : "bg-[var(--lw-green)]/[0.05] group-hover:bg-[var(--lw-green)]/[0.09]"
+                        }`}
                     >
                       <item.icon size={20} className={isOpen ? "text-white" : "text-[var(--lw-green)]"} strokeWidth={1.5} />
                     </div>
                     <ChevronDown
                       size={16}
-                      className={`mt-1 transition-all duration-300 ${
-                        isOpen ? "rotate-180 text-white/40" : "text-[var(--lw-dark)]/20"
-                      }`}
+                      className={`mt-1 transition-all duration-300 ${isOpen ? "rotate-180 text-white/40" : "text-[var(--lw-dark)]/20"
+                        }`}
                     />
                   </div>
                   <div className={`text-[1.75rem] font-bold leading-tight ${isOpen ? "text-white" : "text-[var(--lw-green)]"}`}>

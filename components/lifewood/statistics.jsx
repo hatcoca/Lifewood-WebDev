@@ -9,10 +9,10 @@ const stats = [
   { value: 6, suffix: "", label: "Countries with operations" },
 ]
 
-function AnimatedStat({ value, suffix, decimals = 0 }: { value: number; suffix: string; decimals?: number }) {
+function AnimatedStat({ value, suffix, decimals = 0 }) {
   const [count, setCount] = useState(0)
   const [started, setStarted] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef(null)
 
   useEffect(() => {
     const el = ref.current
@@ -29,7 +29,7 @@ function AnimatedStat({ value, suffix, decimals = 0 }: { value: number; suffix: 
     if (!started) return
     const duration = 1200
     const start = performance.now()
-    const animate = (now: number) => {
+    const animate = (now) => {
       const elapsed = now - start
       const progress = Math.min(elapsed / duration, 1)
       const eased = 1 - Math.pow(1 - progress, 3)

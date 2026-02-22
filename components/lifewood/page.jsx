@@ -6,7 +6,7 @@ import { Hero } from "@/components/lifewood/hero";
 import { About } from "@/components/lifewood/about";
 import { Footer } from "@/components/lifewood/footer";
 
-const Home: React.FC = () => {
+const Home = () => {
   return (
     <main className="min-h-screen overflow-x-hidden">
       <Navbar />

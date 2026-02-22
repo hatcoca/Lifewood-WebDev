@@ -50,7 +50,7 @@ const regions = [
 ]
 
 export function GlobalPresence() {
-  const [expanded, setExpanded] = useState<string | null>(null)
+  const [expanded, setExpanded] = useState(null)
 
   return (
     <section id="global" className="bg-[var(--lw-white)] py-28 lg:py-36">
@@ -76,13 +76,12 @@ export function GlobalPresence() {
               <button
                 key={region.name}
                 onClick={() => setExpanded(isOpen ? null : region.name)}
-                className={`group relative overflow-hidden rounded-[1.25rem] p-7 text-left transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                  isOpen
+                className={`group relative overflow-hidden rounded-[1.25rem] p-7 text-left transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen
                     ? "bg-[var(--lw-green)] shadow-[0_16px_48px_rgba(4,98,65,0.2)]"
                     : region.highlight
                       ? "bg-[var(--lw-green)] shadow-[0_8px_24px_rgba(4,98,65,0.12)] hover:shadow-[0_12px_40px_rgba(4,98,65,0.18)]"
                       : "border border-[var(--lw-dark)]/[0.03] bg-[var(--lw-sea-salt)] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(19,48,32,0.06)]"
-                }`}
+                  }`}
               >
                 {/* Ambient decoration */}
                 {(region.highlight || isOpen) && (
@@ -93,33 +92,29 @@ export function GlobalPresence() {
                   <div className="flex items-center gap-2">
                     <MapPin size={15} className="text-[var(--lw-saffron)]" strokeWidth={2} />
                     <span
-                      className={`text-[0.68rem] font-semibold uppercase tracking-[0.15em] ${
-                        region.highlight || isOpen ? "text-white/50" : "text-[var(--lw-dark)]/35"
-                      }`}
+                      className={`text-[0.68rem] font-semibold uppercase tracking-[0.15em] ${region.highlight || isOpen ? "text-white/50" : "text-[var(--lw-dark)]/35"
+                        }`}
                     >
                       {region.role}
                     </span>
                   </div>
                   <ChevronDown
                     size={14}
-                    className={`transition-all duration-300 ${
-                      isOpen ? "rotate-180" : ""
-                    } ${region.highlight || isOpen ? "text-white/30" : "text-[var(--lw-dark)]/20"}`}
+                    className={`transition-all duration-300 ${isOpen ? "rotate-180" : ""
+                      } ${region.highlight || isOpen ? "text-white/30" : "text-[var(--lw-dark)]/20"}`}
                   />
                 </div>
 
                 <h3
-                  className={`relative text-xl font-bold ${
-                    region.highlight || isOpen ? "text-white" : "text-[var(--lw-dark)]"
-                  }`}
+                  className={`relative text-xl font-bold ${region.highlight || isOpen ? "text-white" : "text-[var(--lw-dark)]"
+                    }`}
                 >
                   {region.name}
                 </h3>
 
                 <p
-                  className={`relative mt-2.5 text-[0.88rem] leading-relaxed transition-all duration-300 ${
-                    region.highlight || isOpen ? "text-white/65" : "text-[var(--lw-dark)]/45"
-                  }`}
+                  className={`relative mt-2.5 text-[0.88rem] leading-relaxed transition-all duration-300 ${region.highlight || isOpen ? "text-white/65" : "text-[var(--lw-dark)]/45"
+                    }`}
                 >
                   {isOpen ? region.description : region.summary}
                 </p>
