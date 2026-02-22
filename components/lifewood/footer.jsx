@@ -1,26 +1,27 @@
 "use client"
 
 import { Mail, MapPin, Phone, ArrowUpRight, Linkedin, Twitter } from "lucide-react"
+import Link from "next/link"
 
 const footerLinks = {
   company: [
-    { label: "Our Company", href: "#about" },
-    { label: "Services", href: "#services" },
-    { label: "Projects", href: "#projects" },
-    { label: "Transformation", href: "#esg" },
-    { label: "Careers", href: "#careers" },
+    { label: "Our Company", href: "/about" },
+    { label: "Services", href: "/#services" },
+    { label: "Projects", href: "/projects" },
+    { label: "Transformation", href: "/#esg" },
+    { label: "Careers", href: "/careers" },
   ],
   solutions: [
-    { label: "Data Annotation", href: "#services" },
-    { label: "AI Training Data", href: "#services" },
-    { label: "Data Processing", href: "#services" },
-    { label: "Quality Assurance", href: "#services" },
+    { label: "Data Annotation", href: "/#services" },
+    { label: "AI Training Data", href: "/#services" },
+    { label: "Data Processing", href: "/#services" },
+    { label: "Quality Assurance", href: "/#services" },
   ],
   regions: [
-    { label: "Malaysia (HQ)", href: "#global" },
-    { label: "Singapore", href: "#global" },
-    { label: "China", href: "#global" },
-    { label: "Bangladesh", href: "#global" },
+    { label: "Malaysia (HQ)", href: "/#global" },
+    { label: "Singapore", href: "/#global" },
+    { label: "China", href: "/#global" },
+    { label: "Bangladesh", href: "/#global" },
   ],
 }
 
@@ -44,13 +45,13 @@ export function Footer() {
                 with world-class data solutions.
               </p>
             </div>
-            <a
-              href="mailto:info@lifewood.com"
+            <Link
+              href="/contact"
               className="group inline-flex shrink-0 items-center gap-2 rounded-full bg-[var(--lw-saffron)] px-7 py-3.5 text-[0.88rem] font-semibold text-[var(--lw-dark)] shadow-[0_4px_16px_rgba(255,179,71,0.3)] transition-all duration-300 hover:shadow-[0_8px_24px_rgba(255,179,71,0.4)] hover:brightness-[1.03]"
             >
               Contact us
               <ArrowUpRight size={15} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -119,12 +120,12 @@ export function Footer() {
             <ul className="mt-5 space-y-3.5">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-[0.88rem] text-white/35 transition-colors duration-300 hover:text-[var(--lw-saffron)]"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -136,12 +137,12 @@ export function Footer() {
             <ul className="mt-5 space-y-3.5">
               {footerLinks.solutions.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-[0.88rem] text-white/35 transition-colors duration-300 hover:text-[var(--lw-saffron)]"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -153,12 +154,12 @@ export function Footer() {
             <ul className="mt-5 space-y-3.5">
               {footerLinks.regions.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-[0.88rem] text-white/35 transition-colors duration-300 hover:text-[var(--lw-saffron)]"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

@@ -1,35 +1,13 @@
-"use client"
-
-import { ArrowRight, Briefcase, Users, Zap, ChevronDown } from "lucide-react"
-import { useState } from "react"
-
-const benefits = [
-  {
-    icon: Zap,
-    title: "Innovation-first culture",
-    summary: "Work on cutting-edge AI technologies.",
-    description:
-      "Work on cutting-edge AI and data technologies shaping the future of machine learning. Our teams collaborate with global tech leaders, contribute to open-source projects, and push the boundaries of automated data processing.",
-  },
-  {
-    icon: Users,
-    title: "Inclusive workplace",
-    summary: "A diverse global team that champions equity.",
-    description:
-      "Join a diverse global team that champions equity, accessibility, and belonging. From flexible work arrangements to mentorship programs, we create an environment where every voice is heard and every talent is valued.",
-  },
-  {
-    icon: Briefcase,
-    title: "Global opportunities",
-    summary: "Grow across our offices worldwide.",
-    description:
-      "Grow your career across our offices in Malaysia, Singapore, China, and beyond. We offer international transfers, cross-team collaborations, and leadership development programs that prepare you for global impact.",
-  },
-]
+import { ArrowRight } from "lucide-react"
+import Link from "next/link"
+import { benefits } from "@/lib/data/careers"
 
 export function Careers() {
+<<<<<<< HEAD:components/lifewood/careers.jsx
   const [expanded, setExpanded] = useState(null)
 
+=======
+>>>>>>> cbb23ad3422d0718ded2a394b9f69158c8a18714:components/lifewood/careers.tsx
   return (
     <section id="careers" className="bg-[var(--lw-white)] py-28 lg:py-36">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -44,20 +22,20 @@ export function Careers() {
             </h2>
             <p className="mt-5 text-[1.05rem] leading-relaxed text-[var(--lw-dark)]/55">
               We are always looking for passionate, talented people who share
-              our vision. Click each benefit to learn more.
+              our vision.
             </p>
             <div className="mt-8">
               <a
-                href="#apply"
+                href="#careers"
                 className="group inline-flex items-center gap-2.5 rounded-full bg-[var(--lw-green)] px-7 py-3.5 text-[0.88rem] font-semibold text-white transition-all duration-300 hover:shadow-[0_8px_24px_rgba(4,98,65,0.2)] active:scale-[0.97]"
               >
                 View open positions
                 <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
-              </a>
+              </Link>
             </div>
           </div>
 
-          {/* Benefit cards */}
+          {/* Benefit cards -- summary only */}
           <div className="grid gap-4">
             {benefits.map((b, i) => {
               const isOpen = expanded === i
@@ -65,9 +43,15 @@ export function Careers() {
                 <button
                   key={b.title}
                   onClick={() => setExpanded(isOpen ? null : i)}
+<<<<<<< HEAD:components/lifewood/careers.jsx
                   className={`group flex items-start gap-5 rounded-[1.25rem] p-7 text-left transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen
                       ? "border border-[var(--lw-green)]/15 bg-[var(--lw-white)] shadow-[0_16px_48px_rgba(19,48,32,0.08)]"
                       : "border border-[var(--lw-dark)]/[0.03] bg-[var(--lw-sea-salt)] hover:border-[var(--lw-green)]/10 hover:shadow-[0_12px_40px_rgba(19,48,32,0.05)]"
+=======
+                  className={`group flex items-start gap-5 rounded-[1.25rem] p-7 text-left transition-all duration-500 ease-[timing-function:cubic-bezier(0.32,0.72,0,1)] ${isOpen
+                    ? "border border-[var(--lw-green)]/15 bg-[var(--lw-white)] shadow-[0_16px_48px_rgba(19,48,32,0.08)]"
+                    : "border border-[var(--lw-dark)]/[0.03] bg-[var(--lw-sea-salt)] hover:border-[var(--lw-green)]/10 hover:shadow-[0_12px_40px_rgba(19,48,32,0.05)]"
+>>>>>>> cbb23ad3422d0718ded2a394b9f69158c8a18714:components/lifewood/careers.tsx
                     }`}
                 >
                   <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors duration-300 ${isOpen ? "bg-[var(--lw-green)]/10" : "bg-[var(--lw-green)]/[0.05]"

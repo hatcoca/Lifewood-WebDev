@@ -1,44 +1,15 @@
-"use client"
-
-import { Globe, Cpu, Handshake, TrendingUp, ChevronDown } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import Image from "next/image"
-import { useState } from "react"
-
-const pillars = [
-  {
-    icon: Globe,
-    title: "Global bridge",
-    summary: "Connecting ASEAN, China and the world.",
-    description:
-      "Strategically connecting ASEAN, China, and the rest of the world through data-driven collaboration. Lifewood serves as a super-bridge, leveraging Malaysia's unique geopolitical position to foster partnerships across diverse markets.",
-  },
-  {
-    icon: Cpu,
-    title: "AI-powered innovation",
-    summary: "Advanced AI, GPT, and Gemini technologies.",
-    description:
-      "Leveraging advanced AI, GPT, and Gemini technologies to transform data into actionable insights at scale. Our R&D teams continuously push the boundaries of what's possible in automated data processing and machine learning.",
-  },
-  {
-    icon: Handshake,
-    title: "Trust and harmony",
-    summary: "Building cooperation across borders.",
-    description:
-      "Building cooperation across borders, cultures, and business practices to foster new ventures. We believe that the best technology emerges from diverse perspectives and mutual respect between all stakeholders.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Sustainable growth",
-    summary: "ESG principles powering the future.",
-    description:
-      "Committed to ESG principles, empowering communities while advancing cutting-edge technology. Every decision we make considers its impact on people, the planet, and long-term prosperity.",
-  },
-]
+import Link from "next/link"
+import { pillars } from "@/lib/data/about"
 
 export function About() {
+<<<<<<< HEAD:components/lifewood/about.jsx
   const [expandedPillar, setExpandedPillar] = useState(null)
   const [showMore, setShowMore] = useState(false)
 
+=======
+>>>>>>> cbb23ad3422d0718ded2a394b9f69158c8a18714:components/lifewood/about.tsx
   return (
     <section id="about" className="bg-[var(--lw-sea-salt)] py-28 lg:py-36">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -56,7 +27,7 @@ export function About() {
           </p>
         </div>
 
-        {/* Image + text row -- with "Read More" */}
+        {/* Image + text row */}
         <div className="mt-20 grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <div className="relative overflow-hidden rounded-[1.5rem]">
             <Image
@@ -78,7 +49,11 @@ export function About() {
 
             {/* Expandable additional text */}
             <div
+<<<<<<< HEAD:components/lifewood/about.jsx
               className={`grid transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${showMore ? "grid-rows-[1fr] mt-5 opacity-100" : "grid-rows-[0fr] opacity-0"
+=======
+              className={`grid transition-all duration-500 ease-[timing-function:cubic-bezier(0.32,0.72,0,1)] ${showMore ? "grid-rows-[1fr] mt-5 opacity-100" : "grid-rows-[0fr] opacity-0"
+>>>>>>> cbb23ad3422d0718ded2a394b9f69158c8a18714:components/lifewood/about.tsx
                 }`}
             >
               <div className="overflow-hidden">
@@ -97,21 +72,10 @@ export function About() {
                 </p>
               </div>
             </div>
-
-            <button
-              onClick={() => setShowMore(!showMore)}
-              className="mt-4 inline-flex items-center gap-1.5 text-[0.88rem] font-semibold text-[var(--lw-green)] transition-colors hover:text-[var(--lw-saffron)] active:scale-[0.97]"
-            >
-              {showMore ? "Show less" : "Read more about us"}
-              <ChevronDown
-                size={15}
-                className={`transition-transform duration-300 ${showMore ? "rotate-180" : ""}`}
-              />
-            </button>
           </div>
         </div>
 
-        {/* Pillar cards -- click to expand */}
+        {/* Pillar cards -- summary only */}
         <div className="mt-20 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {pillars.map((pillar, i) => {
             const isOpen = expandedPillar === i
@@ -119,7 +83,11 @@ export function About() {
               <button
                 key={pillar.title}
                 onClick={() => setExpandedPillar(isOpen ? null : i)}
+<<<<<<< HEAD:components/lifewood/about.jsx
                 className={`group rounded-[1.25rem] p-7 text-left transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen
+=======
+                className={`group rounded-[1.25rem] p-7 text-left transition-all duration-500 ease-[timing-function:cubic-bezier(0.32,0.72,0,1)] ${isOpen
+>>>>>>> cbb23ad3422d0718ded2a394b9f69158c8a18714:components/lifewood/about.tsx
                     ? "bg-[var(--lw-green)] shadow-[0_16px_48px_rgba(4,98,65,0.2)]"
                     : "bg-[var(--lw-white)] shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(19,48,32,0.07)]"
                   }`}

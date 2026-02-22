@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client";
 
 import {
@@ -85,6 +86,13 @@ export function Services() {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
 
+=======
+import { ArrowRight } from "lucide-react"
+import Link from "next/link"
+import { services } from "@/lib/data/services"
+
+export function Services() {
+>>>>>>> cbb23ad3422d0718ded2a394b9f69158c8a18714
   return (
     <section className="bg-[var(--lw-white)] py-28 lg:py-36">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -97,6 +105,7 @@ export function Services() {
           <h2 className="mt-4 text-3xl font-bold text-[var(--lw-dark)] sm:text-4xl lg:text-[2.6rem]">
             AI Data Services for Scalable Innovation
           </h2>
+<<<<<<< HEAD
 
           <p className="mt-6 text-[1.05rem] leading-relaxed text-[var(--lw-dark)]/60">
             We deliver end-to-end data solutions that power artificial
@@ -127,6 +136,14 @@ export function Services() {
         </div>
 
         {/* SERVICES */}
+=======
+          <p className="mt-5 text-[1.05rem] leading-relaxed text-[var(--lw-dark)]/55">
+            From raw data to refined AI-ready datasets -- powering the next generation of machine learning.
+          </p>
+        </div>
+
+        {/* Service cards -- summary only */}
+>>>>>>> cbb23ad3422d0718ded2a394b9f69158c8a18714
         <div className="mt-16 grid gap-4 md:grid-cols-2">
           {services.map((service, i) => {
             const isOpen = expandedIndex === i;
@@ -134,17 +151,25 @@ export function Services() {
             return (
               <div
                 key={service.title}
+<<<<<<< HEAD
                 className={`rounded-2xl border transition-all duration-300 ${
                   isOpen
                     ? "border-[var(--lw-green)]/20 bg-white shadow-xl"
                     : "border-[var(--lw-dark)]/5 bg-[var(--lw-sea-salt)]"
                 }`}
+=======
+                className={`group relative overflow-hidden rounded-[1.5rem] border transition-all duration-500 ease-[timing-function:cubic-bezier(0.32,0.72,0,1)] ${isOpen
+                    ? "border-[var(--lw-green)]/15 bg-[var(--lw-white)] shadow-[0_20px_60px_rgba(19,48,32,0.08)]"
+                    : "border-[var(--lw-dark)]/[0.03] bg-[var(--lw-sea-salt)] hover:border-[var(--lw-green)]/10 hover:shadow-[0_8px_32px_rgba(19,48,32,0.04)]"
+                  }`}
+>>>>>>> cbb23ad3422d0718ded2a394b9f69158c8a18714
               >
                 {/* HEADER */}
                 <button
                   onClick={() => toggle(i)}
                   className="flex w-full items-start justify-between p-8 text-left"
                 >
+<<<<<<< HEAD
                   <div className="flex gap-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--lw-green)]/10">
                       <service.icon size={22} className="text-[var(--lw-green)]" />
@@ -165,13 +190,42 @@ export function Services() {
                       isOpen ? "rotate-180 text-[var(--lw-green)]" : ""
                     }`}
                   />
+=======
+                  <div className="flex-1">
+                    <div className="flex items-center gap-4">
+                      <div
+                        className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition-colors duration-300 ${isOpen ? "bg-[var(--lw-green)]/10" : "bg-[var(--lw-green)]/[0.05]"
+                          }`}
+                      >
+                        <service.icon size={22} className="text-[var(--lw-green)]" strokeWidth={1.5} />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-semibold text-[var(--lw-dark)]">{service.title}</h3>
+                        <p className="mt-1 text-[0.88rem] text-[var(--lw-dark)]/45">{service.summary}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className={`ml-4 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${isOpen
+                        ? "border-[var(--lw-green)]/20 bg-[var(--lw-green)]/[0.06] rotate-180"
+                        : "border-[var(--lw-dark)]/[0.06] bg-transparent"
+                      }`}
+                  >
+                    <ChevronDown size={16} className={`transition-colors ${isOpen ? "text-[var(--lw-green)]" : "text-[var(--lw-dark)]/30"}`} />
+                  </div>
+>>>>>>> cbb23ad3422d0718ded2a394b9f69158c8a18714
                 </button>
 
                 {/* CONTENT */}
                 <div
+<<<<<<< HEAD
                   className={`overflow-hidden transition-all duration-500 ${
                     isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
                   }`}
+=======
+                  className={`grid transition-all duration-500 ease-[timing-function:cubic-bezier(0.32,0.72,0,1)] ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    }`}
+>>>>>>> cbb23ad3422d0718ded2a394b9f69158c8a18714
                 >
                   <div className="px-8 pb-8">
                     <div className="mb-4 h-px bg-[var(--lw-dark)]/10" />
@@ -211,8 +265,24 @@ export function Services() {
                   </div>
                 </div>
               </div>
+<<<<<<< HEAD
             );
           })}
+=======
+            </div>
+          ))}
+        </div>
+
+        {/* View all link */}
+        <div className="mt-10 text-center">
+          <Link
+            href="/services"
+            className="group inline-flex items-center gap-2 text-[0.92rem] font-semibold text-[var(--lw-green)] transition-colors hover:text-[var(--lw-saffron)]"
+          >
+            View all services
+            <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+>>>>>>> cbb23ad3422d0718ded2a394b9f69158c8a18714
         </div>
 
         {/* PROCESS SECTION (LIFEWOOD STYLE) */}
