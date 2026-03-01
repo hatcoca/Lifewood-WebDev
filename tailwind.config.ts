@@ -62,6 +62,12 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
         xl: '1rem',
         '2xl': '1.25rem',
+        '3xl': '1.5rem',
+        'full': '9999px',
+      },
+      boxShadow: {
+        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.04)',
       },
       keyframes: {
         'accordion-down': {

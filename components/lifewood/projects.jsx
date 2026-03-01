@@ -1,262 +1,458 @@
 "use client"
 
-import { ArrowRight, Car, HeartPulse, Landmark, Smartphone, ChevronDown, X } from "lucide-react"
-import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { ArrowRight, Car, HeartPulse, Landmark, Smartphone, ChevronDown, X, Layers, Sparkles, TrendingUp, Search, Brain, Eye, Users, Cpu, Headphones, Globe, BookOpen, Settings } from "lucide-react"
+import { useState, useRef } from "react"
+import Image from "next/image"
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 
 const projects = [
   {
-    id: "autonomous-vehicle-training",
+    id: "data-extraction",
+    icon: Search,
+    type: "Case Study",
+    industry: "Data Engineering",
+    technology: "AI/OCR/Drones",
+    title: "AI Data Extraction",
+    summary: "Optimized acquisition of image and text from multiple sources.",
+    image: "/images/projects/data-extraction.png",
+    color: "#046241",
+    stats: [
+      { label: "Efficiency Gain", value: "45%" },
+      { label: "Data Scale", value: "PB+" },
+      { label: "Accuracy", value: "99.8%" }
+    ],
+    fullDescription: "Using AI, we optimize the acquisition of image and text from multiple sources. Techniques include onsite scanning, drone photography, negotiation with archives and the formation of alliances with corporations, religious organizations and governments.",
+    challenge: "Traditional data acquisition is slow, fragmented, and often lacks the structure needed for large-scale AI training.",
+    solution: "A unified AI-driven extraction pipeline that handles multi-source ingestion including drone and physical scans.",
+    outcome: "Streamlined data supply chain for global research organizations, saving thousands of manual hours."
+  },
+  {
+    id: "ml-enablement",
+    icon: Brain,
+    type: "Case Study",
+    industry: "Machine Learning",
+    technology: "PyTorch/Kubernetes",
+    title: "Machine Learning Enablement",
+    summary: "Comprehensive infrastructure for scaling ML models.",
+    image: "/images/services/data-processing.png",
+    color: "#4f46e5",
+    stats: [
+      { label: "Models Enabled", value: "500+" },
+      { label: "Latency Red.", value: "30%" },
+      { label: "Pipeline Speed", value: "3x" }
+    ],
+    fullDescription: "We provide the essential bridge between raw data and production-ready machine learning models. Our enablement services include feature engineering, model optimization, and deployment pipelines at scale.",
+    challenge: "Moving from a successful pilot to production scale is the primary bottleneck for 85% of AI initiatives.",
+    solution: "Industrial-grade processing frameworks that automate the data-to-model lifecycle with consistent QC.",
+    outcome: "Drastic reduction in time-to-market for enterprise AI solutions across banking and retail sectors."
+  },
+  {
+    id: "autonomous-driving",
     icon: Car,
+    type: "Case Study",
     industry: "Automotive",
-    title: "Autonomous vehicle training",
-    summary: "Labeled 12M+ images for self-driving perception models.",
-    description:
-      "We partnered with a leading automotive OEM to label over 12 million images for self-driving perception models. Our team of 200+ annotators delivered pixel-perfect semantic segmentation, 3D bounding boxes, and lane markings across diverse driving conditions -- achieving 99.2% accuracy with a 3-week turnaround.",
-    stats: ["12M+ images", "99.2% accuracy", "200+ annotators"],
-    slug: "autonomous-vehicle-training",
-    fullDescription: "This groundbreaking project involved collaborating with a top-tier automotive manufacturer to create the largest labeled dataset for autonomous driving in Southeast Asia. Our team of 200+ specialized annotators worked around the clock to deliver pixel-perfect semantic segmentation, 3D bounding boxes, and lane markings across diverse driving conditions including urban, highway, and rural environments. The result was a 99.2% accuracy rate and a 3-week turnaround that exceeded client expectations. The dataset now powers self-driving perception models tested across 1 million+ kilometers of real-world driving.",
-    challenge: "The client needed high-quality labeled data at scale within a tight deadline. Traditional annotation methods would have taken months.",
-    solution: "We deployed a hybrid approach combining AI-assisted pre-labeling with human verification, plus a multi-tier quality control system.",
-    outcome: "Delivered 12M+ images in 3 weeks with 99.2% accuracy, enabling the client to accelerate their autonomous vehicle testing by 6 months."
+    technology: "LiDAR/Semantic Seg.",
+    title: "Autonomous Driving Technology",
+    summary: "High-precision labeling for level 4/5 autonomous vehicles.",
+    image: "/images/projects/autonomous-vehicle.png",
+    color: "#10b981",
+    stats: [
+      { label: "Images Labeled", value: "12M+" },
+      { label: "Precision", value: "99.2%" },
+      { label: "Turnaround", value: "3 Wks" }
+    ],
+    fullDescription: "Lifewood leverages specialized precision teams to label millions of frames for self-driving perception. We handle pixel-perfect semantic segmentation, 33D bounding boxes, and lane markings across diverse global driving conditions.",
+    challenge: "Autonomous systems require massive amounts of perfect ground-truth data that automated tools cannot yet generate.",
+    solution: "Deployed 200+ specialized annotators with a proprietary hybrid AI-human verification toolset.",
+    outcome: "Enabled major automotive OEMs to accelerate their safety-critical perception testing by months."
   },
   {
-    id: "medical-imaging-ai",
-    icon: HeartPulse,
-    industry: "Healthcare",
-    title: "Medical imaging AI",
-    summary: "Annotated radiology scans for diagnostic AI systems.",
-    description:
-      "Supporting a global healthtech company, our medical annotation team labeled thousands of radiology scans (CT, MRI, X-ray) with expert-verified annotations. This enabled the development of diagnostic AI that can detect early-stage anomalies with clinical-grade precision, now deployed in 15+ hospitals across Asia.",
-    stats: ["50K+ scans", "Clinical-grade QA", "15+ hospitals"],
-    slug: "medical-imaging-ai",
-    fullDescription: "Partnering with a global healthtech leader, our specialized medical annotation team - consisting of certified radiologists and trained technicians - labeled over 50,000 radiology scans including CT, MRI, and X-ray modalities. Each annotation was verified through a rigorous double-blind review process to ensure clinical-grade precision. The resulting dataset enabled the development of a diagnostic AI system that can detect early-stage anomalies with 98.7% sensitivity.",
-    challenge: "Medical imaging requires expert-level annotations with zero margin for error. The client needed clinical-grade quality at production scale.",
-    solution: "We assembled a team of certified medical professionals and implemented a multi-stage QA protocol with random expert audits.",
-    outcome: "The AI system is now deployed in 15+ hospitals across Asia, helping radiologists detect anomalies 3x faster with improved accuracy."
+    id: "ai-customer-service",
+    icon: Headphones,
+    type: "Case Study",
+    industry: "Support",
+    technology: "Transformer Models",
+    title: "AI-Enabled Customer Service",
+    summary: "Next-gen conversational interfaces and support automation.",
+    image: "/images/services/ai-training.png",
+    color: "#FFB347",
+    stats: [
+      { label: "Resolution Rate", value: "85%" },
+      { label: "Languages", value: "25+" },
+      { label: "Users Served", value: "10M+" }
+    ],
+    fullDescription: "Seamless home extension and living space expansion through AI-driven intent mapping and sentiment analysis. We build and train the core engines that power global customer service bots and virtual assistants.",
+    challenge: "Legacy customer service systems are rigid and fail to understand complex human intent or emotional context.",
+    solution: "Developed multi-modal training sets for NLP engines that recognize regional dialects and nuanced customer sentiment.",
+    outcome: "Significant improvement in CSAT scores and reduced operational costs for global telecomm leaders."
   },
   {
-    id: "nlp-financial-compliance",
-    icon: Landmark,
-    industry: "Finance",
-    title: "NLP for financial compliance",
-    summary: "Processed multilingual documents for regulatory analysis.",
-    description:
-      "We built a custom NLP training dataset for a Southeast Asian bank's compliance system. Our multilingual team processed financial documents across 8 languages, tagging entities, classifying risk factors, and flagging regulatory triggers -- reducing the bank's manual review workload by 70%.",
-    stats: ["8 languages", "70% time saved", "500K documents"],
-    slug: "nlp-financial-compliance",
-    fullDescription: "For one of Southeast Asia's largest banking groups, we created a comprehensive NLP training dataset to automate regulatory compliance monitoring. Our multilingual team of linguists and financial experts processed 500,000+ documents across 8 languages (English, Malay, Mandarin, Tamil, Thai, Vietnamese, Indonesian, and Tagalog), tagging entities, classifying risk factors, and flagging regulatory triggers.",
-    challenge: "The bank's compliance team was spending 200+ hours weekly manually reviewing documents in multiple languages to identify regulatory risks.",
-    solution: "We built a custom annotation pipeline with language-specific experts and developed a taxonomy of 50+ regulatory risk categories.",
-    outcome: "Reduced manual review workload by 70% and improved regulatory risk detection by 45%, now processing 10,000+ documents daily."
-  },
-  {
-    id: "voice-assistant-training",
+    id: "nlp-speech",
     icon: Smartphone,
+    type: "Case Study",
     industry: "Technology",
-    title: "Voice assistant training",
-    summary: "Curated multilingual speech data for conversational AI.",
-    description:
-      "For a major tech platform, we curated 10,000+ hours of multilingual speech data across 12 Southeast Asian languages and dialects. Our team handled transcription, intent labeling, and sentiment tagging -- powering a voice assistant that serves over 50 million users daily.",
-    stats: ["10K+ hours", "12 languages", "50M+ users"],
-    slug: "voice-assistant-training",
-    fullDescription: "A leading global technology company engaged us to create a diverse, high-quality speech dataset for their voice assistant's expansion into Southeast Asia. We curated 10,000+ hours of speech data across 12 languages and 30+ regional dialects, with careful attention to age, gender, and accent diversity. Our team handled verbatim transcription, intent labeling, sentiment tagging, and acoustic environment classification.",
-    challenge: "The voice assistant struggled with Southeast Asian accents and dialects, resulting in poor user experience for 50M+ potential users.",
-    solution: "We recorded and annotated 10,000+ hours of speech from 5,000+ native speakers across the region, ensuring demographic diversity.",
-    outcome: "The improved voice assistant now serves 50M+ users daily with 95% accuracy across all target languages and dialects."
+    technology: "ASR/TTS Engines",
+    title: "NLP & Speech Acquisition",
+    summary: "Multilingual transcription and intent labeling at scale.",
+    image: "/images/projects/voice-ai.png",
+    color: "#ec4899",
+    stats: [
+      { label: "Hours Curated", value: "10K+" },
+      { label: "Dialects", value: "30+" },
+      { label: "Accuracy", value: "95%" }
+    ],
+    fullDescription: "A leading global technology company engaged us to create a diverse, high-quality speech dataset for their voice assistant's expansion into Southeast Asia. We curated speech data across 12 languages and 30+ regional dialects.",
+    challenge: "Voice assistants often struggle with regional accents and code-switching, leading to poor user adoption in diverse markets.",
+    solution: "Meticulous curation of real-world speech from 5,000+ native speakers across all target demographics.",
+    outcome: "Highly localized AI interfaces that serve over 50 million users daily with industry-leading precision."
+  },
+  {
+    id: "computer-vision",
+    icon: Eye,
+    type: "Case Study",
+    industry: "AI Vision",
+    technology: "Edge AI/YOLOv8",
+    title: "Computer Vision (CV)",
+    summary: "Powering visual recognition across industries.",
+    image: "/images/services/data-annotation.png",
+    color: "#6366f1",
+    stats: [
+      { label: "Object Classes", value: "1K+" },
+      { label: "Accuracy", value: "98.5%" },
+      { label: "Sector Coverage", value: "15+" }
+    ],
+    fullDescription: "From driveways and patios to fencing and brickwork—visual recognition powers modern safety and logistics. We provide the ground-truth data for CV models in manufacturing, security, and urban planning.",
+    challenge: "Varying lighting, occlusions, and rare edge cases make robust CV models difficult to train and validate.",
+    solution: "Expertly annotated datasets with multi-tier quality control focusing on complex visual scenes.",
+    outcome: "Production-ready CV models for everything from factory safety oversight to smart city analytics."
+  },
+  {
+    id: "genealogy",
+    icon: Users,
+    type: "Case Study",
+    industry: "Legacy",
+    technology: "HTR/Digital Archivist",
+    title: "Genealogy",
+    summary: "Digitalizing historical records for heritage preservation.",
+    image: "/images/services/abstract-2.png",
+    color: "#8b5cf6",
+    stats: [
+      { label: "Records Dig.", value: "100M+" },
+      { label: "Accuracy", value: "99.9%" },
+      { label: "Languages", value: "5+" }
+    ],
+    fullDescription: "We preserve the past using the technology of the future. Lifewood specializes in the digitalization, indexing, and genealogical mapping of historical records for archives and heritage organizations globaly.",
+    challenge: "Fragile, handwritten historical documents are inaccessible and difficult to process using standard OCR.",
+    solution: "Manual transcription by specialized linguistic teams combined with proprietary data indexing frameworks.",
+    outcome: "Global accessibility to ancestral records, enabling millions to reconnect with their heritage."
   },
 ]
 
-export function Projects() {
-  const [selectedProject, setSelectedProject] = useState(null)
-  const router = useRouter()
+function ProjectCard({ project, index, isLast, onClick }) {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  })
 
-  const handleCardClick = (project) => {
-    setSelectedProject(project)
-    // Optional: Update URL without navigation
-    // router.push(`/case-studies?project=${project.slug}`, { scroll: false })
-  }
+  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"])
 
-  const handleClose = () => {
-    setSelectedProject(null)
-    // Optional: Clear URL params
-    // router.push('/case-studies', { scroll: false })
-  }
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.8, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
+      onClick={() => onClick(project)}
+      className={`group relative cursor-pointer break-inside-avoid ${isLast ? "[column-span:all] mt-10 w-full inline-block" : ""}`}
+    >
+      <div className="relative overflow-hidden rounded-[4rem] bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-white/5 shadow-sm hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.2)] transition-all duration-1000">
+        <div className={`relative ${isLast ? "aspect-[4/3] md:aspect-[21/9]" : index % 3 === 0 ? "aspect-[4/5]" : "aspect-[16/10]"} overflow-hidden`}>
+          <motion.div style={{ y }} className="absolute inset-0 scale-110">
+            <Image
+              src={project.image}
+              alt={project.title}
+              fill
+              className="object-cover transition-transform duration-1000 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+            />
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-700" />
+        </div>
 
-  // If a project is selected, show only that project in detail
-  if (selectedProject) {
-    const project = selectedProject
-    const Icon = project.icon
+        {/* Floating Tags */}
+        <div className="absolute top-10 left-10 flex flex-wrap gap-3 pointer-events-none opacity-0 -translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700">
+          <span className="px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-2xl text-[0.6rem] font-black text-white uppercase tracking-[0.2em] border border-white/10">
+            {project.type}
+          </span>
+          <span className="px-4 py-1.5 rounded-full bg-lw-green/30 backdrop-blur-2xl text-[0.6rem] font-black text-white uppercase tracking-[0.2em] border border-white/10">
+            {project.industry}
+          </span>
+        </div>
 
-    return (
-      <section className="min-h-screen bg-[var(--lw-sea-salt)] py-28 lg:py-36">
-        <div className="mx-auto max-w-4xl px-6 lg:px-10">
-          {/* Back button */}
-          <button
-            onClick={handleClose}
-            className="group mb-8 inline-flex items-center gap-2 text-sm text-[var(--lw-dark)]/60 hover:text-[var(--lw-green)] transition-colors"
-          >
-            <ArrowRight size={16} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
-            Back to all case studies
-          </button>
+        {/* Content Overlay */}
+        <div className="absolute inset-0 flex flex-col justify-end p-12">
+          <h3 className="text-3xl lg:text-4xl font-black text-white mb-4 translate-y-8 group-hover:translate-y-0 transition-transform duration-700 ease-out">
+            {project.title}
+          </h3>
 
-          {/* Detailed case study */}
-          <div className="bg-white rounded-3xl border border-[var(--lw-green)]/10 shadow-xl overflow-hidden">
-            {/* Header with icon */}
-            <div className="p-8 lg:p-12 border-b border-[var(--lw-dark)]/5">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--lw-green)]/10">
-                  <Icon size={32} className="text-[var(--lw-green)]" strokeWidth={1.5} />
-                </div>
-                <div>
-                  <span className="text-xs font-semibold uppercase tracking-[0.15em] text-[var(--lw-saffron)]">
-                    {project.industry}
-                  </span>
-                  <h1 className="text-2xl lg:text-3xl font-bold text-[var(--lw-dark)]">
-                    {project.title}
-                  </h1>
-                </div>
-              </div>
+          <p className="text-white/60 text-base max-w-sm line-clamp-2 opacity-0 translate-y-6 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700 delay-100 font-medium leading-relaxed">
+            {project.summary}
+          </p>
 
-              {/* Stats */}
-              <div className="flex flex-wrap gap-3 mt-4">
-                {project.stats.map((stat) => (
-                  <span
-                    key={stat}
-                    className="rounded-full bg-[var(--lw-green)]/[0.06] px-4 py-2 text-sm font-medium text-[var(--lw-green)]"
-                  >
-                    {stat}
-                  </span>
-                ))}
+          <div className="mt-12 flex items-center justify-between opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700 delay-200">
+            <div className="flex gap-10">
+              <div>
+                <div className="text-2xl font-black text-white tracking-tighter">{project.stats[0].value}</div>
+                <div className="text-[0.6rem] font-black text-white/30 uppercase tracking-[0.3em] mt-1">{project.stats[0].label}</div>
               </div>
             </div>
 
-            {/* Content */}
-            <div className="p-8 lg:p-12 space-y-8">
-              {/* Full description */}
-              <div>
-                <h2 className="text-lg font-semibold text-[var(--lw-dark)] mb-3">Overview</h2>
-                <p className="text-[var(--lw-dark)]/70 leading-relaxed">
-                  {project.fullDescription}
-                </p>
-              </div>
-
-              {/* Challenge, Solution, Outcome grid */}
-              <div className="grid md:grid-cols-3 gap-6 pt-4">
-                <div className="p-5 bg-[var(--lw-green)]/[0.02] rounded-xl border border-[var(--lw-green)]/5">
-                  <h3 className="font-semibold text-[var(--lw-dark)] mb-2">The Challenge</h3>
-                  <p className="text-sm text-[var(--lw-dark)]/60">{project.challenge}</p>
-                </div>
-                <div className="p-5 bg-[var(--lw-green)]/[0.02] rounded-xl border border-[var(--lw-green)]/5">
-                  <h3 className="font-semibold text-[var(--lw-dark)] mb-2">Our Solution</h3>
-                  <p className="text-sm text-[var(--lw-dark)]/60">{project.solution}</p>
-                </div>
-                <div className="p-5 bg-[var(--lw-green)]/[0.02] rounded-xl border border-[var(--lw-green)]/5">
-                  <h3 className="font-semibold text-[var(--lw-dark)] mb-2">The Outcome</h3>
-                  <p className="text-sm text-[var(--lw-dark)]/60">{project.outcome}</p>
-                </div>
-              </div>
-
-              {/* CTA */}
-              <div className="pt-6 border-t border-[var(--lw-dark)]/5">
-                <a
-                  href="#contact"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--lw-green)] text-white rounded-full text-sm font-medium hover:bg-[var(--lw-green)]/90 transition-all duration-300 hover:scale-105"
-                >
-                  Discuss a similar project
-                  <ArrowRight size={14} />
-                </a>
+            <div className="flex items-center gap-4 group/btn">
+              <span className="text-[0.7rem] font-black text-white uppercase tracking-[0.4em] opacity-0 group-hover:opacity-100 translate-x-6 group-hover:translate-x-0 transition-all duration-700">
+                Explore Case
+              </span>
+              <div className="h-16 w-16 flex items-center justify-center rounded-[1.5rem] bg-white text-zinc-950 group-hover:bg-lw-green group-hover:text-white transition-all duration-500 shadow-2xl group-hover:scale-110 group-hover:rotate-12">
+                <ArrowRight size={24} strokeWidth={3} />
               </div>
             </div>
           </div>
         </div>
-      </section>
-    )
-  }
+      </div>
+    </motion.div>
+  )
+}
 
-  // Otherwise show all projects grid
+export function Projects() {
+  const [selectedProject, setSelectedProject] = useState(null)
+
   return (
-    <section id="projects" className="bg-[var(--lw-sea-salt)] py-28 lg:py-36">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        {/* Header */}
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lw-saffron)]">
-            Our work
-          </span>
-          <h2 className="mt-4 text-balance text-3xl font-bold tracking-tight text-[var(--lw-dark)] sm:text-4xl lg:text-[2.65rem]">
-            Projects that drive real impact
-          </h2>
-          <p className="mt-5 text-[1.05rem] leading-relaxed text-[var(--lw-dark)]/55">
-            Click any case study to see the full story.
-          </p>
+    <section id="projects" className="bg-[#FAFAFA] py-28 lg:py-48 dark:bg-[#060606] overflow-hidden">
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
+
+        {/* Decorative Ambience */}
+        <div className="absolute top-0 right-0 h-[600px] w-[600px] bg-lw-greensaffron/5 blur-[120px] rounded-full pointer-events-none" />
+
+        {/* SECTION HEADER */}
+        <div className="relative mb-32">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="flex items-center gap-4 mb-8"
+          >
+            <div className="h-0.5 w-12 bg-lw-greensaffron" />
+            <span className="text-xs font-black uppercase tracking-[0.5em] text-lw-greensaffron">
+              Digital Masterpieces
+            </span>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-end">
+            <motion.h2
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="text-6xl lg:text-8xl font-black text-zinc-950 dark:text-white tracking-tighter leading-[0.9]"
+            >
+              The AI <br />
+              <span className="text-lw-green italic">Showcase.</span>
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="text-xl leading-relaxed text-zinc-500 dark:text-zinc-400 max-w-xl font-medium"
+            >
+              From complex data extraction to autonomous perception, witness how we materialize high-fidelity AI solutions for the world's leading innovators.
+            </motion.p>
+          </div>
         </div>
 
-        {/* Project cards grid */}
-        <div className="mt-16 grid gap-4 md:grid-cols-2">
-          {projects.map((project, i) => {
-            const Icon = project.icon
-
-            return (
-              <div
+        {/* MAIN PROJECTS GRID */}
+        <div className="flex flex-col gap-10">
+          {/* Top Masonry Section */}
+          <div className="columns-1 md:columns-2 lg:columns-2 gap-10 space-y-10">
+            {projects.slice(0, projects.length - 1).map((project, i) => (
+              <ProjectCard
                 key={project.id}
-                onClick={() => handleCardClick(project)}
-                className="group relative overflow-hidden rounded-[1.5rem] border border-[var(--lw-dark)]/[0.03] bg-[var(--lw-white)] hover:border-[var(--lw-green)]/10 hover:shadow-[0_8px_32px_rgba(19,48,32,0.04)] hover:scale-[1.02] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] cursor-pointer"
+                project={project}
+                index={i}
+                isLast={false}
+                onClick={setSelectedProject}
+              />
+            ))}
+          </div>
+
+          {/* Full-width Last Landscape Banner */}
+          <div className="w-full h-auto">
+            <ProjectCard
+              key={projects[projects.length - 1].id}
+              project={projects[projects.length - 1]}
+              index={projects.length - 1}
+              isLast={true}
+              onClick={setSelectedProject}
+            />
+          </div>
+        </div>
+
+        {/* MODAL / DETAIL VIEW */}
+        <AnimatePresence mode="wait">
+          {selectedProject && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] flex items-center justify-center p-6 lg:p-12 bg-zinc-950/98 backdrop-blur-3xl"
+              onClick={() => setSelectedProject(null)}
+            >
+              <motion.div
+                initial={{ scale: 0.95, y: 60, opacity: 0 }}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                exit={{ scale: 0.95, y: 60, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 260, damping: 25 }}
+                onClick={(e) => e.stopPropagation()}
+                className="relative w-full max-w-7xl max-h-[90vh] overflow-y-auto bg-white dark:bg-zinc-900 rounded-[4.5rem] shadow-2xl custom-scrollbar border border-white/[0.08]"
               >
-                <div className="p-8 lg:p-10">
-                  {/* Header with icon and title */}
-                  <div className="flex items-start gap-4">
-                    <div className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--lw-green)]/[0.05] group-hover:bg-[var(--lw-green)]/10 transition-colors duration-300">
-                      <Icon size={22} className="text-[var(--lw-green)]" strokeWidth={1.5} />
-                    </div>
-                    <div>
-                      <span className="text-[0.7rem] font-semibold uppercase tracking-[0.15em] text-[var(--lw-saffron)]">
-                        {project.industry}
-                      </span>
-                      <h3 className="text-lg font-semibold text-[var(--lw-dark)] group-hover:text-[var(--lw-green)] transition-colors">
-                        {project.title}
-                      </h3>
+                {/* Close Button */}
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="absolute top-12 right-12 z-20 h-16 w-16 flex items-center justify-center rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-white hover:bg-lw-green hover:text-white transition-all shadow-2xl hover:scale-110 active:scale-95"
+                >
+                  <X size={28} strokeWidth={3} />
+                </button>
+
+                <div className="grid lg:grid-cols-2">
+                  {/* Left: Cinematic Visual */}
+                  <div className="relative aspect-square lg:aspect-auto lg:h-full min-h-[600px] overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+                    <Image
+                      src={selectedProject.image}
+                      alt={selectedProject.title}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60" />
+
+                    <div className="absolute bottom-16 left-16 flex gap-6">
+                      <div className="px-10 py-5 rounded-[2rem] bg-black/40 backdrop-blur-3xl border border-white/20 text-white flex flex-col items-center shadow-2xl">
+                        <Cpu className="mb-3 text-lw-green" size={28} />
+                        <span className="text-[0.7rem] font-black uppercase tracking-[0.2em]">Ready for Scale</span>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Summary */}
-                  <p className="mt-4 text-[0.88rem] text-[var(--lw-dark)]/45">
-                    {project.summary}
-                  </p>
+                  {/* Right: Content Section */}
+                  <div className="p-12 lg:p-24 flex flex-col">
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2 }}
+                      className="flex flex-wrap items-center gap-6 mb-12"
+                    >
+                      <div className="h-16 w-16 flex items-center justify-center rounded-[1.5rem] bg-lw-green text-white shadow-xl shadow-emerald-500/20">
+                        <selectedProject.icon size={32} />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-sm font-black uppercase tracking-[0.4em] text-lw-greensaffron">{selectedProject.industry}</span>
+                        <span className="text-[0.7rem] font-bold text-zinc-400 uppercase tracking-widest mt-1">Domain Expertise</span>
+                      </div>
+                    </motion.div>
 
-                  {/* Stats badges */}
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {project.stats.map((stat) => (
-                      <span
-                        key={stat}
-                        className="rounded-full bg-[var(--lw-green)]/[0.04] px-3.5 py-1.5 text-[0.75rem] font-semibold text-[var(--lw-green)]"
-                      >
-                        {stat}
-                      </span>
-                    ))}
-                  </div>
+                    <motion.h2
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className="text-5xl lg:text-7xl font-black text-zinc-950 dark:text-white mb-12 leading-[0.9] tracking-tighter"
+                    >
+                      {selectedProject.title}
+                    </motion.h2>
 
-                  {/* Read more indicator */}
-                  <div className="mt-4 flex items-center gap-1 text-[0.8rem] font-medium text-[var(--lw-green)]/70 group-hover:text-[var(--lw-green)] transition-colors">
-                    <span>Click to read full case study</span>
-                    <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="flex flex-wrap gap-4 mb-16"
+                    >
+                      {[selectedProject.type, selectedProject.technology].map((tag) => (
+                        <div key={tag} className="px-6 py-2.5 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-100 dark:border-white/10 flex items-center gap-3">
+                          <div className="h-1.5 w-1.5 rounded-full bg-lw-green" />
+                          <span className="text-xs font-black text-zinc-600 dark:text-zinc-400 uppercase tracking-widest">{tag}</span>
+                        </div>
+                      ))}
+                    </motion.div>
+
+                    <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                      className="text-2xl text-zinc-500 dark:text-zinc-400 leading-relaxed mb-20 font-medium"
+                    >
+                      {selectedProject.fullDescription}
+                    </motion.p>
+
+                    {/* Stats Highlights */}
+                    <div className="grid grid-cols-3 gap-10 mb-20 p-16 rounded-[4rem] bg-zinc-50 dark:bg-black/40 border border-zinc-100 dark:border-white/5 shadow-inner">
+                      {selectedProject.stats.map((stat, idx) => (
+                        <motion.div
+                          key={stat.label}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.6 + idx * 0.1 }}
+                        >
+                          <div className="text-5xl font-black text-zinc-950 dark:text-white tracking-tighter">{stat.value}</div>
+                          <div className="text-[0.7rem] font-black text-zinc-400 dark:text-zinc-500 uppercase tracking-[0.3em] mt-4">{stat.label}</div>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    {/* Industrial Insights */}
+                    <div className="space-y-16">
+                      {[
+                        { icon: Layers, title: "The Complexity", text: selectedProject.challenge },
+                        { icon: Sparkles, title: "Precision Solution", text: selectedProject.solution },
+                        { icon: TrendingUp, title: "Global Impact", text: selectedProject.outcome }
+                      ].map((block, idx) => (
+                        <motion.div
+                          key={idx}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.8 + idx * 0.1 }}
+                          className="flex gap-10 group/insight"
+                        >
+                          <div className="h-12 w-12 shrink-0 mt-1 rounded-[1.25rem] bg-white dark:bg-zinc-800 flex items-center justify-center text-lw-green shadow-xl group-hover/insight:bg-lw-green group-hover/insight:text-white transition-all">
+                            <block.icon size={22} />
+                          </div>
+                          <div>
+                            <h4 className="font-black text-zinc-950 dark:text-white text-lg mb-4 uppercase tracking-tight">{block.title}</h4>
+                            <p className="text-[1.1rem] text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">{block.text}</p>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    {/* Action */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.1 }}
+                      className="pt-24 mt-auto"
+                    >
+                      <button className="group w-full flex items-center justify-between rounded-[2.5rem] bg-zinc-950 dark:bg-white p-3 pl-14 text-white dark:text-zinc-950 text-xl font-black transition-all shadow-2xl hover:scale-[1.02] active:scale-[0.98]">
+                        ANALYZE SIMILAR CHALLENGES
+                        <div className="h-20 w-20 flex items-center justify-center rounded-[2.2rem] bg-lw-green text-white group-hover:rotate-45 transition-transform duration-500">
+                          <ArrowRight size={32} strokeWidth={3} />
+                        </div>
+                      </button>
+                    </motion.div>
                   </div>
                 </div>
-              </div>
-            )
-          })}
-        </div>
-
-        {/* View all projects link */}
-        <div className="mt-12 text-center">
-          <Link
-            href="/case-studies"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-[var(--lw-dark)]/10 rounded-full text-[var(--lw-dark)] font-medium hover:border-[var(--lw-green)]/30 hover:shadow-lg transition-all duration-300 hover:scale-105"
-          >
-            View all case studies
-            <ArrowRight size={16} />
-          </Link>
-        </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   )

@@ -2,7 +2,6 @@
 
 import { Navbar } from "@/components/lifewood/navbar";
 import { Projects } from "@/components/lifewood/projects";
-import { Footer } from "@/components/lifewood/footer";
 
 export default function ProjectsPage() {
   return (
@@ -11,7 +10,6 @@ export default function ProjectsPage() {
       <div className="pt-20">
         <Projects />
       </div>
-      <Footer />
     </main>
   );
 }

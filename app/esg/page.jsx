@@ -2,7 +2,6 @@
 
 import { Navbar } from "@/components/lifewood/navbar";
 import { ESG } from "@/components/lifewood/esg";
-import { Footer } from "@/components/lifewood/footer";
 
 export default function ESGPage() {
   return (
@@ -11,7 +10,6 @@ export default function ESGPage() {
       <div className="pt-20">
         <ESG />
       </div>
-      <Footer />
     </main>
   );
 }

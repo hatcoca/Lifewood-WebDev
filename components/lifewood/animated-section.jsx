@@ -1,6 +1,6 @@
 "use client"
 
-import type { ReactNode } from "react"
+import { useAnimateOnScroll } from "@/hooks/use-animate-on-scroll"
 
 export function AnimatedSection({ children, delay = 0 }) {
   const { ref, isVisible } = useAnimateOnScroll(0.1)

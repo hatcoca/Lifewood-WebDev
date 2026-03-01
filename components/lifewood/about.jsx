@@ -1,144 +1,117 @@
-import { ArrowRight } from "lucide-react"
-import Image from "next/image"
+"use client"
+
+import { ArrowRight, MoveRight, ArrowUpRight } from "lucide-react"
 import Link from "next/link"
-import { pillars } from "@/lib/data/about"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { useRef } from "react"
+import Image from "next/image"
 
 export function About() {
-<<<<<<< HEAD:components/lifewood/about.jsx
-  const [expandedPillar, setExpandedPillar] = useState(null)
-  const [showMore, setShowMore] = useState(false)
-
-=======
->>>>>>> cbb23ad3422d0718ded2a394b9f69158c8a18714:components/lifewood/about.tsx
+  const containerRef = useRef(null)
+  
   return (
-    <section id="about" className="bg-[var(--lw-sea-salt)] py-28 lg:py-36">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        {/* Section header */}
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lw-saffron)]">
-            Who we are
-          </span>
-          <h2 className="mt-4 text-balance text-3xl font-bold tracking-tight text-[var(--lw-dark)] sm:text-4xl lg:text-[2.65rem]">
-            More than a data company
-          </h2>
-          <p className="mt-5 text-[1.05rem] leading-relaxed text-[var(--lw-dark)]/55">
-            Lifewood processes data, delivers at speed, and produces projects in
-            multiple languages for some of the world&apos;s largest organizations.
-          </p>
-        </div>
+    <section ref={containerRef} id="about" className="relative z-10 bg-white dark:bg-[#060606] pt-16 pb-16 lg:pt-24 lg:pb-24 overflow-hidden shadow-[0_-20px_40px_rgba(0,0,0,0.05)] dark:shadow-[0_-20px_40px_rgba(0,0,0,0.5)]">
+      <div className="relative mx-auto max-w-6xl px-6 lg:px-10">
+        
+        {/* TOP SECTION: ABOUT US + PILL BUTTON */}
+        <div className="flex flex-col items-center text-center space-y-12 mb-32 lg:mb-48">
+          
+          {/* Section Label */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-4 text-xs font-black tracking-[0.4em] text-zinc-400 uppercase"
+          >
+            <div className="h-2 w-2 rounded-full bg-zinc-900 dark:bg-zinc-100" />
+            ABOUT US
+          </motion.div>
 
-        {/* Image + text row */}
-        <div className="mt-20 grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
-          <div className="relative overflow-hidden rounded-[1.5rem]">
-            <Image
-              src="/about-bridge.jpg"
-              alt="Lifewood global headquarters connecting East and West"
-              width={640}
-              height={440}
-              className="h-auto w-full object-cover"
-            />
-            <div className="absolute inset-0 rounded-[1.5rem] ring-1 ring-inset ring-[var(--lw-dark)]/[0.04]" />
-          </div>
+          {/* Main Headline */}
+          <motion.h2 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1, duration: 0.8 }}
+            className="text-[1.75rem] md:text-4xl lg:text-[2.75rem] font-medium text-zinc-900 dark:text-zinc-100 tracking-tight leading-[1.3] max-w-5xl"
+          >
+            At <span className="font-bold">Lifewood</span> we empower our company and our clients to realize the transformative power of AI: bringing big data to life: launching new ways of thinking, learning and doing; for the good of humankind.
+          </motion.h2>
 
-          <div>
-            <p className="text-[1.05rem] leading-[1.75] text-[var(--lw-dark)]/60">
-              At our core, we define and communicate our identity to global teams,
-              clients, investors, and stakeholders across the world. Lifewood is a
-              bridge between ASEAN and China, and by extension, the rest of the world.
-            </p>
-
-            {/* Expandable additional text */}
-            <div
-<<<<<<< HEAD:components/lifewood/about.jsx
-              className={`grid transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${showMore ? "grid-rows-[1fr] mt-5 opacity-100" : "grid-rows-[0fr] opacity-0"
-=======
-              className={`grid transition-all duration-500 ease-[timing-function:cubic-bezier(0.32,0.72,0,1)] ${showMore ? "grid-rows-[1fr] mt-5 opacity-100" : "grid-rows-[0fr] opacity-0"
->>>>>>> cbb23ad3422d0718ded2a394b9f69158c8a18714:components/lifewood/about.tsx
-                }`}
+          {/* Know Us Better Button */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            <Link 
+              href="/about"
+              className="group flex items-center rounded-full bg-[#1A362D] p-1.5 pl-8 pr-1.5 transition-all hover:scale-105 hover:bg-[#11241E] active:scale-95 shadow-lg"
             >
-              <div className="overflow-hidden">
-                <p className="text-[1.05rem] leading-[1.75] text-[var(--lw-dark)]/60">
-                  We are a builder of harmony, trust, and cooperation across borders,
-                  cultures, and business practices. With headquarters in Malaysia,
-                  Lifewood is ideally situated to support the country&apos;s role as a
-                  super-bridge connecting China with other nations, leveraging advanced
-                  technologies like AI, GPT, and Gemini to bring diverse people and
-                  interests together.
-                </p>
-                <p className="mt-5 text-[1.05rem] leading-[1.75] text-[var(--lw-dark)]/60">
-                  Our commitment to excellence has made us the trusted partner of
-                  leading global enterprises across automotive, healthcare, finance,
-                  and technology sectors.
-                </p>
+              <span className="text-[0.9rem] font-medium text-white tracking-wide pr-6">Know Us Better</span>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#11241E] text-white transition-transform group-hover:bg-lw-green">
+                <MoveRight size={18} className="transition-transform group-hover:translate-x-1" />
               </div>
-            </div>
-          </div>
+            </Link>
+          </motion.div>
         </div>
 
-        {/* Pillar cards -- summary only */}
-        <div className="mt-20 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {pillars.map((pillar, i) => {
-            const isOpen = expandedPillar === i
-            return (
-              <button
-                key={pillar.title}
-                onClick={() => setExpandedPillar(isOpen ? null : i)}
-<<<<<<< HEAD:components/lifewood/about.jsx
-                className={`group rounded-[1.25rem] p-7 text-left transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen
-=======
-                className={`group rounded-[1.25rem] p-7 text-left transition-all duration-500 ease-[timing-function:cubic-bezier(0.32,0.72,0,1)] ${isOpen
->>>>>>> cbb23ad3422d0718ded2a394b9f69158c8a18714:components/lifewood/about.tsx
-                    ? "bg-[var(--lw-green)] shadow-[0_16px_48px_rgba(4,98,65,0.2)]"
-                    : "bg-[var(--lw-white)] shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(19,48,32,0.07)]"
-                  }`}
-              >
-                <div
-                  className={`mb-4 inline-flex h-11 w-11 items-center justify-center rounded-[0.75rem] transition-colors duration-300 ${isOpen ? "bg-white/15" : "bg-[var(--lw-green)]/[0.05] group-hover:bg-[var(--lw-green)]/[0.09]"
-                    }`}
-                >
-                  <pillar.icon
-                    size={22}
-                    className={`transition-colors ${isOpen ? "text-white" : "text-[var(--lw-green)]"}`}
-                    strokeWidth={1.5}
-                  />
-                </div>
-                <h3
-                  className={`text-[1.05rem] font-semibold transition-colors ${isOpen ? "text-white" : "text-[var(--lw-dark)]"
-                    }`}
-                >
-                  {pillar.title}
-                </h3>
-                <p
-                  className={`mt-2 text-[0.84rem] leading-relaxed transition-colors ${isOpen ? "text-white/70" : "text-[var(--lw-dark)]/45"
-                    }`}
-                >
-                  {isOpen ? pillar.description : pillar.summary}
-                </p>
-              </button>
-            )
-          })}
-        </div>
+        {/* BOTTOM SECTION: TWO CIRCLES + SECONDARY TEXT */}
+        <div className="flex flex-col items-start max-w-4xl space-y-8">
+          
+          {/* Decorative Circles */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center -space-x-4"
+          >
+            <div className="h-8 w-8 rounded-full bg-[#1A362D] border-2 border-white dark:border-[#060606] relative z-10" />
+            <div className="h-8 w-8 rounded-full bg-zinc-400 border-2 border-white dark:border-[#060606] relative z-0" />
+          </motion.div>
 
-        {/* Vision & Mission */}
-        <div className="mt-20 grid items-stretch gap-5 lg:grid-cols-2">
-          <div className="relative overflow-hidden rounded-[1.5rem] bg-[var(--lw-green)] p-9 lg:p-12">
-            <div className="absolute top-0 right-0 h-48 w-48 rounded-full bg-[var(--lw-saffron)]/[0.06] blur-3xl" />
-            <span className="relative text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lw-saffron)]">Our vision</span>
-            <p className="relative mt-5 text-xl font-medium leading-[1.6] text-white/90 lg:text-[1.35rem]">
-              To be the global champion in AI data solutions, igniting a culture
-              of innovation and sustainability that enriches lives and transforms
-              communities worldwide.
-            </p>
-          </div>
-          <div className="relative overflow-hidden rounded-[1.5rem] border border-[var(--lw-green)]/[0.06] bg-[var(--lw-white)] p-9 lg:p-12">
-            <div className="absolute bottom-0 left-0 h-48 w-48 rounded-full bg-[var(--lw-green)]/[0.03] blur-3xl" />
-            <span className="relative text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lw-saffron)]">Our mission</span>
-            <p className="relative mt-5 text-xl font-medium leading-[1.6] text-[var(--lw-dark)]/65 lg:text-[1.35rem]">
-              To develop and deploy cutting-edge AI technologies that solve
-              real-world problems, empower communities, and advance sustainable
-              practices across sectors.
-            </p>
-          </div>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-zinc-500 dark:text-zinc-400 text-[1.05rem] lg:text-[1.15rem] leading-relaxed font-medium"
+          >
+            By connecting local expertise with our global AI data infrastructure, we create opportunities, empower communities, and drive inclusive growth worldwide.
+          </motion.p>
+          
+          {/* Action Row */}
+          <motion.div
+             initial={{ opacity: 0, y: 20 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ delay: 0.2 }}
+             className="flex flex-wrap items-center gap-4 pt-4"
+          >
+            {/* Contact Action */}
+            <Link 
+              href="/contact"
+              className="group flex items-center rounded-full bg-[#F5B553] p-1 pl-6 pr-1 transition-all hover:scale-105 hover:bg-[#F2A42B] active:scale-95 shadow-sm"
+            >
+              <span className="text-[0.8rem] font-bold text-zinc-900 tracking-wide pr-4">Contact us now</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-zinc-900 transition-transform group-hover:bg-zinc-50">
+                <ArrowUpRight size={14} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </div>
+            </Link>
+
+            {/* Explore Action */}
+            <Link 
+              href="/services"
+              className="group flex items-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#060606] p-1 pl-1 pr-6 transition-all hover:scale-105 hover:border-zinc-300 dark:hover:border-zinc-700 active:scale-95 shadow-sm"
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-white transition-transform group-hover:bg-zinc-200 dark:group-hover:bg-zinc-800 mr-4">
+                <ArrowUpRight size={14} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </div>
+              <span className="text-[0.8rem] font-semibold text-zinc-600 dark:text-zinc-300 tracking-wide">Explore more</span>
+            </Link>
+          </motion.div>
+
         </div>
       </div>
     </section>

@@ -1,257 +1,106 @@
 "use client";
 
-import {
-  Database,
-  Brain,
-  Layers,
-  ShieldCheck,
-  ArrowRight,
-  ChevronDown,
-} from "lucide-react";
-import { useState } from "react";
-import Link from "next/link";
-
-const services = [
-  {
-    icon: Database,
-    title: "Data Annotation",
-    summary: "High-quality, human-powered data labeling across modalities.",
-    description:
-      "We provide enterprise-grade data annotation services designed to power modern AI systems. Our global workforce delivers precise labeling across text, image, audio, and video datasets with consistent quality and scalability. Every dataset is carefully curated to meet strict accuracy requirements and domain-specific needs.",
-    features: [
-      "Text classification",
-      "Image segmentation",
-      "NER tagging",
-      "Sentiment analysis",
-      "Audio transcription",
-      "Video labeling",
-    ],
-    slug: "data-annotation",
-  },
-  {
-    icon: Brain,
-    title: "AI Training Data",
-    summary: "Production-grade datasets for ML model development.",
-    description:
-      "We create high-quality training datasets tailored for machine learning and generative AI applications. From supervised learning datasets to reinforcement learning with human feedback (RLHF), we help organizations build smarter, more reliable AI systems.",
-    features: [
-      "Custom datasets",
-      "Model fine-tuning",
-      "Bias detection",
-      "Benchmark data",
-      "RLHF data",
-      "Prompt engineering",
-    ],
-    slug: "ai-training-data",
-  },
-  {
-    icon: Layers,
-    title: "Data Processing",
-    summary: "End-to-end pipeline management at massive scale.",
-    description:
-      "Our data processing pipelines transform raw data into structured, AI-ready formats. We support large-scale data operations with automation, API integration, and real-time processing to ensure seamless data flow across systems.",
-    features: [
-      "Data cleansing",
-      "Format conversion",
-      "Pipeline automation",
-      "Real-time processing",
-      "API integration",
-      "Cloud deployment",
-    ],
-    slug: "data-processing",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Quality Assurance",
-    summary: "Multi-tier QC processes with 98%+ accuracy rates.",
-    description:
-      "Quality is at the core of everything we do. Our multi-layer validation process ensures accuracy, consistency, and compliance across all datasets. We combine human review with automated checks to maintain industry-leading quality standards.",
-    features: [
-      "Multi-tier QC",
-      "Accuracy tracking",
-      "Audit trails",
-      "Compliance checks",
-      "SLA monitoring",
-      "Real-time dashboards",
-    ],
-    slug: "quality-assurance",
-  },
-];
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 export function Services() {
-  const [expandedIndex, setExpandedIndex] = useState(null);
-
-  const toggle = (index) => {
-    setExpandedIndex(expandedIndex === index ? null : index);
-  };
-
   return (
-    <section className="bg-[var(--lw-white)] py-28 lg:py-36">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        {/* HEADER */}
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lw-saffron)]">
-            What we do
-          </span>
-
-          <h2 className="mt-4 text-3xl font-bold text-[var(--lw-dark)] sm:text-4xl lg:text-[2.6rem]">
-            AI Data Services for Scalable Innovation
-          </h2>
-
-          <p className="mt-6 text-[1.05rem] leading-relaxed text-[var(--lw-dark)]/60">
-            We deliver end-to-end data solutions that power artificial
-            intelligence. From data collection and annotation to processing and
-            validation, our services are designed to help organizations build
-            accurate, reliable, and scalable AI systems.
-          </p>
-        </div>
-
-        {/* STATS / TRUST */}
-        <div className="mt-16 grid grid-cols-2 gap-6 text-center md:grid-cols-4">
-          <div>
-            <p className="text-3xl font-bold text-[var(--lw-green)]">1M+</p>
-            <p className="text-sm text-[var(--lw-dark)]/50">Data Points / Day</p>
-          </div>
-          <div>
-            <p className="text-3xl font-bold text-[var(--lw-green)]">98%</p>
-            <p className="text-sm text-[var(--lw-dark)]/50">Accuracy Rate</p>
-          </div>
-          <div>
-            <p className="text-3xl font-bold text-[var(--lw-green)]">100+</p>
-            <p className="text-sm text-[var(--lw-dark)]/50">Global Clients</p>
-          </div>
-          <div>
-            <p className="text-3xl font-bold text-[var(--lw-green)]">24/7</p>
-            <p className="text-sm text-[var(--lw-dark)]/50">Operations</p>
-          </div>
-        </div>
-
-        {/* SERVICES */}
-        <div className="mt-16 grid gap-4 md:grid-cols-2">
-          {services.map((service, i) => {
-            const isOpen = expandedIndex === i;
-
-            return (
-              <div
-                key={service.title}
-                className={`rounded-2xl border transition-all duration-300 ${isOpen
-                  ? "border-[var(--lw-green)]/20 bg-white shadow-xl"
-                  : "border-[var(--lw-dark)]/5 bg-[var(--lw-sea-salt)]"
-                  }`}
-              >
-                {/* HEADER */}
-                <button
-                  onClick={() => toggle(i)}
-                  className="flex w-full items-start justify-between p-8 text-left"
-                >
-                  <div className="flex gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--lw-green)]/10">
-                      <service.icon size={22} className="text-[var(--lw-green)]" />
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-semibold text-[var(--lw-dark)]">
-                        {service.title}
-                      </h3>
-                      <p className="text-sm text-[var(--lw-dark)]/50">
-                        {service.summary}
-                      </p>
-                    </div>
-                  </div>
-
-                  <ChevronDown
-                    className={`transition-transform ${isOpen ? "rotate-180 text-[var(--lw-green)]" : ""
-                      }`}
-                  />
-                </button>
-
-                {/* CONTENT */}
-                <div
-                  className={`overflow-hidden transition-all duration-500 ${isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-                    }`}
-                >
-                  <div className="px-8 pb-8">
-                    <div className="mb-4 h-px bg-[var(--lw-dark)]/10" />
-
-                    <p className="text-sm leading-relaxed text-[var(--lw-dark)]/60">
-                      {service.description}
-                    </p>
-
-                    {/* FEATURES */}
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {service.features.map((f) => (
-                        <span
-                          key={f}
-                          className="rounded-full bg-[var(--lw-green)]/10 px-3 py-1 text-xs text-[var(--lw-green)]"
-                        >
-                          {f}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* CTA */}
-                    <div className="mt-5 flex gap-4">
-                      <Link
-                        href={`/services/${service.slug}`}
-                        className="text-sm font-semibold text-[var(--lw-green)] hover:text-[var(--lw-saffron)]"
-                      >
-                        Learn more →
-                      </Link>
-
-                      <Link
-                        href="/contacts"
-                        className="text-sm text-[var(--lw-dark)]/40 hover:text-[var(--lw-green)]"
-                      >
-                        Contact us
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* PROCESS SECTION (LIFEWOOD STYLE) */}
-        <div className="mt-24 text-center">
-          <h3 className="text-2xl font-semibold text-[var(--lw-dark)]">
-            Our Approach
-          </h3>
-          <p className="mt-4 text-[var(--lw-dark)]/60">
-            A structured workflow ensuring quality, scalability, and efficiency.
-          </p>
-
-          <div className="mt-10 grid gap-6 md:grid-cols-4">
-            {[
-              "Data Collection",
-              "Annotation",
-              "Quality Control",
-              "Delivery",
-            ].map((step, i) => (
-              <div
-                key={step}
-                className="rounded-xl border bg-white p-6 text-sm shadow-sm"
-              >
-                <p className="font-semibold text-[var(--lw-green)]">
-                  0{i + 1}
-                </p>
-                <p className="mt-2 text-[var(--lw-dark)]">{step}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* FINAL CTA */}
-        <div className="mt-20 text-center">
-          <Link
-            href="/contacts"
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--lw-green)] px-8 py-4 text-sm font-semibold text-white hover:brightness-110"
+    <section className="bg-white py-24 pb-32 dark:bg-[#060606]">
+      <div className="mx-auto max-w-6xl px-6 lg:px-10">
+        <div className="flex flex-col items-center text-center space-y-4 mb-16">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl lg:text-5xl font-medium tracking-tight text-zinc-900 dark:text-white"
           >
-            Get Started with Lifewood
-            <ArrowRight size={16} />
-          </Link>
+            AI DATA SERVICES
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-[0.9rem] font-medium text-zinc-600 dark:text-zinc-400 max-w-3xl"
+          >
+            Lifewood offers AI and IT services that enhance decision-making, reduce costs, and improve productivity to optimize organizational performance.
+          </motion.p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-auto md:h-[550px]">
+          {/* Audio - Spans 3 columns top */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="relative overflow-hidden rounded-[1.5rem] bg-zinc-100 dark:bg-zinc-900 md:col-span-3 md:row-span-1 h-[250px] md:h-auto group"
+          >
+            <Image 
+              src="https://images.unsplash.com/photo-1599839619722-39751411ea63?q=80&w=2670&auto=format&fit=crop" 
+              alt="Audio Waveform" 
+              fill 
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+            <span className="absolute top-6 left-6 text-white text-sm font-medium">Audio</span>
+          </motion.div>
+
+          {/* Text - Spans 2 rows right */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="relative overflow-hidden rounded-[1.5rem] bg-zinc-100 dark:bg-zinc-900 md:col-span-1 md:row-span-2 h-[300px] md:h-auto group"
+          >
+            <Image 
+              src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=2573&auto=format&fit=crop" 
+              alt="Text book" 
+              fill 
+              className="object-cover transition-transform duration-700 group-hover:scale-105 object-[70%_top]"
+            />
+            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
+            <span className="absolute top-6 left-6 text-white text-sm font-medium">Text</span>
+          </motion.div>
+
+          {/* Image - Bottom Left */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            className="relative overflow-hidden rounded-[1.5rem] bg-zinc-100 dark:bg-zinc-900 md:col-span-1 md:row-span-1 h-[250px] md:h-auto group"
+          >
+            <Image 
+              src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=2664&auto=format&fit=crop" 
+              alt="Camera Image" 
+              fill 
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
+            <span className="absolute top-6 left-6 text-white text-sm font-medium">Image</span>
+          </motion.div>
+
+          {/* Video - Bottom Middle */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+            className="relative overflow-hidden rounded-[1.5rem] bg-zinc-100 dark:bg-zinc-900 md:col-span-2 md:row-span-1 h-[250px] md:h-auto group"
+          >
+            <Image 
+              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop" 
+              alt="Video Editing Dashboard" 
+              fill 
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
+            <span className="absolute top-6 left-6 text-white text-sm font-medium">Video</span>
+          </motion.div>
         </div>
       </div>
     </section>
-  );
+  )
 }

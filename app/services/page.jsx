@@ -2,7 +2,6 @@
 
 import { Navbar } from "@/components/lifewood/navbar";
 import { Services } from "@/components/lifewood/services";
-import { Footer } from "@/components/lifewood/footer";
 
 export default function ServicesPage() {
   return (
@@ -11,7 +10,6 @@ export default function ServicesPage() {
       <div className="pt-20">
         <Services />
       </div>
-      <Footer />
     </main>
   );
 }
