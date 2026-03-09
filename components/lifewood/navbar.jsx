@@ -66,7 +66,7 @@ const mainNavItems = [
 const rightNavItems = [
   { label: "Careers", href: "/careers" },
   { label: "Contact Us", href: "/contact" },
-  { label: "Internal News", href: "/news" }
+ 
 ]
 
 const allNavItems = [...mainNavItems, ...rightNavItems]
@@ -110,13 +110,12 @@ export function Navbar() {
 
   return (
     <header className="fixed top-4 md:top-6 left-0 right-0 z-50 transition-all duration-300 ease-in-out px-4 flex justify-center w-full pointer-events-none">
-      <nav 
-        ref={navRef} 
-        className={`pointer-events-auto flex w-full max-w-[1400px] items-center justify-between px-6 lg:px-8 py-3 rounded-[3rem] transition-all duration-300 ${
-          scrolled 
-            ? "bg-white/95 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/40" 
-            : "bg-white shadow-[0_4px_20px_rgb(0,0,0,0.06)] border border-zinc-100"
-        }`}
+      <nav
+        ref={navRef}
+        className={`pointer-events-auto flex w-full max-w-[1400px] items-center justify-between px-6 lg:px-8 py-3 rounded-[3rem] transition-all duration-300 glass ${scrolled
+            ? "shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
+            : "shadow-[0_4px_20px_rgb(0,0,0,0.06)]"
+          }`}
       >
         {/* ── Logo ── */}
         <Link href="/" className="group flex items-center shrink-0">
@@ -131,7 +130,7 @@ export function Navbar() {
 
         {/* ── Desktop links container ── */}
         <div className="hidden lg:flex items-center justify-end flex-1 ml-10">
-          
+
           {/* Main Nav Items */}
           <div className="flex items-center gap-1 xl:gap-2 mr-6 xl:mr-8">
             {mainNavItems.map((item) =>
@@ -159,7 +158,7 @@ export function Navbar() {
                       : "pointer-events-none -translate-y-2 opacity-0"
                       }`}
                   >
-                    <div className="w-[320px] overflow-hidden rounded-3xl border border-zinc-200/60 bg-white/95 p-2 shadow-xl backdrop-blur-xl">
+                    <div className="w-[320px] overflow-hidden rounded-3xl glass p-2 shadow-xl">
                       {item.children.map((child) => (
                         <Link
                           key={child.label}
@@ -196,13 +195,13 @@ export function Navbar() {
           {/* Right Action Nav Items */}
           <div className="flex items-center gap-4 xl:gap-5 pl-6 xl:pl-8 border-l border-zinc-200/80">
             {rightNavItems.map((item) => (
-               <Link
-                 key={item.label}
-                 href={item.href}
-                 className={`text-[13px] font-semibold transition-all duration-300 ${pathname === item.href ? "text-[#fca13f]" : "text-zinc-800 hover:text-zinc-500"}`}
-               >
-                 {item.label}
-               </Link>
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`text-[13px] font-semibold transition-all duration-300 ${pathname === item.href ? "text-[#fca13f]" : "text-zinc-800 hover:text-zinc-500"}`}
+              >
+                {item.label}
+              </Link>
             ))}
           </div>
 
@@ -232,7 +231,7 @@ export function Navbar() {
 
       {/* Mobile drawer */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-40 max-h-[85vh] overflow-y-auto rounded-t-3xl bg-background shadow-glass transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] lg:hidden ${mobileOpen ? "translate-y-0" : "translate-y-full"
+        className={`fixed bottom-0 left-0 right-0 z-40 max-h-[85vh] overflow-y-auto rounded-t-3xl glass shadow-glass transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] lg:hidden ${mobileOpen ? "translate-y-0" : "translate-y-full"
           }`}
       >
         {/* Drag handle */}

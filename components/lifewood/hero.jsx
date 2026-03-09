@@ -7,6 +7,7 @@ import dynamic from "next/dynamic"
 
 const GhostCursor = dynamic(() => import('./GhostCursor'), { ssr: false })
 const Threads = dynamic(() => import('../Threads'), { ssr: false })
+const Waves = dynamic(() => import('../Waves'), { ssr: false })
 
 const heroWords = ["AI-powered data solutions.", "global transformation.", "smart innovation."]
 
@@ -45,8 +46,20 @@ export function Hero() {
           <GhostCursor color="var(--lw-green)" brightness={1.5} />
         </div>
 
-        <div className="absolute inset-0 z-0 pointer-events-auto opacity-40">
-          <Threads color={threadsColor} amplitude={1.5} distance={0.25} enableMouseInteraction={true} />
+        <div className="absolute inset-0 z-0 pointer-events-auto opacity-30 dark:opacity-20">
+          <Waves
+            lineColor="rgba(4, 98, 65, 0.3)"
+            backgroundColor="transparent"
+            waveSpeedX={0.02}
+            waveSpeedY={0.01}
+            waveAmpX={40}
+            waveAmpY={20}
+            friction={0.9}
+            tension={0.01}
+            maxCursorMove={120}
+            xGap={12}
+            yGap={36}
+          />
         </div>
       </div>
 
@@ -64,7 +77,7 @@ export function Hero() {
             */}
             <h1 className="text-balance text-[3.25rem] font-medium leading-[1.05] tracking-tighter tight-words text-zinc-900 sm:text-6xl lg:text-[4.25rem] dark:text-white">
               The world’s leading provider  <br className="hidden sm:block" />
-               {" "}
+              {" "}
               <span className="relative inline-flex flex-col h-[1.1em] overflow-hidden min-w-[300px] sm:min-w-[450px] align-bottom">
                 <AnimatePresence mode="popLayout">
                   <motion.span
