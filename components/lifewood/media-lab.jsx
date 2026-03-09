@@ -8,7 +8,7 @@ const mediaCards = [
   {
     title: "Global Teams",
     desc: "Human expertise across regions and domains.",
-    image: "/esg-community.jpg",
+    image: "/images/african-team-2.png",
     tilt: -2.5,
   },
   {

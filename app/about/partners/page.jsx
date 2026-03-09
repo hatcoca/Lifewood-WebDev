@@ -61,7 +61,7 @@ export default function AboutPartnersPage() {
             transition={{ duration: 0.8 }}
             className="relative aspect-[5/4] overflow-hidden rounded-[2.4rem] shadow-2xl"
           >
-            <Image src="/esg-community.jpg" alt="Lifewood partnership and community impact" fill className="object-cover" priority />
+            <Image src="/images/african-team-1.png" alt="Lifewood partnership and community impact" fill className="object-cover" priority />
             <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
           </motion.div>
         </div>

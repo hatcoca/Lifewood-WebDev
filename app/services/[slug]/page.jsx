@@ -146,7 +146,7 @@ export default function ServiceDetailPage() {
                                 transition={{ delay: idx * 0.1 }}
                                 className="group relative p-8 rounded-[2rem] border border-zinc-100 bg-zinc-50/50 dark:border-white/5 dark:bg-zinc-900/30 hover:bg-white dark:hover:bg-zinc-900 hover:shadow-xl transition-all"
                             >
-                                <div className="text-4xl font-black text-zinc-100 dark:text-zinc-800 mb-6 group-hover:text-[var(--lw-green)]/10 transition-colors">0{idx + 1}</div>
+                                <div className="text-4xl font-black text-[var(--lw-green)] mb-6 transition-colors">0{idx + 1}</div>
                                 <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-3 flex items-center gap-2">
                                     {step.title}
                                     <ChevronRight className="h-4 w-4 opacity-0 group-hover:opacity-100 translate-x-[-10px] group-hover:translate-x-0 transition-all text-[var(--lw-green)]" />
