@@ -102,10 +102,10 @@ export function Hero() {
               className="mt-12"
             >
               <a
-                href="#services"
+                href="/contact"
                 className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-zinc-900 px-8 py-4 text-white transition-all hover:scale-[1.02] dark:bg-white dark:text-zinc-900 tracking-tight"
               >
-                <span className="relative">Explore services</span>
+                <span className="relative">Contact Us</span>
                 <ArrowRight className="relative h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
             </motion.div>
