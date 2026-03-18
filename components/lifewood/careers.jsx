@@ -18,11 +18,11 @@ export function Careers() {
   return (
     <section id="careers" className="relative overflow-hidden bg-white pb-32 pt-32 md:pt-48">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-        
+
         {/* --- Minimalist Hero Section --- */}
         <div className="flex flex-col md:flex-row md:items-start justify-between mb-24 md:mb-32 gap-16 md:gap-32">
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -31,9 +31,9 @@ export function Careers() {
             <h1 className="text-6xl md:text-[5.5rem] lg:text-[7rem] font-bold tracking-[-0.04em] text-zinc-950 leading-[0.9] mb-10">
               Careers in <br /> Lifewood
             </h1>
-            
-            <Link 
-              href="/contact" 
+
+            <Link
+              href="/careers/apply"
               className="group inline-flex items-center gap-2 rounded-full bg-[#fca13f] px-8 py-3 text-sm font-semibold text-zinc-950 transition-all hover:bg-[#faa956] hover:scale-[1.02] active:scale-[0.98] shadow-[0_8px_20px_rgba(252,161,63,0.3)]"
             >
               Join Us
@@ -41,7 +41,7 @@ export function Careers() {
             </Link>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
@@ -56,14 +56,14 @@ export function Careers() {
 
         {/* --- Massive Rounded Image --- */}
         <motion.div
-           initial={{ opacity: 0, y: 60 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-           className="relative aspect-[16/9] lg:aspect-[2.35/1] w-full overflow-hidden rounded-[2.5rem] md:rounded-[4rem] bg-zinc-100 shadow-[0_30px_60px_rgba(0,0,0,0.12)] mb-32"
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="relative aspect-[16/9] lg:aspect-[2.35/1] w-full overflow-hidden rounded-[2.5rem] md:rounded-[4rem] bg-zinc-100 shadow-[0_30px_60px_rgba(0,0,0,0.12)] mb-32"
         >
-          <img 
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=2400" 
-            alt="Lifewood Team Collaboration" 
+          <img
+            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=2400"
+            alt="Lifewood Team Collaboration"
             className="h-full w-full object-cover"
           />
         </motion.div>
@@ -73,12 +73,12 @@ export function Careers() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} 
+            viewport={{ once: true }}
             className="mb-12 flex flex-col items-center justify-center text-center"
           >
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-4 py-1.5 shadow-sm">
-                <Briefcase className="h-4 w-4 text-[#fca13f]" />
-                <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-zinc-500">Global Opportunities</span>
+              <Briefcase className="h-4 w-4 text-[#fca13f]" />
+              <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-zinc-500">Global Opportunities</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-zinc-900">
               Open Positions
@@ -88,15 +88,15 @@ export function Careers() {
           <div className="flex flex-col gap-5">
             {jobs.map((job, i) => (
               <motion.div
-                 key={i}
-                 initial={{ opacity: 0, y: 20 }}
-                 whileInView={{ opacity: 1, y: 0 }}
-                 viewport={{ once: true }}
-                 transition={{ delay: i * 0.1 }}
-                 className={`group relative flex flex-col p-6 md:p-8 rounded-[2rem] bg-white border transition-all duration-300 ${expandedJob === i ? 'border-zinc-300 shadow-[0_20px_60px_rgba(0,0,0,0.06)]' : 'border-zinc-200 hover:border-zinc-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1'}`}
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className={`group relative flex flex-col p-6 md:p-8 rounded-[2rem] bg-white border transition-all duration-300 ${expandedJob === i ? 'border-zinc-300 shadow-[0_20px_60px_rgba(0,0,0,0.06)]' : 'border-zinc-200 hover:border-zinc-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1'}`}
               >
                 {/* Header Row (Clickable) */}
-                <button 
+                <button
                   onClick={() => setExpandedJob(expandedJob === i ? null : i)}
                   className="w-full text-left flex flex-col md:flex-row md:items-center justify-between outline-none"
                 >
@@ -111,12 +111,12 @@ export function Careers() {
                       {job.location}
                     </div>
                   </div>
-                  
+
                   <div className={`relative z-10 mt-6 md:mt-0 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border transition-all duration-300 shadow-sm ${expandedJob === i ? 'bg-[#fca13f] border-[#fca13f] shadow-[0_8px_20px_rgba(252,161,63,0.4)]' : 'bg-zinc-50 border-zinc-200 group-hover:bg-[#fca13f] group-hover:border-[#fca13f] group-hover:shadow-[0_8px_20px_rgba(252,161,63,0.4)]'}`}>
                     <ArrowRight className={`h-5 w-5 transition-all duration-300 ${expandedJob === i ? 'text-white rotate-90' : 'text-zinc-400 group-hover:text-white group-hover:translate-x-0.5'}`} />
                   </div>
                 </button>
-                
+
                 {/* Expandable Content Area */}
                 <AnimatePresence>
                   {expandedJob === i && (
@@ -135,8 +135,8 @@ export function Careers() {
                           </p>
                         </div>
                         <div className="md:w-1/3 flex items-start md:justify-end">
-                           <Link 
-                            href="/contact" 
+                          <Link
+                            href="/careers/apply"
                             className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-2.5 text-xs font-bold text-white transition-all hover:bg-zinc-800 active:scale-[0.98]"
                           >
                             Apply Now
@@ -154,15 +154,15 @@ export function Careers() {
               </motion.div>
             ))}
           </div>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} 
+            viewport={{ once: true }}
             className="mt-12 flex justify-center"
           >
-             <Link 
-              href="/contact" 
+            <Link
+              href="/careers/apply"
               className="text-sm font-bold text-zinc-500 hover:text-zinc-900 transition-colors underline decoration-zinc-300 hover:decoration-zinc-900 underline-offset-4"
             >
               Don't see a fit? Send us an open application.

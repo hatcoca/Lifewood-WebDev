@@ -66,7 +66,7 @@ const mainNavItems = [
 const rightNavItems = [
   { label: "Careers", href: "/careers" },
   { label: "Contact Us", href: "/contact" },
- 
+  { label: "Admin", href: "/admin/login" },
 ]
 
 const allNavItems = [...mainNavItems, ...rightNavItems]
@@ -108,13 +108,15 @@ export function Navbar() {
     setOpenDropdown(prev => prev === label ? null : label)
   }
 
+  if (pathname?.startsWith("/admin")) return null;
+
   return (
     <header className="fixed top-4 md:top-6 left-0 right-0 z-50 transition-all duration-300 ease-in-out px-4 flex justify-center w-full pointer-events-none">
       <nav
         ref={navRef}
         className={`pointer-events-auto flex w-full max-w-[1400px] items-center justify-between px-6 lg:px-8 py-3 rounded-[3rem] transition-all duration-300 glass ${scrolled
-            ? "shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
-            : "shadow-[0_4px_20px_rgb(0,0,0,0.06)]"
+          ? "shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
+          : "shadow-[0_4px_20px_rgb(0,0,0,0.06)]"
           }`}
       >
         {/* ── Logo ── */}
@@ -303,7 +305,7 @@ export function Navbar() {
           {/* Mobile bottom actions */}
           <div className="mt-4 flex flex-col gap-3">
             <Link
-              href="/apply"
+              href="/careers/apply"
               onClick={() => setMobileOpen(false)}
               className="flex items-center justify-center gap-2 rounded-full bg-lw-green py-3.5 text-sm font-semibold text-white transition-all active:brightness-95"
             >

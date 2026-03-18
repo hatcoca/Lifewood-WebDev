@@ -58,13 +58,14 @@ float lineFn(vec2 st, float width, float perc, float offset, vec2 mouse, float t
     float split_offset = (perc * 0.4);
     float split_point = 0.1 + split_offset;
 
-    float amplitude_normal = smoothstep(split_point, 0.7, st.x);
+    float amplitude_normal = 1.0 - abs(st.x - 0.5) * 2.0;
+    amplitude_normal = smoothstep(0.0, 0.5, amplitude_normal);
     float amplitude_strength = 0.5;
     float finalAmplitude = amplitude_normal * amplitude_strength
                            * amplitude * (1.0 + (mouse.y - 0.5) * 0.2);
 
     float time_scaled = time / 10.0 + (mouse.x - 0.5) * 1.0;
-    float blur = smoothstep(split_point, split_point + 0.05, st.x) * perc;
+    float blur = (1.0 - amplitude_normal) * perc;
 
     float xnoise = mix(
         Perlin2D(vec2(time_scaled, st.x + perc) * 2.5),

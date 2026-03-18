@@ -1,23 +1,22 @@
 "use client"
 
-import { ArrowRight, MoveRight, ArrowUpRight } from "lucide-react"
+import { MoveRight, ArrowUpRight } from "lucide-react"
 import Link from "next/link"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion } from "framer-motion"
 import { useRef } from "react"
-import Image from "next/image"
 
 export function About() {
   const containerRef = useRef(null)
-  
+
   return (
     <section ref={containerRef} id="about" className="relative z-10 bg-white dark:bg-[#060606] pt-16 pb-16 lg:pt-24 lg:pb-24 overflow-hidden shadow-[0_-20px_40px_rgba(0,0,0,0.05)] dark:shadow-[0_-20px_40px_rgba(0,0,0,0.5)]">
       <div className="relative mx-auto max-w-6xl px-6 lg:px-10">
-        
+
         {/* TOP SECTION: ABOUT US + PILL BUTTON */}
         <div className="flex flex-col items-center text-center space-y-12 mb-32 lg:mb-48">
-          
+
           {/* Section Label */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -28,7 +27,7 @@ export function About() {
           </motion.div>
 
           {/* Main Headline */}
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -45,7 +44,7 @@ export function About() {
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.6 }}
           >
-            <Link 
+            <Link
               href="/about"
               className="group flex items-center rounded-full bg-[#1A362D] p-1.5 pl-8 pr-1.5 transition-all hover:scale-105 hover:bg-[#11241E] active:scale-95 shadow-lg"
             >
@@ -59,7 +58,7 @@ export function About() {
 
         {/* BOTTOM SECTION: TWO CIRCLES + SECONDARY TEXT */}
         <div className="flex flex-col items-start max-w-4xl space-y-8">
-          
+
           {/* Decorative Circles */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -80,17 +79,17 @@ export function About() {
           >
             By connecting local expertise with our global AI data infrastructure, we create opportunities, empower communities, and drive inclusive growth worldwide.
           </motion.p>
-          
+
           {/* Action Row */}
           <motion.div
-             initial={{ opacity: 0, y: 20 }}
-             whileInView={{ opacity: 1, y: 0 }}
-             viewport={{ once: true }}
-             transition={{ delay: 0.2 }}
-             className="flex flex-wrap items-center gap-4 pt-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-wrap items-center gap-4 pt-4"
           >
             {/* Contact Action */}
-            <Link 
+            <Link
               href="/contact"
               className="group flex items-center rounded-full bg-[#F5B553] p-1 pl-6 pr-1 transition-all hover:scale-105 hover:bg-[#F2A42B] active:scale-95 shadow-sm"
             >
@@ -101,7 +100,7 @@ export function About() {
             </Link>
 
             {/* Explore Action */}
-            <Link 
+            <Link
               href="/services"
               className="group flex items-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#060606] p-1 pl-1 pr-6 transition-all hover:scale-105 hover:border-zinc-300 dark:hover:border-zinc-700 active:scale-95 shadow-sm"
             >

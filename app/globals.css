@@ -56,31 +56,54 @@
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Glass morphism */
-.glass {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
+/* Modern iOS-Style Glassmorphism */
+.glass-surface {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
 }
 
-.glass-dark {
-  background: rgba(4, 98, 65, 0.7);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.glass-surface-dark {
+  background: rgba(10, 25, 18, 0.85);
+  /* Darker and more opaque */
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Finer border */
+  box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.4);
+  /* Deeper shadow */
 }
 
-.glass-nav {
-  @apply bg-white/70 dark:bg-[#060606]/70 backdrop-blur-lg border-b border-gray-200/50 dark:border-gray-800/50 shadow-sm transition-all duration-300;
+/* Vibrant Mesh Gradient Background */
+.bg-vibrant-mesh {
+  background-color: #f8f9fa;
+  background-image:
+    radial-gradient(at 0% 0%, hsla(155, 91%, 20%, 0.15) 0px, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(33, 100%, 64%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(155, 91%, 20%, 0.15) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, hsla(155, 91%, 20%, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(33, 100%, 64%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(155, 91%, 20%, 0.15) 0px, transparent 50%);
+  background-attachment: fixed;
 }
 
 /* Selection color */
 ::selection {
-  background: rgba(4, 98, 65, 0.15);
+  background: rgba(4, 98, 65, 0.2);
   color: var(--lw-dark);
+}
+
+/* Rounded "Squircle" utility */
+.rounded-squircle {
+  border-radius: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .rounded-squircle {
+    border-radius: 1.5rem;
+  }
 }

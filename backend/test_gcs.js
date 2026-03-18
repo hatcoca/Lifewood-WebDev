@@ -1,0 +1,1 @@
+const { Storage } = require("@google-cloud/storage"); const storage = new Storage({ keyFilename: "./serviceAccountKey.json" }); storage.getBuckets().then(([buckets]) => { console.log("Buckets:", buckets.map(b => b.name)); }).catch(console.error);

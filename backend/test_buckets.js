@@ -1,0 +1,1 @@
+const admin = require("firebase-admin"); const serviceAccount = require("./serviceAccountKey.json"); admin.initializeApp({ credential: admin.credential.cert(serviceAccount) }); async function test() { try { const res = await admin.storage().getBuckets(); console.log("Buckets:", res[0].map(b => b.name)); } catch(e) { console.log(e); } } test();
