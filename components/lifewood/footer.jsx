@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Linkedin, Facebook, Instagram, Youtube, MessageCircle } from "lucide-react"
 
@@ -17,10 +18,15 @@ export function Footer() {
             {/* Left Column */}
             <div className="flex flex-col justify-between h-full space-y-16">
               <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <div className="h-[14px] w-[14px] rounded-full bg-[#fca13f]" />
-                  <span className="text-[1.3rem] font-bold tracking-tight mt-1">lifewood</span>
-                </div>
+                <Link href="/" className="flex items-center gap-2 group">
+                  <Image
+                    src="/logo.png"
+                    alt="Lifewood"
+                    width={100}
+                    height={28}
+                    className="brightness-0 invert opacity-90 transition-opacity group-hover:opacity-100"
+                  />
+                </Link>
                 <p className="text-[0.85rem] font-medium text-white/90 max-w-md leading-relaxed tracking-wide">
                   We provide global Data Engineering Services to enable AI Solutions.
                 </p>

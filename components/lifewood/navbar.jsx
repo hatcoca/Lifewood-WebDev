@@ -160,7 +160,7 @@ export function Navbar() {
                       : "pointer-events-none -translate-y-2 opacity-0"
                       }`}
                   >
-                    <div className="w-[320px] overflow-hidden rounded-3xl glass p-2 shadow-xl">
+                    <div className="w-[320px] overflow-hidden rounded-3xl bg-white border border-zinc-200/50 shadow-2xl p-2">
                       {item.children.map((child) => (
                         <Link
                           key={child.label}
@@ -233,7 +233,7 @@ export function Navbar() {
 
       {/* Mobile drawer */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-40 max-h-[85vh] overflow-y-auto rounded-t-3xl glass shadow-glass transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] lg:hidden ${mobileOpen ? "translate-y-0" : "translate-y-full"
+        className={`fixed bottom-0 left-0 right-0 z-40 max-h-[85vh] overflow-y-auto rounded-t-3xl bg-white shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] lg:hidden ${mobileOpen ? "translate-y-0" : "translate-y-full"
           }`}
       >
         {/* Drag handle */}

@@ -133,7 +133,7 @@ export default function ContactPage() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-5 py-4 rounded-xl bg-white/60 border border-white shadow-inner focus:bg-white focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-400 font-medium"
+                    className="w-full px-5 py-4 rounded-xl bg-white/30 border border-white/50 backdrop-blur-md shadow-inner focus:bg-white/50 focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-500 font-medium"
                     placeholder="e.g. John Doe"
                   />
                 </div>
@@ -145,7 +145,7 @@ export default function ContactPage() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-5 py-4 rounded-xl bg-white/60 border border-white shadow-inner focus:bg-white focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-400 font-medium"
+                    className="w-full px-5 py-4 rounded-xl bg-white/30 border border-white/50 backdrop-blur-md shadow-inner focus:bg-white/50 focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-500 font-medium"
                     placeholder="john@example.com"
                   />
                 </div>
@@ -159,7 +159,7 @@ export default function ContactPage() {
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
-                  className="w-full px-5 py-4 rounded-xl bg-white/60 border border-white shadow-inner focus:bg-white focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-400 font-medium"
+                  className="w-full px-5 py-4 rounded-xl bg-white/30 border border-white/50 backdrop-blur-md shadow-inner focus:bg-white/50 focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-500 font-medium"
                   placeholder="How can we help?"
                 />
               </div>
@@ -172,7 +172,7 @@ export default function ContactPage() {
                   value={formData.message}
                   onChange={handleChange}
                   rows={5}
-                  className="w-full px-5 py-4 rounded-xl bg-white/60 border border-white shadow-inner focus:bg-white focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-400 font-medium resize-none leading-relaxed"
+                  className="w-full px-5 py-4 rounded-xl bg-white/30 border border-white/50 backdrop-blur-md shadow-inner focus:bg-white/50 focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-500 font-medium resize-none leading-relaxed"
                   placeholder="Share your thoughts with us..."
                 />
               </div>
