@@ -24,7 +24,8 @@ export default function ContactPage() {
     setStatus({ type: "", message: "" });
 
     try {
-      const response = await fetch("http://localhost:5000/api/contact", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const response = await fetch(`${apiUrl}/api/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -53,7 +54,7 @@ export default function ContactPage() {
 
       <div className="max-w-7xl mx-auto w-full relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          
+
           {/* Left Column: Contact Info & Typography */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
@@ -122,88 +123,88 @@ export default function ContactPage() {
             <div className="glass-surface p-8 sm:p-12 rounded-[2rem] shadow-glass border border-white/40 backdrop-blur-2xl relative overflow-hidden">
               {/* Shine effect inside card */}
               <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/80 to-transparent"></div>
-              
+
               <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-xs font-black uppercase tracking-widest text-zinc-500 ml-1">Full Name</label>
+                    <input
+                      required
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full px-5 py-4 rounded-xl bg-white/30 border border-white/50 backdrop-blur-md shadow-inner focus:bg-white/50 focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-500 font-medium"
+                      placeholder="e.g. John Doe"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-black uppercase tracking-widest text-zinc-500 ml-1">Email Address</label>
+                    <input
+                      required
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full px-5 py-4 rounded-xl bg-white/30 border border-white/50 backdrop-blur-md shadow-inner focus:bg-white/50 focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-500 font-medium"
+                      placeholder="john@example.com"
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
-                  <label className="text-xs font-black uppercase tracking-widest text-zinc-500 ml-1">Full Name</label>
+                  <label className="text-xs font-black uppercase tracking-widest text-zinc-500 ml-1">Subject</label>
                   <input
                     required
                     type="text"
-                    name="name"
-                    value={formData.name}
+                    name="subject"
+                    value={formData.subject}
                     onChange={handleChange}
                     className="w-full px-5 py-4 rounded-xl bg-white/30 border border-white/50 backdrop-blur-md shadow-inner focus:bg-white/50 focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-500 font-medium"
-                    placeholder="e.g. John Doe"
+                    placeholder="How can we help?"
                   />
                 </div>
+
                 <div className="space-y-2">
-                  <label className="text-xs font-black uppercase tracking-widest text-zinc-500 ml-1">Email Address</label>
-                  <input
+                  <label className="text-xs font-black uppercase tracking-widest text-zinc-500 ml-1">Message</label>
+                  <textarea
                     required
-                    type="email"
-                    name="email"
-                    value={formData.email}
+                    name="message"
+                    value={formData.message}
                     onChange={handleChange}
-                    className="w-full px-5 py-4 rounded-xl bg-white/30 border border-white/50 backdrop-blur-md shadow-inner focus:bg-white/50 focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-500 font-medium"
-                    placeholder="john@example.com"
+                    rows={5}
+                    className="w-full px-5 py-4 rounded-xl bg-white/30 border border-white/50 backdrop-blur-md shadow-inner focus:bg-white/50 focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-500 font-medium resize-none leading-relaxed"
+                    placeholder="Share your thoughts with us..."
                   />
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-zinc-500 ml-1">Subject</label>
-                <input
-                  required
-                  type="text"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className="w-full px-5 py-4 rounded-xl bg-white/30 border border-white/50 backdrop-blur-md shadow-inner focus:bg-white/50 focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-500 font-medium"
-                  placeholder="How can we help?"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-zinc-500 ml-1">Message</label>
-                <textarea
-                  required
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  rows={5}
-                  className="w-full px-5 py-4 rounded-xl bg-white/30 border border-white/50 backdrop-blur-md shadow-inner focus:bg-white/50 focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-zinc-500 font-medium resize-none leading-relaxed"
-                  placeholder="Share your thoughts with us..."
-                />
-              </div>
-
-            {status.message && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className={`p-5 rounded-2xl text-sm font-bold flex items-center gap-3 ${status.type === 'success' ? 'bg-green-500/10 text-green-700 border border-green-500/20' : 'bg-red-500/10 text-red-700 border border-red-500/20'}`}
-              >
-                <div className={`w-2 h-2 rounded-full ${status.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`} />
-                {status.message}
-              </motion.div>
-            )}
-
-              <button
-                disabled={loading}
-                type="submit"
-                className="w-full py-4 bg-lw-dark text-white rounded-xl font-bold text-lg hover:bg-lw-green hover:shadow-xl hover:shadow-lw-green/20 transition-all transform active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3 mt-4"
-              >
-                {loading ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    <span>Sending...</span>
-                  </>
-                ) : (
-                  "Send Message"
+                {status.message && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className={`p-5 rounded-2xl text-sm font-bold flex items-center gap-3 ${status.type === 'success' ? 'bg-green-500/10 text-green-700 border border-green-500/20' : 'bg-red-500/10 text-red-700 border border-red-500/20'}`}
+                  >
+                    <div className={`w-2 h-2 rounded-full ${status.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`} />
+                    {status.message}
+                  </motion.div>
                 )}
-              </button>
-            </form>
-          </div>
+
+                <button
+                  disabled={loading}
+                  type="submit"
+                  className="w-full py-4 bg-lw-dark text-white rounded-xl font-bold text-lg hover:bg-lw-green hover:shadow-xl hover:shadow-lw-green/20 transition-all transform active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3 mt-4"
+                >
+                  {loading ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      <span>Sending...</span>
+                    </>
+                  ) : (
+                    "Send Message"
+                  )}
+                </button>
+              </form>
+            </div>
           </motion.div>
         </div>
       </div>

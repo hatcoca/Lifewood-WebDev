@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function AdminLoginPage() {
     const [email, setEmail] = useState("");
@@ -44,6 +46,15 @@ export default function AdminLoginPage() {
                 className="w-full max-w-md bg-white dark:bg-zinc-900 p-8 rounded-[2rem] shadow-xl border border-zinc-100 dark:border-zinc-800"
             >
                 <div className="text-center mb-8">
+                    <Link href="/" className="inline-block mb-6 group">
+                        <Image
+                            src="/logo.png"
+                            alt="Lifewood"
+                            width={160}
+                            height={44}
+                            className="mx-auto transition-transform duration-300 group-hover:scale-105"
+                        />
+                    </Link>
                     <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">Admin Login</h1>
                     <p className="text-zinc-500 text-sm mt-2">Lifewood Management System</p>
                 </div>

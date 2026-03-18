@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import Threads from "@/components/Threads";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -174,9 +175,10 @@ export default function AdminDashboard() {
     const fetchData = async () => {
         setLoading(true);
         try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
             const [msgRes, appRes] = await Promise.all([
-                fetch("http://localhost:5000/api/contact"),
-                fetch("http://localhost:5000/api/applications")
+                fetch(`${apiUrl}/api/contact`),
+                fetch(`${apiUrl}/api/applications`)
             ]);
             const [msgData, appData] = await Promise.all([msgRes.json(), appRes.json()]);
             setMessages(Array.isArray(msgData) ? msgData : []);
@@ -195,7 +197,8 @@ export default function AdminDashboard() {
 
     const updateAppStatus = async (id, status) => {
         try {
-            await fetch("http://localhost:5000/api/applications/status", {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            await fetch(`${apiUrl}/api/applications/status`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id, status })
@@ -208,7 +211,8 @@ export default function AdminDashboard() {
 
     const markMessageReplied = async (id) => {
         try {
-            await fetch(`http://localhost:5000/api/contact/${id}/replied`, {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            await fetch(`${apiUrl}/api/contact/${id}/replied`, {
                 method: "PATCH"
             });
             fetchData();
@@ -221,7 +225,8 @@ export default function AdminDashboard() {
         if (!window.confirm("Are you sure you want to permanently delete this application? This action cannot be undone and will also delete their resume file.")) return;
 
         try {
-            const res = await fetch(`http://localhost:5000/api/applications/${id}`, {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const res = await fetch(`${apiUrl}/api/applications/${id}`, {
                 method: "DELETE"
             });
             if (res.ok) {
@@ -238,7 +243,8 @@ export default function AdminDashboard() {
         if (!window.confirm("Are you sure you want to permanently delete this message? This action cannot be undone.")) return;
 
         try {
-            const res = await fetch(`http://localhost:5000/api/contact/${id}`, {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const res = await fetch(`${apiUrl}/api/contact/${id}`, {
                 method: "DELETE"
             });
             if (res.ok) {
@@ -255,7 +261,8 @@ export default function AdminDashboard() {
         e.preventDefault();
         setSendingEmail(true);
         try {
-            const response = await fetch("http://localhost:5000/api/admin/send-email", {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const response = await fetch(`${apiUrl}/api/admin/send-email`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -334,6 +341,15 @@ export default function AdminDashboard() {
                         >
                             <MenuIcon size={24} />
                         </button>
+                        <Link href="/" className="lg:hidden mx-auto">
+                            <Image
+                                src="/logo.png"
+                                alt="Lifewood"
+                                width={110}
+                                height={30}
+                                className="transition-transform duration-300 active:scale-105"
+                            />
+                        </Link>
                         <div>
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lw-green/10 text-lw-green text-[10px] font-black uppercase tracking-widest mb-4">
                                 <span className="w-1.5 h-1.5 bg-lw-green rounded-full animate-pulse"></span>
