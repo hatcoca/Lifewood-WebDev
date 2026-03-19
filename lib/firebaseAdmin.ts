@@ -9,18 +9,20 @@ const getServiceAccount = () => {
 
             // Aggressively clean the private_key field from JSON to fix ASN.1 errors
             if (sa.private_key) {
-                sa.private_key = sa.private_key.trim();
-                sa.private_key = sa.private_key.replace(/\\n/g, "\n");
+                let pk = sa.private_key.trim();
+                pk = pk.replace(/\\n/g, "\n");
 
-                // Remove existing headers and re-wrap to ensure perfect PEM format
-                sa.private_key = sa.private_key
+                // Strip ALL headers, footers, and internal newlines to get pure Base64
+                pk = pk
                     .replace(/-----BEGIN PRIVATE KEY-----/g, "")
                     .replace(/-----END PRIVATE KEY-----/g, "")
                     .replace(/-----BEGIN RSA PRIVATE KEY-----/g, "")
                     .replace(/-----END RSA PRIVATE KEY-----/g, "")
+                    .replace(/\s+/g, "") // Remove ALL spaces, newlines, tabs
                     .trim();
 
-                sa.private_key = `-----BEGIN PRIVATE KEY-----\n${sa.private_key}\n-----END PRIVATE KEY-----`;
+                // Re-wrap perfectly
+                sa.private_key = `-----BEGIN PRIVATE KEY-----\n${pk}\n-----END PRIVATE KEY-----`;
             }
             return sa;
         } catch (e) {
@@ -36,33 +38,21 @@ const getServiceAccount = () => {
     if (projectId && clientEmail && privateKeyRaw) {
         console.log("FIREBASE: Using individual environment variables");
 
-        // AGGRESSIVE CLEANING to fix ASN.1 / Unparsed DER error
-        let privateKey = privateKeyRaw.trim();
+        let pk = privateKeyRaw.trim();
+        pk = pk.replace(/\\n/g, "\n");
 
-        // Remove surrounding quotes (common Vercel copy-paste issue)
-        if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
-            privateKey = privateKey.substring(1, privateKey.length - 1);
-        }
-        if (privateKey.startsWith("'") && privateKey.endsWith("'")) {
-            privateKey = privateKey.substring(1, privateKey.length - 1);
-        }
-
-        // Fix escaped newlines
-        privateKey = privateKey.replace(/\\n/g, "\n");
-
-        // REMOVE all existing headers/footers to avoid duplicates or extra newlines
-        // We look for any combination of BEGIN/END and PRIVATE KEY and strip them
-        privateKey = privateKey
+        // Strip ALL headers, footers, and internal newlines/spaces
+        pk = pk
             .replace(/-----BEGIN PRIVATE KEY-----/g, "")
             .replace(/-----END PRIVATE KEY-----/g, "")
             .replace(/-----BEGIN RSA PRIVATE KEY-----/g, "")
             .replace(/-----END RSA PRIVATE KEY-----/g, "")
+            .replace(/\s+/g, "") // REMOVE ALL INTERNAL NEWLINES/SPACES
             .trim();
 
-        // Final wrap with EXACTLY one newline between header and content, and content and footer
-        privateKey = `-----BEGIN PRIVATE KEY-----\n${privateKey}\n-----END PRIVATE KEY-----`;
+        // Final wrap with EXACTLY one newline
+        const privateKey = `-----BEGIN PRIVATE KEY-----\n${pk}\n-----END PRIVATE KEY-----`;
 
-        // Return object with BOTH camelCase and snake_case for maximum compatibility
         return {
             projectId,
             clientEmail,
@@ -82,7 +72,6 @@ const getServiceAccount = () => {
 
         if (missing.length > 0) {
             console.error(`FIREBASE Error: Missing environment variables: ${missing.join(", ")}`);
-            throw new Error(`FIREBASE Error: Missing Vercel variables: ${missing.join(", ")}`);
         }
     }
 
