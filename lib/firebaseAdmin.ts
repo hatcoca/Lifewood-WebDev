@@ -11,30 +11,38 @@ const getServiceAccount = () => {
     }
 
     // 2. Check for individual components
-    if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY) {
-        // Ensure private key is properly formatted
-        let privateKey = process.env.FIREBASE_PRIVATE_KEY.trim();
+    const projectId = process.env.FIREBASE_PROJECT_ID;
+    const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+    const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY;
 
-        // Handle escaped newlines (both \n and \\n)
-        privateKey = privateKey.replace(/\\n/g, "\n");
+    if (projectId && clientEmail && privateKeyRaw) {
+        let privateKey = privateKeyRaw.trim().replace(/\\n/g, "\n");
 
-        // Add headers/footers if missing (rare, but good for robustness)
         if (!privateKey.includes("-----BEGIN PRIVATE KEY-----")) {
             privateKey = `-----BEGIN PRIVATE KEY-----\n${privateKey}\n-----END PRIVATE KEY-----`;
         }
 
         return {
-            projectId: process.env.FIREBASE_PROJECT_ID,
-            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-            privateKey: privateKey,
+            projectId,
+            clientEmail,
+            privateKey,
         };
+    }
+
+    // Log missing variables at runtime to help the user
+    const missing = [];
+    if (!projectId) missing.push("FIREBASE_PROJECT_ID");
+    if (!clientEmail) missing.push("FIREBASE_CLIENT_EMAIL");
+    if (!privateKeyRaw) missing.push("FIREBASE_PRIVATE_KEY");
+
+    if (missing.length > 0 && process.env.NODE_ENV === "production" && !process.env.NEXT_PHASE) {
+        console.error(`FIREBASE Error: Missing environment variables: ${missing.join(", ")}`);
     }
 
     return null;
 };
 
 const initAdmin = () => {
-    // Return existing app if already initialized
     if (admin.apps.length > 0) return admin.apps[0];
 
     const serviceAccount = getServiceAccount();
@@ -46,11 +54,12 @@ const initAdmin = () => {
                 storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "lifewood-webdev.appspot.com",
             });
         } catch (error) {
-            console.error("FIREBASE: Initialization error with service account:", error);
+            console.error("FIREBASE: Initialization error:", error);
+            throw error;
         }
     }
 
-    // Fallback for build time ONLY (prevents build crashes when secrets are unavailable)
+    // Fallback for build time
     return admin.initializeApp({
         projectId: "build-time-dummy",
         storageBucket: "build-time-dummy.appspot.com",
