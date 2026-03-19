@@ -126,7 +126,7 @@ export async function sendApplicationNotification(data: {
     
     <div style="margin-top: 30px; text-align: center;">
       ${data.resumeUrl ? `
-      <a href="${data.resumeUrl}" style="background-color: ${BRAND_COLOR}; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block; margin-right: 10px;">Download Resume</a>
+      <a href="${data.resumeUrl}" style="background-color: ${BRAND_COLOR}; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block; margin-right: 10px;">View Candidate Resume</a>
       ` : ""}
       <a href="mailto:${data.email}" style="border: 1px solid ${BRAND_COLOR}; color: ${BRAND_COLOR}; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">Reply to Applicant</a>
     </div>
