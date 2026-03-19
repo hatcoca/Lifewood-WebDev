@@ -36,7 +36,11 @@ export default function ContactPage() {
         setStatus({ type: "success", message: "Message sent successfully! Check your email for confirmation." });
         setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
-        setStatus({ type: "error", message: data.error || "Something went wrong." });
+        // If the API returned specific validation errors, show the first one
+        const errorMessage = data.errors
+          ? Object.values(data.errors)[0]
+          : (data.message || "Something went wrong.");
+        setStatus({ type: "error", message: errorMessage });
       }
     } catch (error) {
       setStatus({ type: "error", message: "Failed to connect to the server." });
