@@ -117,10 +117,14 @@ export async function POST(request: Request) {
             message: "Application submitted successfully",
             resumeURL,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error("Application POST error:", error);
         return NextResponse.json(
-            { success: false, error: "Internal server error" },
+            {
+                success: false,
+                error: error.message || "Something went wrong during submission.",
+                details: error.stack?.split('\n').slice(0, 2).join(' ') // Safe debug info
+            },
             { status: 500 }
         );
     }
