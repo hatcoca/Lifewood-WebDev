@@ -19,10 +19,10 @@ const getServiceAccount = () => {
     if (projectId && clientEmail && privateKeyRaw) {
         console.log("FIREBASE: Using individual environment variables");
 
-        // Aggressive cleaning
+        // AGGRESSIVE CLEANING to fix ASN.1 / Unparsed DER error
         let privateKey = privateKeyRaw.trim();
 
-        // Remove surrounding quotes
+        // Remove surrounding quotes (common Vercel copy-paste issue)
         if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
             privateKey = privateKey.substring(1, privateKey.length - 1);
         }
@@ -30,17 +30,22 @@ const getServiceAccount = () => {
             privateKey = privateKey.substring(1, privateKey.length - 1);
         }
 
-        // Fix newlines
+        // Fix escaped newlines
         privateKey = privateKey.replace(/\\n/g, "\n");
 
-        // Ensure headers are present
-        if (!privateKey.includes("-----BEGIN PRIVATE KEY-----")) {
-            // Remove any existing manual headers or whitespace
-            privateKey = privateKey.replace(/-----BEGIN PRIVATE KEY-----/g, "").replace(/-----END PRIVATE KEY-----/g, "").trim();
-            privateKey = `-----BEGIN PRIVATE KEY-----\n${privateKey}\n-----END PRIVATE KEY-----`;
-        }
+        // REMOVE all existing headers/footers to avoid duplicates or extra newlines
+        // We look for any combination of BEGIN/END and PRIVATE KEY and strip them
+        privateKey = privateKey
+            .replace(/-----BEGIN PRIVATE KEY-----/g, "")
+            .replace(/-----END PRIVATE KEY-----/g, "")
+            .replace(/-----BEGIN RSA PRIVATE KEY-----/g, "")
+            .replace(/-----END RSA PRIVATE KEY-----/g, "")
+            .trim();
 
-        // Return object with BOTH camelCase and snake_case to be 100% safe
+        // Final wrap with EXACTLY one newline between header and content, and content and footer
+        privateKey = `-----BEGIN PRIVATE KEY-----\n${privateKey}\n-----END PRIVATE KEY-----`;
+
+        // Return object with BOTH camelCase and snake_case for maximum compatibility
         return {
             projectId,
             clientEmail,
@@ -57,7 +62,11 @@ const getServiceAccount = () => {
         if (!projectId) missing.push("FIREBASE_PROJECT_ID");
         if (!clientEmail) missing.push("FIREBASE_CLIENT_EMAIL");
         if (!privateKeyRaw) missing.push("FIREBASE_PRIVATE_KEY");
-        console.error(`FIREBASE Error: Missing environment variables: ${missing.join(", ")}`);
+
+        if (missing.length > 0) {
+            console.error(`FIREBASE Error: Missing environment variables: ${missing.join(", ")}`);
+            throw new Error(`FIREBASE Error: Missing Vercel variables: ${missing.join(", ")}`);
+        }
     }
 
     return null;
@@ -77,7 +86,6 @@ const initAdmin = () => {
             });
         } catch (error: any) {
             console.error("FIREBASE: Initialization error:", error.message);
-            // This error will be caught by the API route and shown to the user
             throw new Error(`Firebase Auth Failed: ${error.message}. Check your Private Key!`);
         }
     }
