@@ -16,7 +16,19 @@ const getServiceAccount = () => {
     const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY;
 
     if (projectId && clientEmail && privateKeyRaw) {
-        let privateKey = privateKeyRaw.trim().replace(/\\n/g, "\n");
+        // Aggressive cleaning: remove quotes, trim, handle newlines
+        let privateKey = privateKeyRaw.trim();
+
+        // Remove surrounding quotes if they exist (common Vercel issue)
+        if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+            privateKey = privateKey.substring(1, privateKey.length - 1);
+        }
+        if (privateKey.startsWith("'") && privateKey.endsWith("'")) {
+            privateKey = privateKey.substring(1, privateKey.length - 1);
+        }
+
+        // Handle escaped newlines
+        privateKey = privateKey.replace(/\\n/g, "\n");
 
         if (!privateKey.includes("-----BEGIN PRIVATE KEY-----")) {
             privateKey = `-----BEGIN PRIVATE KEY-----\n${privateKey}\n-----END PRIVATE KEY-----`;
@@ -37,6 +49,8 @@ const getServiceAccount = () => {
 
     if (missing.length > 0 && process.env.NODE_ENV === "production" && !process.env.NEXT_PHASE) {
         console.error(`FIREBASE Error: Missing environment variables: ${missing.join(", ")}`);
+        // We throw a descriptive error so the API route can return it to the UI
+        throw new Error(`FIREBASE Error: Missing keys on Vercel: ${missing.join(", ")}`);
     }
 
     return null;
@@ -53,9 +67,9 @@ const initAdmin = () => {
                 credential: admin.credential.cert(serviceAccount),
                 storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "lifewood-webdev.appspot.com",
             });
-        } catch (error) {
+        } catch (error: any) {
             console.error("FIREBASE: Initialization error:", error);
-            throw error;
+            throw new Error(`FIREBASE: ${error.message}`);
         }
     }
 

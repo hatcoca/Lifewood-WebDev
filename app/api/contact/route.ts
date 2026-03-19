@@ -11,10 +11,10 @@ export async function GET() {
       ...doc.data(),
     }));
     return NextResponse.json(messages);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Fetch Contact Messages Error:", error);
     return NextResponse.json(
-      { success: false, message: "Failed to fetch messages" },
+      { success: false, message: error.message || "Failed to fetch messages" },
       { status: 500 }
     );
   }
@@ -55,7 +55,6 @@ export async function POST(request: Request) {
       await sendContactNotification(submission);
     } catch (emailError) {
       console.error("Failed to send contact email notification:", emailError);
-      // We don't fail the whole request if email fails
     }
 
     return NextResponse.json({
@@ -67,9 +66,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         success: false,
-        message: error.message?.includes("FIREBASE")
-          ? error.message
-          : "Something went wrong. Please try again later."
+        message: error.message || "Something went wrong. Please try again later."
       },
       { status: 500 }
     );
