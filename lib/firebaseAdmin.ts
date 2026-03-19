@@ -1,32 +1,33 @@
 import admin from "firebase-admin";
 
 const getServiceAccount = () => {
-    // 1. Check for full JSON key first (BEST WAY)
+    // 1. Check for full JSON key first
     if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
         try {
-            console.log("FIREBASE: Using FIREBASE_SERVICE_ACCOUNT_KEY JSON");
+            console.log("FIREBASE DEBUG: Attempting to parse FIREBASE_SERVICE_ACCOUNT_KEY");
             const sa = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 
-            // Aggressively clean the private_key field from JSON to fix ASN.1 errors
-            if (sa.private_key) {
-                let pk = sa.private_key.trim();
-                pk = pk.replace(/\\n/g, "\n");
+            if (sa && typeof sa === 'object') {
+                console.log("FIREBASE DEBUG: JSON parse successful. Keys found:", Object.keys(sa));
+                // Aggressively clean the private_key field from JSON
+                if (sa.private_key) {
+                    let pk = sa.private_key.trim();
+                    pk = pk.replace(/\\n/g, "\n");
 
-                // Strip ALL headers, footers, and internal newlines to get pure Base64
-                pk = pk
-                    .replace(/-----BEGIN PRIVATE KEY-----/g, "")
-                    .replace(/-----END PRIVATE KEY-----/g, "")
-                    .replace(/-----BEGIN RSA PRIVATE KEY-----/g, "")
-                    .replace(/-----END RSA PRIVATE KEY-----/g, "")
-                    .replace(/\s+/g, "") // Remove ALL spaces, newlines, tabs
-                    .trim();
+                    pk = pk
+                        .replace(/-----BEGIN PRIVATE KEY-----/g, "")
+                        .replace(/-----END PRIVATE KEY-----/g, "")
+                        .replace(/-----BEGIN RSA PRIVATE KEY-----/g, "")
+                        .replace(/-----END RSA PRIVATE KEY-----/g, "")
+                        .replace(/\s+/g, "") // Remove ALL spaces/newlines
+                        .trim();
 
-                // Re-wrap perfectly
-                sa.private_key = `-----BEGIN PRIVATE KEY-----\n${pk}\n-----END PRIVATE KEY-----`;
+                    sa.private_key = `-----BEGIN PRIVATE KEY-----\n${pk}\n-----END PRIVATE KEY-----`;
+                }
+                return sa;
             }
-            return sa;
-        } catch (e) {
-            console.error("FIREBASE: Failed to parse SERVICE_ACCOUNT_KEY JSON");
+        } catch (e: any) {
+            console.error("FIREBASE DEBUG: JSON Parse Error:", e.message);
         }
     }
 
@@ -36,21 +37,17 @@ const getServiceAccount = () => {
     const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY;
 
     if (projectId && clientEmail && privateKeyRaw) {
-        console.log("FIREBASE: Using individual environment variables");
+        console.log("FIREBASE DEBUG: Using individual variables");
 
+        // Ultra-aggressive cleaning
         let pk = privateKeyRaw.trim();
         pk = pk.replace(/\\n/g, "\n");
-
-        // Strip ALL headers, footers, and internal newlines/spaces
         pk = pk
             .replace(/-----BEGIN PRIVATE KEY-----/g, "")
             .replace(/-----END PRIVATE KEY-----/g, "")
-            .replace(/-----BEGIN RSA PRIVATE KEY-----/g, "")
-            .replace(/-----END RSA PRIVATE KEY-----/g, "")
-            .replace(/\s+/g, "") // REMOVE ALL INTERNAL NEWLINES/SPACES
+            .replace(/\s+/g, "")
             .trim();
 
-        // Final wrap with EXACTLY one newline
         const privateKey = `-----BEGIN PRIVATE KEY-----\n${pk}\n-----END PRIVATE KEY-----`;
 
         return {
@@ -63,60 +60,55 @@ const getServiceAccount = () => {
         };
     }
 
-    // Log failures
-    if (process.env.NODE_ENV === "production" && !process.env.NEXT_PHASE) {
-        const missing = [];
-        if (!projectId) missing.push("FIREBASE_PROJECT_ID");
-        if (!clientEmail) missing.push("FIREBASE_CLIENT_EMAIL");
-        if (!privateKeyRaw) missing.push("FIREBASE_PRIVATE_KEY");
-
-        if (missing.length > 0) {
-            console.error(`FIREBASE Error: Missing environment variables: ${missing.join(", ")}`);
-        }
-    }
-
+    console.log("FIREBASE DEBUG: No credential variables found in process.env");
     return null;
 };
 
 const initAdmin = () => {
-    if (admin.apps.length > 0) return admin.apps[0];
+    // If already initialized, return existing
+    if (admin.apps.length > 0) {
+        return admin.apps[0];
+    }
 
     const serviceAccount = getServiceAccount();
 
     if (serviceAccount) {
         try {
-            console.log("FIREBASE: Initializing Admin SDK...");
+            console.log("FIREBASE DEBUG: Calling initializeApp with credential object...");
             return admin.initializeApp({
                 credential: admin.credential.cert(serviceAccount),
                 storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "lifewood-webdev.appspot.com",
             });
         } catch (error: any) {
-            console.error("FIREBASE: Initialization error:", error.message);
-            throw new Error(`Firebase Auth Failed: ${error.message}. Check your Private Key!`);
+            console.error("FIREBASE DEBUG: Init Error:", error.message);
+            throw new Error(`Firebase Auth Failed: ${error.message}`);
         }
     }
 
-    // Fallback for build time
+    // Fallback for build time ONLY (prevents crash during static site generation)
+    console.log("FIREBASE DEBUG: Returning dummy app for build-time safety");
     return admin.initializeApp({
         projectId: "build-time-dummy",
         storageBucket: "build-time-dummy.appspot.com",
     });
 };
 
+// Exports
 export const getFirestore = () => {
     const app = admin.apps.length ? admin.apps[0] : initAdmin();
-    return admin.firestore(app);
+    return admin.firestore(app!);
 };
 
 export const getStorage = () => {
     const app = admin.apps.length ? admin.apps[0] : initAdmin();
-    return admin.storage(app);
+    return admin.storage(app!);
 };
 
 export const getAuth = () => {
     const app = admin.apps.length ? admin.apps[0] : initAdmin();
-    return admin.auth(app);
+    return admin.auth(app!);
 };
 
-export const db = admin.apps.length ? admin.firestore(admin.apps[0]) : (null as any);
-export const bucket = admin.apps.length ? admin.storage(admin.apps[0]).bucket() : (null as any);
+// Legacy exports
+export const db = (null as any);
+export const bucket = (null as any);
