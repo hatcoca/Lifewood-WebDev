@@ -74,10 +74,12 @@ const initAdmin = () => {
 
     if (serviceAccount) {
         try {
-            console.log("FIREBASE DEBUG: Calling initializeApp with credential object...");
+            const bucketName = (process.env.FIREBASE_STORAGE_BUCKET || "lifewood-webdev.appspot.com").trim().replace("gs://", "").split('/')[0];
+            console.log("FIREBASE DEBUG: Using storage bucket:", bucketName);
+
             return admin.initializeApp({
                 credential: admin.credential.cert(serviceAccount),
-                storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "lifewood-webdev.appspot.com",
+                storageBucket: bucketName,
             });
         } catch (error: any) {
             console.error("FIREBASE DEBUG: Init Error:", error.message);
