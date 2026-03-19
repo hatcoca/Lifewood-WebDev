@@ -3,31 +3,38 @@ import admin from "firebase-admin";
 const getServiceAccount = () => {
     // 1. Check for full JSON key first
     if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
-        try {
-            console.log("FIREBASE DEBUG: Attempting to parse FIREBASE_SERVICE_ACCOUNT_KEY");
-            const sa = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+        const rawJson = process.env.FIREBASE_SERVICE_ACCOUNT_KEY.trim();
 
-            if (sa && typeof sa === 'object') {
-                console.log("FIREBASE DEBUG: JSON parse successful. Keys found:", Object.keys(sa));
-                // Aggressively clean the private_key field from JSON
-                if (sa.private_key) {
-                    let pk = sa.private_key.trim();
-                    pk = pk.replace(/\\n/g, "\n");
+        // Safety check: JSON must start with '{'
+        if (rawJson.startsWith('{')) {
+            try {
+                console.log("FIREBASE DEBUG: Attempting to parse FIREBASE_SERVICE_ACCOUNT_KEY");
+                const sa = JSON.parse(rawJson);
 
-                    pk = pk
-                        .replace(/-----BEGIN PRIVATE KEY-----/g, "")
-                        .replace(/-----END PRIVATE KEY-----/g, "")
-                        .replace(/-----BEGIN RSA PRIVATE KEY-----/g, "")
-                        .replace(/-----END RSA PRIVATE KEY-----/g, "")
-                        .replace(/\s+/g, "") // Remove ALL spaces/newlines
-                        .trim();
+                if (sa && typeof sa === 'object') {
+                    console.log("FIREBASE DEBUG: JSON parse successful. Keys found:", Object.keys(sa));
+                    // Aggressively clean the private_key field from JSON
+                    if (sa.private_key) {
+                        let pk = sa.private_key.trim();
+                        pk = pk.replace(/\\n/g, "\n");
 
-                    sa.private_key = `-----BEGIN PRIVATE KEY-----\n${pk}\n-----END PRIVATE KEY-----`;
+                        pk = pk
+                            .replace(/-----BEGIN PRIVATE KEY-----/g, "")
+                            .replace(/-----END PRIVATE KEY-----/g, "")
+                            .replace(/-----BEGIN RSA PRIVATE KEY-----/g, "")
+                            .replace(/-----END RSA PRIVATE KEY-----/g, "")
+                            .replace(/\s+/g, "") // Remove ALL spaces/newlines
+                            .trim();
+
+                        sa.private_key = `-----BEGIN PRIVATE KEY-----\n${pk}\n-----END PRIVATE KEY-----`;
+                    }
+                    return sa;
                 }
-                return sa;
+            } catch (e: any) {
+                console.error("FIREBASE DEBUG: JSON Parse Error:", e.message);
             }
-        } catch (e: any) {
-            console.error("FIREBASE DEBUG: JSON Parse Error:", e.message);
+        } else if (rawJson.startsWith('-')) {
+            console.error("FIREBASE WARNING: FIREBASE_SERVICE_ACCOUNT_KEY appears to be a PEM Key, not JSON. Skipping JSON parse.");
         }
     }
 
