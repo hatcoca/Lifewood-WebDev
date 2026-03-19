@@ -175,10 +175,9 @@ export default function AdminDashboard() {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
             const [msgRes, appRes] = await Promise.all([
-                fetch(`${apiUrl}/api/contact`),
-                fetch(`${apiUrl}/api/applications`)
+                fetch("/api/contact"),
+                fetch("/api/applications")
             ]);
             const [msgData, appData] = await Promise.all([msgRes.json(), appRes.json()]);
             setMessages(Array.isArray(msgData) ? msgData : []);
@@ -197,8 +196,7 @@ export default function AdminDashboard() {
 
     const updateAppStatus = async (id, status) => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-            await fetch(`${apiUrl}/api/applications/status`, {
+            await fetch("/api/applications", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id, status })
@@ -211,8 +209,7 @@ export default function AdminDashboard() {
 
     const markMessageReplied = async (id) => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-            await fetch(`${apiUrl}/api/contact/${id}/replied`, {
+            await fetch(`/api/contact/${id}`, {
                 method: "PATCH"
             });
             fetchData();
@@ -225,8 +222,7 @@ export default function AdminDashboard() {
         if (!window.confirm("Are you sure you want to permanently delete this application? This action cannot be undone and will also delete their resume file.")) return;
 
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-            const res = await fetch(`${apiUrl}/api/applications/${id}`, {
+            const res = await fetch(`/api/applications/${id}`, {
                 method: "DELETE"
             });
             if (res.ok) {
@@ -243,8 +239,7 @@ export default function AdminDashboard() {
         if (!window.confirm("Are you sure you want to permanently delete this message? This action cannot be undone.")) return;
 
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-            const res = await fetch(`${apiUrl}/api/contact/${id}`, {
+            const res = await fetch(`/api/contact/${id}`, {
                 method: "DELETE"
             });
             if (res.ok) {
@@ -261,8 +256,7 @@ export default function AdminDashboard() {
         e.preventDefault();
         setSendingEmail(true);
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-            const response = await fetch(`${apiUrl}/api/admin/send-email`, {
+            const response = await fetch("/api/admin/send-email", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

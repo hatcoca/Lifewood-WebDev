@@ -72,8 +72,7 @@ export default function ApplyPage() {
             data.append("name", fullName);
             data.append("resume", resume);
 
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-            const response = await fetch(`${apiUrl}/api/applications`, {
+            const response = await fetch("/api/applications", {
                 method: "POST",
                 body: data,
             });
@@ -92,7 +91,7 @@ export default function ApplyPage() {
                     message: ""
                 });
                 setResume(null);
-                e.target.reset();
+                if (e.target) e.target.reset();
             } else {
                 setStatus({ type: "error", message: result.error || "Something went wrong." });
             }
