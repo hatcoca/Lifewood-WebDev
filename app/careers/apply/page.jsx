@@ -31,8 +31,8 @@ export default function ApplyPage() {
         position: "",
         portfolio: "",
         message: "",
+        resumeLink: "",
     });
-    const [resume, setResume] = useState(null);
     const [status, setStatus] = useState({ type: "", message: "" });
     const [loading, setLoading] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
@@ -43,10 +43,6 @@ export default function ApplyPage() {
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handleFileChange = (e) => {
-        setResume(e.target.files[0]);
     };
 
     const handleSubmit = async (e) => {
@@ -60,21 +56,19 @@ export default function ApplyPage() {
         setStatus({ type: "", message: "" });
 
         try {
-            const data = new FormData();
             // Concatenate names for backend compatibility
             const fullName = `${formData.firstName} ${formData.lastName}`.trim();
 
-            Object.keys(formData).forEach(key => {
-                if (key !== 'firstName' && key !== 'lastName') {
-                    data.append(key, formData[key]);
-                }
-            });
-            data.append("name", fullName);
-            data.append("resume", resume);
+            const payload = {
+                ...formData,
+                name: fullName,
+                resumeURL: formData.resumeLink // Backend expects resumeURL
+            };
 
             const response = await fetch("/api/applications", {
                 method: "POST",
-                body: data,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
             });
 
             const result = await response.json();
@@ -88,9 +82,9 @@ export default function ApplyPage() {
                     phone: "",
                     position: "",
                     portfolio: "",
-                    message: ""
+                    message: "",
+                    resumeLink: ""
                 });
-                setResume(null);
                 if (e.target) e.target.reset();
             } else {
                 setStatus({ type: "error", message: result.error || "Something went wrong." });
@@ -267,24 +261,22 @@ export default function ApplyPage() {
                                     </div>
                                 </div>
 
-                                {/* Resume Upload */}
+                                {/* Resume Link */}
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-lw-green ml-1">Upload CV / Resume (PDF, DOCX)</label>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-lw-green ml-1">Link to Resume / CV (Google Drive, LinkedIn, etc.)</label>
                                     <div className="relative group">
+                                        <Globe className="absolute left-5 top-1/2 -translate-y-1/2 text-lw-dark/20 group-focus-within:text-lw-green transition-colors" size={18} />
                                         <input
                                             required
-                                            type="file"
-                                            accept=".pdf,.docx"
-                                            onChange={handleFileChange}
-                                            className="w-full px-6 py-4 rounded-2xl bg-white/40 border border-black/5 focus:bg-white focus:ring-8 focus:ring-lw-green/5 focus:border-lw-green/30 outline-none transition-all text-transparent font-bold file:hidden cursor-pointer"
+                                            type="url"
+                                            name="resumeLink"
+                                            value={formData.resumeLink}
+                                            onChange={handleChange}
+                                            className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white/40 border border-black/5 focus:bg-white focus:ring-8 focus:ring-lw-green/5 focus:border-lw-green/30 outline-none transition-all text-lw-dark placeholder-lw-dark/20 font-bold"
+                                            placeholder="https://drive.google.com/..."
                                         />
-                                        <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none flex items-center gap-2 text-lw-green font-black text-[10px] uppercase tracking-widest">
-                                            <Upload size={14} strokeWidth={3} />
-                                            {resume ? resume.name.split('.').pop().toUpperCase() : "Browse"}
-                                        </div>
-                                        {!resume && <div className="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-none text-lw-dark/20 font-bold uppercase tracking-widest text-[10px]">Select your file...</div>}
-                                        {resume && <div className="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-none text-lw-dark font-black truncate max-w-[200px] text-sm">{resume.name}</div>}
                                     </div>
+                                    <p className="text-[9px] text-lw-dark/40 font-bold px-2">Please make sure the link is set to "Anyone with the link can view"</p>
                                 </div>
 
                                 {/* Message */}

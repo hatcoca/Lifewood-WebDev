@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { getFirestore, getStorage } from "@/lib/firebaseAdmin";
+import { getFirestore } from "@/lib/firebaseAdmin";
 import { sendApplicationNotification } from "@/lib/email-service";
-import { v4 as uuidv4 } from "uuid";
 
 export async function GET() {
     try {
@@ -12,10 +11,10 @@ export async function GET() {
             ...doc.data(),
         }));
         return NextResponse.json(applications);
-    } catch (error) {
+    } catch (error: any) {
         console.error("Fetch Applications Error:", error);
         return NextResponse.json(
-            { success: false, message: "Failed to fetch applications" },
+            { success: false, message: error.message || "Failed to fetch applications" },
             { status: 500 }
         );
     }
@@ -40,10 +39,10 @@ export async function PATCH(request: Request) {
             success: true,
             message: `Status updated to ${status}`,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error("Update Application Status Error:", error);
         return NextResponse.json(
-            { success: false, message: "Failed to update status" },
+            { success: false, message: error.message || "Failed to update status" },
             { status: 500 }
         );
     }
@@ -51,36 +50,16 @@ export async function PATCH(request: Request) {
 
 export async function POST(request: Request) {
     try {
-        const formData = await request.formData();
+        // Option B: JSON instead of FormData to bypass Storage
+        const body = await request.json();
+        const { name, email, phone, position, portfolio, message, resumeURL } = body;
 
-        const name = formData.get("name") as string;
-        const email = formData.get("email") as string;
-        const phone = formData.get("phone") as string;
-        const position = formData.get("position") as string;
-        const portfolio = formData.get("portfolio") as string;
-        const message = formData.get("message") as string;
-        const resume = formData.get("resume") as File;
-
-        if (!name || !email || !phone || !position || !resume) {
+        if (!name || !email || !phone || !position || !resumeURL) {
             return NextResponse.json(
-                { success: false, error: "Required fields missing" },
+                { success: false, error: "Required fields missing (Name, Email, Phone, Position, and Resume Link are all required)." },
                 { status: 400 }
             );
         }
-
-        let resumeURL = "";
-        const storage = getStorage();
-        const bucket = storage.bucket();
-        const fileName = `${Date.now()}_${uuidv4()}_${resume.name}`;
-        const file = bucket.file(`resumes/${fileName}`);
-        const buffer = Buffer.from(await resume.arrayBuffer());
-
-        await file.save(buffer, {
-            metadata: { contentType: resume.type },
-            public: true,
-        });
-
-        resumeURL = `https://storage.googleapis.com/${bucket.name}/${file.name}`;
 
         const applicationData = {
             name,
@@ -89,7 +68,7 @@ export async function POST(request: Request) {
             position,
             portfolio: portfolio || "",
             message: message || "",
-            resumeURL,
+            resumeURL, // This is now a direct link provided by the user
             status: "pending",
             submittedAt: new Date().toISOString(),
             createdAt: new Date().toISOString(),
@@ -104,7 +83,7 @@ export async function POST(request: Request) {
                 email,
                 phone,
                 position,
-                experience: "N/A",
+                experience: "Mentioned in Message",
                 coverLetter: message,
                 resumeUrl: resumeURL,
             });
@@ -114,7 +93,7 @@ export async function POST(request: Request) {
 
         return NextResponse.json({
             success: true,
-            message: "Application submitted successfully",
+            message: "Application submitted successfully! Our team will review your resume link and get back to you.",
             resumeURL,
         });
     } catch (error: any) {
@@ -123,7 +102,6 @@ export async function POST(request: Request) {
             {
                 success: false,
                 error: error.message || "Something went wrong during submission.",
-                details: error.stack?.split('\n').slice(0, 2).join(' ') // Safe debug info
             },
             { status: 500 }
         );
