@@ -17,11 +17,23 @@ export async function GET() {
 
     const status = keys.reduce((acc, key) => {
         const value = process.env[key];
+        let privateKeyFrag = "N/A";
+
+        if (key === "FIREBASE_SERVICE_ACCOUNT_KEY" && value) {
+            try {
+                const parsed = JSON.parse(value);
+                if (parsed.private_key) {
+                    privateKeyFrag = `${parsed.private_key.substring(0, 30)}...${parsed.private_key.substring(parsed.private_key.length - 30)}`;
+                }
+            } catch (e) { }
+        }
+
         acc[key] = {
             exists: !!value,
             length: value ? value.length : 0,
-            startsWith: value ? value.substring(0, 10) + "..." : "N/A",
-            endsWith: value ? "..." + value.substring(value.length - 10) : "N/A",
+            startsWith: value ? value.substring(0, 15) + "..." : "N/A",
+            endsWith: value ? "..." + value.substring(value.length - 15) : "N/A",
+            jsonPrivateKeyFrag: privateKeyFrag,
             hasNewlines: value ? value.includes("\n") : false,
             hasEscapedNewlines: value ? value.includes("\\n") : false,
         };
