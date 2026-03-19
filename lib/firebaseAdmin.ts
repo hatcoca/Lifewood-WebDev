@@ -5,7 +5,24 @@ const getServiceAccount = () => {
     if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
         try {
             console.log("FIREBASE: Using FIREBASE_SERVICE_ACCOUNT_KEY JSON");
-            return JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+            const sa = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+
+            // Aggressively clean the private_key field from JSON to fix ASN.1 errors
+            if (sa.private_key) {
+                sa.private_key = sa.private_key.trim();
+                sa.private_key = sa.private_key.replace(/\\n/g, "\n");
+
+                // Remove existing headers and re-wrap to ensure perfect PEM format
+                sa.private_key = sa.private_key
+                    .replace(/-----BEGIN PRIVATE KEY-----/g, "")
+                    .replace(/-----END PRIVATE KEY-----/g, "")
+                    .replace(/-----BEGIN RSA PRIVATE KEY-----/g, "")
+                    .replace(/-----END RSA PRIVATE KEY-----/g, "")
+                    .trim();
+
+                sa.private_key = `-----BEGIN PRIVATE KEY-----\n${sa.private_key}\n-----END PRIVATE KEY-----`;
+            }
+            return sa;
         } catch (e) {
             console.error("FIREBASE: Failed to parse SERVICE_ACCOUNT_KEY JSON");
         }
