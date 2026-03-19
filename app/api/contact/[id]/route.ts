@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/firebaseAdmin";
+import { getFirestore } from "@/lib/firebaseAdmin";
 
 export async function PATCH(
     request: Request,
@@ -15,6 +15,7 @@ export async function PATCH(
             );
         }
 
+        const db = getFirestore();
         await db.collection("contacts").doc(id).update({ status: "replied" });
 
         return NextResponse.json({
@@ -44,6 +45,7 @@ export async function DELETE(
             );
         }
 
+        const db = getFirestore();
         await db.collection("contacts").doc(id).delete();
 
         return NextResponse.json({

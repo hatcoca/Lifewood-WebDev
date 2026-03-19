@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import { db, bucket } from "@/lib/firebaseAdmin";
+import { getFirestore, getStorage } from "@/lib/firebaseAdmin";
 import { sendApplicationNotification } from "@/lib/email-service";
 import { v4 as uuidv4 } from "uuid";
 
 export async function GET() {
     try {
+        const db = getFirestore();
         const snapshot = await db.collection("applications").orderBy("submittedAt", "desc").get();
         const applications = snapshot.docs.map((doc) => ({
             id: doc.id,
@@ -32,6 +33,7 @@ export async function PATCH(request: Request) {
             );
         }
 
+        const db = getFirestore();
         await db.collection("applications").doc(id).update({ status });
 
         return NextResponse.json({
@@ -67,6 +69,8 @@ export async function POST(request: Request) {
         }
 
         let resumeURL = "";
+        const storage = getStorage();
+        const bucket = storage.bucket();
         const fileName = `${Date.now()}_${uuidv4()}_${resume.name}`;
         const file = bucket.file(`resumes/${fileName}`);
         const buffer = Buffer.from(await resume.arrayBuffer());
@@ -91,6 +95,7 @@ export async function POST(request: Request) {
             createdAt: new Date().toISOString(),
         };
 
+        const db = getFirestore();
         await db.collection("applications").add(applicationData);
 
         try {

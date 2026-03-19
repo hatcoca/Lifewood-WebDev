@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db, bucket } from "@/lib/firebaseAdmin";
+import { getFirestore, getStorage } from "@/lib/firebaseAdmin";
 
 export async function DELETE(
     request: Request,
@@ -15,6 +15,7 @@ export async function DELETE(
             );
         }
 
+        const db = getFirestore();
         const docRef = db.collection("applications").doc(id);
         const doc = await docRef.get();
 
@@ -36,6 +37,8 @@ export async function DELETE(
                 // Extract filename from URL
                 const fileName = appData.resumeUrl.split("/").pop();
                 if (fileName) {
+                    const storage = getStorage();
+                    const bucket = storage.bucket();
                     await bucket.file(`resumes/${fileName}`).delete();
                 }
             } catch (storageError) {

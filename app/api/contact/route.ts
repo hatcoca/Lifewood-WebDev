@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/firebaseAdmin";
+import { getFirestore } from "@/lib/firebaseAdmin";
 import { sendContactNotification } from "@/lib/email-service";
 
 export async function GET() {
   try {
+    const db = getFirestore();
     const snapshot = await db.collection("contacts").orderBy("submittedAt", "desc").get();
     const messages = snapshot.docs.map((doc) => ({
       id: doc.id,
@@ -46,6 +47,7 @@ export async function POST(request: Request) {
     };
 
     // Save to Firestore
+    const db = getFirestore();
     await db.collection("contacts").add(submission);
 
     // Send Email Notification
