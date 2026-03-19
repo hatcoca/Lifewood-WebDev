@@ -428,7 +428,7 @@ export default function AdminDashboard() {
                                             <div className="text-xs text-lw-dark/50 truncate max-w-[200px]">{msg.subject}</div>
                                         </div>
                                         <div className="text-[10px] font-bold text-lw-dark/40 bg-black/5 px-2 py-1 rounded-md">
-                                            {new Date(msg.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                                            {msg.createdAt || msg.submittedAt ? new Date(msg.createdAt || msg.submittedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '---'}
                                         </div>
                                     </div>
                                 ))}
@@ -510,7 +510,7 @@ export default function AdminDashboard() {
                                             <td className="px-8 py-7">
                                                 <div className="flex items-center gap-2 text-lw-dark/50 font-bold text-xs">
                                                     <Clock size={12} className="text-lw-green/40" />
-                                                    {new Date(item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                    {item.createdAt || item.submittedAt ? new Date(item.createdAt || item.submittedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A'}
                                                 </div>
                                             </td>
                                             <td className="px-8 py-7" onClick={(e) => e.stopPropagation()}>
@@ -553,14 +553,20 @@ export default function AdminDashboard() {
                                                     )}
                                                     {activeTab === "applications" && (
                                                         <>
-                                                            <a
-                                                                href={item.resumeURL}
-                                                                target="_blank"
-                                                                className="p-3 bg-white/60 border border-black/5 hover:bg-blue-600 hover:text-white rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
-                                                                title="Open Resume Link"
-                                                            >
-                                                                <Globe size={16} />
-                                                            </a>
+                                                            {item.resumeURL ? (
+                                                                <a
+                                                                    href={item.resumeURL}
+                                                                    target="_blank"
+                                                                    className="p-3 bg-white/60 border border-black/5 hover:bg-blue-600 hover:text-white rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
+                                                                    title="Open Resume Link"
+                                                                >
+                                                                    <Globe size={16} />
+                                                                </a>
+                                                            ) : (
+                                                                <div className="p-3 bg-black/5 text-lw-dark/30 rounded-2xl" title="PDF Attachment in Gmail">
+                                                                    <FileText size={16} />
+                                                                </div>
+                                                            )}
                                                             {item.status !== "accepted" && item.status !== "rejected" && (
                                                                 <div className="flex gap-2 border-l border-black/10 pl-2">
                                                                     <button
@@ -660,13 +666,23 @@ export default function AdminDashboard() {
                                     <p className="text-lw-dark text-base lg:text-lg leading-relaxed whitespace-pre-wrap italic">"{selectedItem.message}"</p>
                                 </div>
                                 <div className="pt-4 lg:pt-6">
-                                    <a
-                                        href={selectedItem.resumeURL}
-                                        target="_blank"
-                                        className="inline-flex items-center gap-3 px-8 lg:px-10 py-4 lg:py-5 bg-lw-dark text-white rounded-3xl font-black text-[10px] lg:text-sm uppercase tracking-widest hover:bg-lw-green transition-all shadow-xl shadow-lw-dark/10 hover:shadow-lw-green/20"
-                                    >
-                                        <Globe size={18} /> View Resume Link
-                                    </a>
+                                    {selectedItem.resumeURL ? (
+                                        <a
+                                            href={selectedItem.resumeURL}
+                                            target="_blank"
+                                            className="inline-flex items-center gap-3 px-8 lg:px-10 py-4 lg:py-5 bg-lw-dark text-white rounded-3xl font-black text-[10px] lg:text-sm uppercase tracking-widest hover:bg-lw-green transition-all shadow-xl shadow-lw-dark/10 hover:shadow-lw-green/20"
+                                        >
+                                            <Globe size={18} /> View Resume Link
+                                        </a>
+                                    ) : (
+                                        <div className="p-5 lg:p-6 bg-amber-50 rounded-3xl border border-amber-200 text-amber-800 flex items-center gap-4">
+                                            <AlertCircle className="text-amber-500" size={24} />
+                                            <div>
+                                                <p className="font-black text-xs uppercase tracking-widest">PDF Attachment</p>
+                                                <p className="text-sm font-bold opacity-80">This candidate's resume was sent directly to your Gmail inbox as a PDF attachment.</p>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </>
                         )}
