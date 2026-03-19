@@ -62,10 +62,15 @@ export async function POST(request: Request) {
       success: true,
       message: "Thank you for reaching out! We will get back to you within 1-2 business days.",
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Contact API Error:", error);
     return NextResponse.json(
-      { success: false, message: "Something went wrong. Please try again later." },
+      {
+        success: false,
+        message: error.message?.includes("FIREBASE")
+          ? error.message
+          : "Something went wrong. Please try again later."
+      },
       { status: 500 }
     );
   }
