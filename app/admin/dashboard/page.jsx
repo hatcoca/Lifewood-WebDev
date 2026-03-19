@@ -219,7 +219,7 @@ export default function AdminDashboard() {
     };
 
     const deleteApplication = async (id) => {
-        if (!window.confirm("Are you sure you want to permanently delete this application? This action cannot be undone and will also delete their resume file.")) return;
+        if (!window.confirm("Are you sure you want to permanently delete this application? This action cannot be undone.")) return;
 
         try {
             const res = await fetch(`/api/applications/${id}`, {
@@ -557,9 +557,9 @@ export default function AdminDashboard() {
                                                                 href={item.resumeURL}
                                                                 target="_blank"
                                                                 className="p-3 bg-white/60 border border-black/5 hover:bg-blue-600 hover:text-white rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
-                                                                title="Download Resume"
+                                                                title="Open Resume Link"
                                                             >
-                                                                <Download size={16} />
+                                                                <Globe size={16} />
                                                             </a>
                                                             {item.status !== "accepted" && item.status !== "rejected" && (
                                                                 <div className="flex gap-2 border-l border-black/10 pl-2">
@@ -665,7 +665,7 @@ export default function AdminDashboard() {
                                         target="_blank"
                                         className="inline-flex items-center gap-3 px-8 lg:px-10 py-4 lg:py-5 bg-lw-dark text-white rounded-3xl font-black text-[10px] lg:text-sm uppercase tracking-widest hover:bg-lw-green transition-all shadow-xl shadow-lw-dark/10 hover:shadow-lw-green/20"
                                     >
-                                        <Download size={18} /> View Documents
+                                        <Globe size={18} /> View Resume Link
                                     </a>
                                 </div>
                             </>
