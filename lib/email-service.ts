@@ -106,6 +106,11 @@ export async function sendApplicationNotification(data: {
   experience: string;
   coverLetter?: string;
   resumeUrl?: string;
+  resumeFile?: {
+    buffer: Buffer;
+    filename: string;
+    contentType: string;
+  };
 }) {
   const adminEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_USER;
 
@@ -116,6 +121,7 @@ export async function sendApplicationNotification(data: {
       <tr><td style="color: #777; padding: 10px;"><strong>Email</strong></td><td style="padding: 10px;"><a href="mailto:${data.email}" style="color: ${BRAND_COLOR};">${data.email}</a></td></tr>
       <tr><td style="color: #777; padding: 10px;"><strong>Position</strong></td><td style="padding: 10px;">${data.position}</td></tr>
       <tr><td style="color: #777; padding: 10px;"><strong>Experience</strong></td><td style="padding: 10px;">${data.experience}</td></tr>
+      ${data.resumeFile ? `<tr><td style="color: #777; padding: 10px;"><strong>Resume File</strong></td><td style="padding: 10px;">${data.resumeFile.filename} (Attached)</td></tr>` : ""}
     </table>
     
     ${data.coverLetter ? `
@@ -126,19 +132,29 @@ export async function sendApplicationNotification(data: {
     
     <div style="margin-top: 30px; text-align: center;">
       ${data.resumeUrl ? `
-      <a href="${data.resumeUrl}" style="background-color: ${BRAND_COLOR}; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block; margin-right: 10px;">View Candidate Resume</a>
+      <a href="${data.resumeUrl}" style="background-color: ${BRAND_COLOR}; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block; margin-right: 10px;">View Resume</a>
       ` : ""}
       <a href="mailto:${data.email}" style="border: 1px solid ${BRAND_COLOR}; color: ${BRAND_COLOR}; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">Reply to Applicant</a>
     </div>
   `;
 
-  const mailOptions = {
+  const mailOptions: any = {
     from: `"${data.fullName} (Job Applicant)" <${process.env.EMAIL_USER}>`,
     to: adminEmail,
     replyTo: data.email,
     subject: `Application: ${data.position} - ${data.fullName}`,
     html: getEmailTemplate("New Job Application", htmlContent),
   };
+
+  if (data.resumeFile) {
+    mailOptions.attachments = [
+      {
+        filename: data.resumeFile.filename,
+        content: data.resumeFile.buffer,
+        contentType: data.resumeFile.contentType || 'application/pdf'
+      }
+    ];
+  }
 
   await transporter.sendMail(mailOptions);
 }

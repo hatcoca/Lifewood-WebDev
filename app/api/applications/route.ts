@@ -50,16 +50,25 @@ export async function PATCH(request: Request) {
 
 export async function POST(request: Request) {
     try {
-        // Option B: JSON instead of FormData to bypass Storage
-        const body = await request.json();
-        const { name, email, phone, position, portfolio, message, resumeURL } = body;
+        const formData = await request.formData();
+        const name = formData.get("name") as string;
+        const email = formData.get("email") as string;
+        const phone = formData.get("phone") as string;
+        const position = formData.get("position") as string;
+        const portfolio = formData.get("portfolio") as string;
+        const message = formData.get("message") as string;
+        const resumeFile = formData.get("resume") as File | null;
 
-        if (!name || !email || !phone || !position || !resumeURL) {
+        if (!name || !email || !phone || !position || !resumeFile) {
             return NextResponse.json(
-                { success: false, error: "Required fields missing (Name, Email, Phone, Position, and Resume Link are all required)." },
+                { success: false, error: "Required fields missing (Name, Email, Phone, Position, and Resume File are all required)." },
                 { status: 400 }
             );
         }
+
+        // Convert file to Buffer for email attachment
+        const bytes = await resumeFile.arrayBuffer();
+        const buffer = Buffer.from(bytes);
 
         const applicationData = {
             name,
@@ -68,7 +77,7 @@ export async function POST(request: Request) {
             position,
             portfolio: portfolio || "",
             message: message || "",
-            resumeURL, // This is now a direct link provided by the user
+            resumeURL: "", // We are not uploading to storage anymore
             status: "pending",
             submittedAt: new Date().toISOString(),
             createdAt: new Date().toISOString(),
@@ -83,9 +92,13 @@ export async function POST(request: Request) {
                 email,
                 phone,
                 position,
-                experience: "Mentioned in Message",
+                experience: "Provided in Application",
                 coverLetter: message,
-                resumeUrl: resumeURL,
+                resumeFile: {
+                    buffer,
+                    filename: resumeFile.name,
+                    contentType: resumeFile.type
+                }
             });
         } catch (err) {
             console.error("Email notification failed:", err);
@@ -93,8 +106,7 @@ export async function POST(request: Request) {
 
         return NextResponse.json({
             success: true,
-            message: "Application submitted successfully! Our team will review your resume link and get back to you.",
-            resumeURL,
+            message: "Application submitted successfully! Your resume has been sent to our team as an attachment.",
         });
     } catch (error: any) {
         console.error("Application POST error:", error);
