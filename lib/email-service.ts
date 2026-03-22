@@ -13,49 +13,75 @@ const transporter = nodemailer.createTransport({
 const LOGO_URL = "https://lifewood-web-dev-nine.vercel.app/logo.png";
 const BRAND_COLOR = "#004d40"; // Lifewood Dark Green
 const ACCENT_COLOR = "#f5c542"; // Logo Yellow
+const BG_COLOR = "#f0f4f8"; // Premium light grey-blue
 
 export function getEmailTemplate(title: string, content: string) {
   return `
-    <div style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f9f9f9; padding: 40px 0;">
-      <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-        <!-- Header -->
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+      <title>${title}</title>
+    </head>
+    <body style="margin: 0; padding: 0; font-family: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: ${BG_COLOR}; color: #333;">
+      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
         <tr>
-          <td style="background-color: ${BRAND_COLOR}; padding: 30px; text-align: center;">
-            <img src="${LOGO_URL}" alt="Lifewood Logo" width="180" style="display: block; margin: 0 auto; filter: brightness(1.2);">
-          </td>
-        </tr>
-        
-        <!-- Decoration Bar -->
-        <tr>
-          <td style="height: 4px; background-color: ${ACCENT_COLOR};"></td>
-        </tr>
+          <td align="center" style="padding: 50px 10px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.08);">
+              <!-- Logo Header (White for visibility) -->
+              <tr>
+                <td style="padding: 30px 40px; text-align: center; background-color: #ffffff;">
+                  <img src="${LOGO_URL}" alt="Lifewood" width="180" style="display: inline-block;">
+                </td>
+              </tr>
+              
+              <!-- Color Accent Bar -->
+              <tr>
+                <td style="padding: 40px 40px 30px 40px; background: linear-gradient(135deg, ${BRAND_COLOR} 0%, #00695c 100%); text-align: left;">
+                  <h1 style="margin: 0; font-size: 32px; font-weight: 800; color: #ffffff; line-height: 1.1; letter-spacing: -0.03em;">
+                    ${title}
+                  </h1>
+                  <div style="height: 4px; width: 60px; background-color: ${ACCENT_COLOR}; margin-top: 15px; border-radius: 2px;"></div>
+                </td>
+              </tr>
 
-        <!-- Body -->
-        <tr>
-          <td style="padding: 40px 30px;">
-            <h1 style="color: ${BRAND_COLOR}; font-size: 24px; margin-top: 0; margin-bottom: 20px;">${title}</h1>
-            <div style="color: #444; line-height: 1.7; font-size: 16px;">
-              ${content}
-            </div>
-          </td>
-        </tr>
+              <!-- Content Body -->
+              <tr>
+                <td style="padding: 40px;">
+                  <div style="font-size: 16px; line-height: 1.8; color: #4b5563;">
+                    ${content}
+                  </div>
+                </td>
+              </tr>
 
-        <!-- Footer -->
-        <tr>
-          <td style="background-color: #f4f4f4; padding: 25px; text-align: center;">
-            <p style="margin: 0; color: #777; font-size: 13px;">
-              <strong>Lifewood Data Technology</strong><br/>
-              The world's leading data solution provider
-            </p>
-            <div style="margin-top: 15px; border-top: 1px solid #ddd; padding-top: 15px;">
-              <p style="margin: 0; color: #999; font-size: 11px;">
-                © ${new Date().getFullYear()} Lifewood. All rights reserved.
-              </p>
-            </div>
+              <!-- Modern Footer -->
+              <tr>
+                <td style="padding: 50px 40px; background-color: #1a202c; text-align: center;">
+                  <img src="${LOGO_URL}" alt="Lifewood" width="120" style="display: inline-block; margin-bottom: 25px; filter: brightness(0) invert(1);">
+                  <p style="margin: 0; font-size: 12px; font-weight: 600; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.1em;">
+                    The world's leading data solution provider
+                  </p>
+                  <p style="margin: 15px 0 30px 0; font-size: 14px; color: #718096; line-height: 1.6;">
+                    Providing high-quality datasets and AI training data<br/>
+                    to global technology leaders since 2004.
+                  </p>
+                  
+                  <div style="padding-top: 30px; border-top: 1px solid #2d3748;">
+                    <p style="margin: 0; font-size: 11px; color: #4a5568;">
+                      © ${new Date().getFullYear()} Lifewood Data Technology. All rights reserved.<br/>
+                      This is an automated notification. Please do not reply directly to this address.
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
       </table>
-    </div>
+    </body>
+    </html>
   `;
 }
 
@@ -69,30 +95,53 @@ export async function sendContactNotification(data: {
   const adminEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_USER;
 
   const htmlContent = `
-    <p style="font-size: 18px; font-weight: 600; color: #333; margin-bottom: 10px;">Contact Inquiry Details</p>
-    <table width="100%" cellpadding="5" cellspacing="0" style="border-collapse: collapse; margin-bottom: 25px; background-color: #fcfcfc; border-radius: 6px; border: 1px solid #eee;">
-      <tr><td width="30%" style="color: #777; padding: 10px;"><strong>Name</strong></td><td style="padding: 10px;">${data.name}</td></tr>
-      <tr><td style="color: #777; padding: 10px;"><strong>Email</strong></td><td style="padding: 10px;"><a href="mailto:${data.email}" style="color: ${BRAND_COLOR};">${data.email}</a></td></tr>
-      ${data.company ? `<tr><td style="color: #777; padding: 10px;"><strong>Company</strong></td><td style="padding: 10px;">${data.company}</td></tr>` : ""}
-      <tr><td style="color: #777; padding: 10px;"><strong>Subject</strong></td><td style="padding: 10px;">${data.subject}</td></tr>
-    </table>
-    
-    <div style="background-color: #f7fbf8; border-left: 4px solid ${BRAND_COLOR}; padding: 20px; border-radius: 4px;">
-      <p style="margin: 0; color: #555; font-style: italic;">"${data.message}"</p>
+    <p style="font-size: 18px; color: #1a202c; font-weight: 600; margin-bottom: 25px;">Hello Team,</p>
+    <p style="margin-bottom: 30px;">You have received a new inquiry through the website. Here are the submission details:</p>
+
+    <div style="background-color: #f7fafc; border-radius: 16px; padding: 30px; margin-bottom: 40px; border: 1px solid #e2e8f0;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+        <tr>
+          <td style="padding: 12px 0; color: #718096; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;" width="100">Sender</td>
+          <td style="padding: 12px 0; color: #2d3748; font-weight: 700; font-size: 16px;">${data.name}</td>
+        </tr>
+        <tr>
+          <td style="padding: 12px 0; border-top: 1px solid #edf2f7; color: #718096; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Email</td>
+          <td style="padding: 12px 0; border-top: 1px solid #edf2f7; color: #2d3748; font-weight: 700; font-size: 16px;">
+            <a href="mailto:${data.email}" style="color: ${BRAND_COLOR}; text-decoration: none;">${data.email}</a>
+          </td>
+        </tr>
+        ${data.company ? `
+        <tr>
+          <td style="padding: 12px 0; border-top: 1px solid #edf2f7; color: #718096; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Company</td>
+          <td style="padding: 12px 0; border-top: 1px solid #edf2f7; color: #2d3748; font-weight: 700; font-size: 16px;">${data.company}</td>
+        </tr>` : ""}
+        <tr>
+          <td style="padding: 12px 0; border-top: 1px solid #edf2f7; color: #718096; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Subject</td>
+          <td style="padding: 12px 0; border-top: 1px solid #edf2f7; color: #2d3748; font-weight: 700; font-size: 16px;">${data.subject}</td>
+        </tr>
+      </table>
     </div>
     
-    <div style="margin-top: 30px; text-align: center;">
-      <a href="mailto:${data.email}" style="background-color: ${BRAND_COLOR}; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">Reply Directly to ${data.name.split(' ')[0]}</a>
+    <div style="background-color: #ffffff; border: 2px solid ${BG_COLOR}; padding: 30px; border-radius: 16px; position: relative; margin-bottom: 40px;">
+      <div style="position: absolute; top: -15px; left: 20px; background-color: #ffffff; padding: 0 10px; color: ${BRAND_COLOR}; font-weight: 800; font-size: 12px; text-transform: uppercase;">Message Content</div>
+      <p style="margin: 0; color: #4a5568; line-height: 1.8; font-size: 16px; font-style: italic;">
+        "${data.message}"
+      </p>
+    </div>
+    
+    <div style="text-align: center;">
+      <a href="mailto:${data.email}" style="background-color: ${BRAND_COLOR}; color: #ffffff; padding: 20px 40px; text-decoration: none; border-radius: 50px; font-weight: 800; font-size: 16px; display: inline-block; box-shadow: 0 10px 20px rgba(0, 77, 64, 0.15); transition: all 0.3s ease;">
+        REPLY TO THIS INQUIRY
+      </a>
     </div>
   `;
 
   const mailOptions = {
-    // We use display name to show the sender, but authenticated email to avoid spam filters
-    from: `"${data.name} via Lifewood Web" <${process.env.EMAIL_USER}>`,
+    from: `"${data.name} via Lifewood" <${process.env.EMAIL_USER}>`,
     to: adminEmail,
-    replyTo: data.email, // This makes "Reply" work in Gmail automatically
+    replyTo: data.email,
     subject: `Inbox: ${data.subject} - ${data.name}`,
-    html: getEmailTemplate("New Inquiry from Website", htmlContent),
+    html: getEmailTemplate("New Website Inquiry", htmlContent),
   };
 
   await transporter.sendMail(mailOptions);
@@ -115,35 +164,58 @@ export async function sendApplicationNotification(data: {
   const adminEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_USER;
 
   const htmlContent = `
-    <p style="font-size: 18px; font-weight: 600; color: #333; margin-bottom: 10px;">Job Application Details</p>
-    <table width="100%" cellpadding="5" cellspacing="0" style="border-collapse: collapse; margin-bottom: 25px; background-color: #fcfcfc; border-radius: 6px; border: 1px solid #eee;">
-      <tr><td width="30%" style="color: #777; padding: 10px;"><strong>Full Name</strong></td><td style="padding: 10px;">${data.fullName}</td></tr>
-      <tr><td style="color: #777; padding: 10px;"><strong>Email</strong></td><td style="padding: 10px;"><a href="mailto:${data.email}" style="color: ${BRAND_COLOR};">${data.email}</a></td></tr>
-      <tr><td style="color: #777; padding: 10px;"><strong>Position</strong></td><td style="padding: 10px;">${data.position}</td></tr>
-      <tr><td style="color: #777; padding: 10px;"><strong>Experience</strong></td><td style="padding: 10px;">${data.experience}</td></tr>
-      ${data.resumeFile ? `<tr><td style="color: #777; padding: 10px;"><strong>Resume File</strong></td><td style="padding: 10px;">${data.resumeFile.filename} (Attached)</td></tr>` : ""}
-    </table>
+    <p style="font-size: 18px; color: #1a202c; font-weight: 600; margin-bottom: 25px;">Hello Talent Team,</p>
+    <p style="margin-bottom: 30px;">A new candidate has applied for a position. Here are the application details:</p>
+
+    <div style="background-color: #f7fafc; border-radius: 16px; padding: 30px; margin-bottom: 40px; border: 1px solid #e2e8f0;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+        <tr>
+          <td style="padding: 12px 0; color: #718096; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;" width="120">Candidate</td>
+          <td style="padding: 12px 0; color: #2d3748; font-weight: 700; font-size: 16px;">${data.fullName}</td>
+        </tr>
+        <tr>
+          <td style="padding: 12px 0; border-top: 1px solid #edf2f7; color: #718096; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Email</td>
+          <td style="padding: 12px 0; border-top: 1px solid #edf2f7; color: #2d3748; font-weight: 700; font-size: 16px;">
+            <a href="mailto:${data.email}" style="color: ${BRAND_COLOR}; text-decoration: none;">${data.email}</a>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 12px 0; border-top: 1px solid #edf2f7; color: #718096; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Position</td>
+          <td style="padding: 12px 0; border-top: 1px solid #edf2f7; color: #2d3748; font-weight: 700; font-size: 16px;">
+            <span style="background-color: ${BRAND_COLOR}; color: #ffffff; padding: 4px 12px; border-radius: 6px; font-size: 12px; letter-spacing: 0.05em;">${data.position}</span>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 12px 0; border-top: 1px solid #edf2f7; color: #718096; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Experience</td>
+          <td style="padding: 12px 0; border-top: 1px solid #edf2f7; color: #2d3748; font-weight: 700; font-size: 16px;">${data.experience}</td>
+        </tr>
+      </table>
+    </div>
     
     ${data.coverLetter ? `
-    <p style="font-weight: 600; margin-bottom: 5px;">Cover Letter:</p>
-    <div style="background-color: #f7fbf8; border-left: 4px solid ${BRAND_COLOR}; padding: 20px; border-radius: 4px; margin-bottom: 25px;">
-      <p style="margin: 0; color: #555;">${data.coverLetter}</p>
+    <div style="background-color: #ffffff; border: 2px solid ${BG_COLOR}; padding: 30px; border-radius: 16px; position: relative; margin-bottom: 40px;">
+      <div style="position: absolute; top: -15px; left: 20px; background-color: #ffffff; padding: 0 10px; color: ${BRAND_COLOR}; font-weight: 800; font-size: 12px; text-transform: uppercase;">Cover Letter</div>
+      <p style="margin: 0; color: #4a5568; line-height: 1.8; font-size: 15px;">${data.coverLetter}</p>
     </div>` : ""}
     
-    <div style="margin-top: 30px; text-align: center;">
+    <div style="text-align: center;">
       ${data.resumeUrl ? `
-      <a href="${data.resumeUrl}" style="background-color: ${BRAND_COLOR}; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block; margin-right: 10px;">View Resume</a>
+      <a href="${data.resumeUrl}" style="background-color: ${BRAND_COLOR}; color: #ffffff; padding: 18px 30px; text-decoration: none; border-radius: 50px; font-weight: 800; font-size: 15px; display: inline-block; margin: 0 10px 10px 10px; box-shadow: 0 8px 16px rgba(0, 77, 64, 0.15);">
+        VIEW RESUME
+      </a>
       ` : ""}
-      <a href="mailto:${data.email}" style="border: 1px solid ${BRAND_COLOR}; color: ${BRAND_COLOR}; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">Reply to Applicant</a>
+      <a href="mailto:${data.email}" style="border: 2px solid ${BRAND_COLOR}; color: ${BRAND_COLOR}; padding: 16px 30px; text-decoration: none; border-radius: 50px; font-weight: 800; font-size: 15px; display: inline-block; margin: 0 10px 10px 10px;">
+        CONTACT CANDIDATE
+      </a>
     </div>
   `;
 
   const mailOptions: any = {
-    from: `"${data.fullName} (Job Applicant)" <${process.env.EMAIL_USER}>`,
+    from: `"${data.fullName} via Careers" <${process.env.EMAIL_USER}>`,
     to: adminEmail,
     replyTo: data.email,
     subject: `Application: ${data.position} - ${data.fullName}`,
-    html: getEmailTemplate("New Job Application", htmlContent),
+    html: getEmailTemplate("New Career Application", htmlContent),
   };
 
   if (data.resumeFile) {
@@ -165,9 +237,15 @@ export async function sendAdminEmail(data: {
   message: string;
 }) {
   const formattedMessage = `
-    <p>Dear Valued User,</p>
-    <p>${data.message.replace(/\n/g, '<br/>')}</p>
-    <p>Best regards,<br/><strong>The Lifewood Team</strong></p>
+    <div style="color: #2d3748; line-height: 2;">
+      <p style="font-size: 18px; font-weight: 700; color: #1a202c; margin-bottom: 25px;">Hello,</p>
+      <div style="font-size: 16px; color: #4a5568; margin-bottom: 40px; white-space: pre-wrap;">${data.message}</div>
+      
+      <div style="padding: 30px; background-color: #f7fafc; border-radius: 16px; border-left: 6px solid ${BRAND_COLOR};">
+        <p style="margin: 0; font-weight: 800; color: ${BRAND_COLOR}; font-size: 16px;">The Lifewood Team</p>
+        <p style="margin: 5px 0 0 0; font-size: 13px; color: #718096; text-transform: uppercase; letter-spacing: 0.05em;">Empowering intelligence through human-centric data.</p>
+      </div>
+    </div>
   `;
 
   const mailOptions = {
@@ -178,3 +256,5 @@ export async function sendAdminEmail(data: {
   };
   await transporter.sendMail(mailOptions);
 }
+
+
