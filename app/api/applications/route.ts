@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getFirestore } from "@/lib/firebaseAdmin";
-import { sendApplicationNotification } from "@/lib/email-service";
+import { sendApplicationNotification, sendApplicationStatusUpdate } from "@/lib/email-service";
 
 export async function GET() {
     try {
@@ -33,11 +33,36 @@ export async function PATCH(request: Request) {
         }
 
         const db = getFirestore();
+        const appDoc = await db.collection("applications").doc(id).get();
+
+        if (!appDoc.exists) {
+            return NextResponse.json(
+                { success: false, message: "Application not found" },
+                { status: 404 }
+            );
+        }
+
+        const appData = appDoc.data();
         await db.collection("applications").doc(id).update({ status });
+
+        // Trigger email notification if status is accepted or rejected
+        if (status === "accepted" || status === "rejected") {
+            try {
+                await sendApplicationStatusUpdate({
+                    fullName: appData?.name || "Candidate",
+                    email: appData?.email,
+                    position: appData?.position || "the requested position",
+                    status: status as "accepted" | "rejected"
+                });
+            } catch (emailErr) {
+                console.error("Failed to send status update email:", emailErr);
+                // We don't return error here because the DB update was successful
+            }
+        }
 
         return NextResponse.json({
             success: true,
-            message: `Status updated to ${status}`,
+            message: `Status updated to ${status} and notification sent.`,
         });
     } catch (error: any) {
         console.error("Update Application Status Error:", error);

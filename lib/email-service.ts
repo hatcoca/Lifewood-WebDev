@@ -257,4 +257,69 @@ export async function sendAdminEmail(data: {
   await transporter.sendMail(mailOptions);
 }
 
+export async function sendApplicationStatusUpdate(data: {
+  fullName: string;
+  email: string;
+  position: string;
+  status: "accepted" | "rejected";
+}) {
+  const isAccepted = data.status === "accepted";
+  const title = isAccepted ? "Application Update: Great News!" : "Application Update: Status Update";
+  const subject = isAccepted
+    ? `Congratulations! Your application for ${data.position} at Lifewood`
+    : `Update regarding your application for ${data.position} at Lifewood`;
+
+  const content = isAccepted ? `
+    <div style="color: #2d3748; line-height: 1.8;">
+      <p style="font-size: 20px; font-weight: 800; color: ${BRAND_COLOR}; margin-bottom: 20px;">Congratulations, ${data.fullName.split(' ')[0]}!</p>
+      <p style="font-size: 16px; margin-bottom: 25px;">
+        We are thrilled to inform you that after reviewing your application and profile, we have decided to <strong>accept</strong> your application for the <strong>${data.position}</strong> position at Lifewood.
+      </p>
+      <div style="background-color: #f0fff4; border: 1px solid #c6f6d5; padding: 25px; border-radius: 16px; margin-bottom: 30px;">
+        <p style="margin: 0; color: #22543d; font-weight: 700; font-size: 15px;">Next Steps:</p>
+        <p style="margin: 10px 0 0 0; color: #276749; font-size: 14px;">
+          Our HR team will follow up with you shortly via this email address to discuss the onboarding process, documentation, and your start date. 
+        </p>
+      </div>
+      <p style="font-size: 15px; color: #4a5568; margin-bottom: 35px;">
+        Welcome to the team! We are excited about the possibility of having your expertise contribute to our mission of empowering intelligence through human-centric data.
+      </p>
+    </div>
+  ` : `
+    <div style="color: #2d3748; line-height: 1.8;">
+      <p style="font-size: 18px; font-weight: 700; color: #1a202c; margin-bottom: 20px;">Hello ${data.fullName.split(' ')[0]},</p>
+      <p style="font-size: 16px; margin-bottom: 25px;">
+        Thank you very much for your interest in the <strong>${data.position}</strong> position at Lifewood and for the time you spent sharing your background with us.
+      </p>
+      <p style="font-size: 15px; color: #4a5568; margin-bottom: 25px;">
+        After careful consideration, we regret to inform you that we will not be moving forward with your application at this time. Our team had many highly qualified candidates, and this was an extremely difficult decision.
+      </p>
+      <div style="background-color: #fffaf0; border: 1px solid #feebc8; padding: 25px; border-radius: 16px; margin-bottom: 30px;">
+        <p style="margin: 0; color: #7b341e; font-weight: 700; font-size: 14px;">
+          We will keep your profile in our talent pool and may reach out if a future opening aligns with your unique skills and experience.
+        </p>
+      </div>
+      <p style="font-size: 15px; color: #4a5568; margin-bottom: 35px;">
+        We wish you the very best of luck in your current job search and your future professional endeavors.
+      </p>
+    </div>
+  `;
+
+  const footerSignature = `
+    <div style="padding: 30px; background-color: #f7fafc; border-radius: 16px; border-left: 6px solid ${isAccepted ? '#38a169' : BRAND_COLOR};">
+      <p style="margin: 0; font-weight: 800; color: ${BRAND_COLOR}; font-size: 16px;">The Lifewood Talent Team</p>
+      <p style="margin: 5px 0 0 0; font-size: 13px; color: #718096; text-transform: uppercase; letter-spacing: 0.05em;">Human-Centric Data Solutions</p>
+    </div>
+  `;
+
+  const mailOptions = {
+    from: `"Lifewood Careers" <${process.env.EMAIL_USER}>`,
+    to: data.email,
+    subject: subject,
+    html: getEmailTemplate(title, content + footerSignature),
+  };
+
+  await transporter.sendMail(mailOptions);
+}
+
 
