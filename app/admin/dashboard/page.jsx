@@ -132,7 +132,7 @@ const Modal = ({ isOpen, onClose, title, children, className = "" }) => (
                     animate={{ scale: 1, opacity: 1, y: 0 }}
                     exit={{ scale: 0.9, opacity: 0, y: 20 }}
                     transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                    className={`bg-[#f8f9fa] rounded-[2.5rem] lg:rounded-[3rem] w-full max-w-3xl overflow-hidden relative z-10 ${className || 'shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]'}`}
+                    className={`glass-surface rounded-[2.5rem] lg:rounded-[3rem] w-full max-w-3xl overflow-hidden relative z-10 ${className || 'shadow-glass'}`}
                 >
                     <div className="flex justify-between items-center px-8 lg:px-10 py-6 lg:py-8">
                         <h3 className="text-xl lg:text-2xl font-black text-lw-dark tracking-tight">{title}</h3>
@@ -620,49 +620,49 @@ export default function AdminDashboard() {
                 {selectedItem && (
                     <div className="space-y-8 lg:space-y-10">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-                            <div className="p-5 lg:p-6 bg-black/[0.02] rounded-3xl border border-black/5">
-                                <label className="text-[10px] font-black text-lw-green uppercase tracking-widest mb-2 block">Full Name</label>
-                                <p className="text-lg lg:text-xl font-black text-lw-dark">{selectedItem.name}</p>
+                            <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Full Name</label>
+                                <p className="text-lg lg:text-xl font-black text-lw-dark tracking-tight">{selectedItem.name}</p>
                             </div>
-                            <div className="p-5 lg:p-6 bg-black/[0.02] rounded-3xl border border-black/5">
-                                <label className="text-[10px] font-black text-lw-green uppercase tracking-widest mb-2 block">Email Address</label>
-                                <p className="text-lg lg:text-xl font-black text-lw-dark truncate">{selectedItem.email}</p>
+                            <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Email Address</label>
+                                <p className="text-lg lg:text-xl font-black text-lw-dark truncate tracking-tight">{selectedItem.email}</p>
                             </div>
                         </div>
 
                         {activeTab === "messages" ? (
                             <>
-                                <div className="p-5 lg:p-6 bg-black/[0.02] rounded-3xl border border-black/5">
-                                    <label className="text-[10px] font-black text-lw-green uppercase tracking-widest mb-2 block">Subject Line</label>
-                                    <p className="text-lg lg:text-xl font-bold text-lw-dark">{selectedItem.subject}</p>
+                                <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Subject Line</label>
+                                    <p className="text-lg lg:text-xl font-bold text-lw-dark tracking-tight">{selectedItem.subject}</p>
                                 </div>
-                                <div className="p-6 lg:p-8 bg-white rounded-[2.5rem] shadow-sm border border-black/[0.03]">
-                                    <label className="text-[10px] font-black text-lw-green uppercase tracking-widest mb-3 block">Message Body</label>
+                                <div className="p-6 lg:p-8 bg-white/60 backdrop-blur-md rounded-[2.5rem] shadow-sm border border-white/60 transition-all hover:bg-white/80 group">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-3 block ml-1 group-hover:text-lw-green transition-colors font-sans">Message Body</label>
                                     <p className="text-lw-dark text-base lg:text-lg italic leading-relaxed whitespace-pre-wrap">"{selectedItem.message}"</p>
                                 </div>
                             </>
                         ) : (
                             <>
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-                                    <div className="p-5 lg:p-6 bg-white rounded-3xl shadow-sm border border-black/[0.03]">
-                                        <label className="text-[10px] font-black text-lw-green uppercase tracking-widest mb-2 block">Phone Number</label>
-                                        <p className="text-lg lg:text-xl font-black text-lw-dark">{selectedItem.phone}</p>
+                                    <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Phone Number</label>
+                                        <p className="text-lg lg:text-xl font-black text-lw-dark tracking-tight">{selectedItem.phone}</p>
                                     </div>
-                                    <div className="p-5 lg:p-6 bg-white rounded-3xl shadow-sm border border-black/[0.03]">
-                                        <label className="text-[10px] font-black text-lw-green uppercase tracking-widest mb-2 block">Desired Position</label>
-                                        <p className="text-lg lg:text-xl font-black text-lw-green">{selectedItem.position}</p>
+                                    <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Desired Position</label>
+                                        <p className="text-lg lg:text-xl font-black text-lw-green tracking-tight">{selectedItem.position}</p>
                                     </div>
                                 </div>
                                 {selectedItem.portfolio && (
-                                    <div className="p-5 lg:p-6 bg-white rounded-3xl shadow-sm border border-black/[0.03]">
-                                        <label className="text-[10px] font-black text-lw-green uppercase tracking-widest mb-2 block">Portfolio URL</label>
-                                        <a href={selectedItem.portfolio} target="_blank" className="text-base lg:text-lg font-bold text-blue-600 hover:underline flex items-center gap-2 truncate">
+                                    <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Portfolio URL</label>
+                                        <a href={selectedItem.portfolio} target="_blank" className="text-base lg:text-lg font-bold text-blue-600 hover:underline flex items-center gap-2 truncate tracking-tight">
                                             {selectedItem.portfolio.replace(/^https?:\/\//, '')} <ArrowUpRight size={16} />
                                         </a>
                                     </div>
                                 )}
-                                <div className="p-6 lg:p-8 bg-white rounded-[2.5rem] shadow-sm border border-black/[0.03]">
-                                    <label className="text-[10px] font-black text-lw-green uppercase tracking-widest mb-3 block">Cover Letter</label>
+                                <div className="p-6 lg:p-8 bg-white/60 backdrop-blur-md rounded-[2.5rem] shadow-sm border border-white/60 transition-all hover:bg-white/80 group">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-3 block ml-1 group-hover:text-lw-green transition-colors font-sans">Cover Letter</label>
                                     <p className="text-lw-dark text-base lg:text-lg leading-relaxed whitespace-pre-wrap italic">"{selectedItem.message}"</p>
                                 </div>
                                 <div className="pt-4 lg:pt-6">
@@ -706,18 +706,18 @@ export default function AdminDashboard() {
             >
                 {selectedItem && (
                     <form onSubmit={handleSendReply} className="space-y-8 lg:space-y-10">
-                        <div className="p-5 lg:p-6 bg-black/[0.02] rounded-3xl border border-black/5">
-                            <label className="text-[10px] font-black text-lw-green uppercase tracking-widest mb-2 block">Recipient Email</label>
-                            <p className="text-lg lg:text-xl font-bold text-lw-dark">{selectedItem.email}</p>
+                        <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Recipient Email</label>
+                            <p className="text-lg lg:text-xl font-black text-lw-dark tracking-tight">{selectedItem.email}</p>
                         </div>
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-lw-green uppercase tracking-widest ml-4 block">Craft Your Response</label>
+                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4 block font-sans">Craft Your Response</label>
                             <textarea
                                 required
                                 rows={8}
                                 value={replyBody}
                                 onChange={(e) => setReplyBody(e.target.value)}
-                                className="w-full p-6 lg:p-8 bg-white/60 backdrop-blur-sm border border-black/5 rounded-[2.5rem] outline-none focus:bg-white focus:ring-8 focus:ring-lw-green/5 focus:border-lw-green/30 transition-all font-medium text-base lg:text-lg leading-relaxed shadow-inner shadow-black/5"
+                                className="w-full p-6 lg:p-8 bg-white/40 backdrop-blur-md border border-white/60 rounded-[2.5rem] outline-none focus:bg-white/60 focus:ring-8 focus:ring-lw-green/10 focus:border-lw-green/30 transition-all font-medium text-base lg:text-lg leading-relaxed shadow-inner"
                                 placeholder="Type your professional reply here..."
                             />
                         </div>
