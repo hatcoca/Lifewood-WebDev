@@ -285,7 +285,8 @@ export default function AdminDashboard() {
                 body: JSON.stringify({
                     to: selectedItem.email,
                     subject: `Formal Response: Regarding ${cleanSubject}`,
-                    message: replyBody
+                    message: replyBody,
+                    name: selectedItem.name
                 })
             });
 

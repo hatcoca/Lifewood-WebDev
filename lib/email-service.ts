@@ -235,10 +235,14 @@ export async function sendAdminEmail(data: {
   to: string;
   subject: string;
   message: string;
+  name?: string;
 }) {
+  const firstName = data.name ? data.name.split(' ')[0] : '';
+  const greeting = firstName ? `Hello ${firstName},` : "Hello,";
+
   const formattedMessage = `
     <div style="color: #2d3748; line-height: 2;">
-      <p style="font-size: 18px; font-weight: 700; color: #1a202c; margin-bottom: 25px;">Hello,</p>
+      <p style="font-size: 18px; font-weight: 700; color: #1a202c; margin-bottom: 25px;">${greeting}</p>
       <div style="font-size: 16px; color: #4a5568; margin-bottom: 40px; white-space: pre-wrap;">${data.message}</div>
       
       <div style="padding: 30px; background-color: #f7fafc; border-radius: 16px; border-left: 6px solid ${BRAND_COLOR};">

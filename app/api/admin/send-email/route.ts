@@ -4,7 +4,7 @@ import { sendAdminEmail } from "@/lib/email-service";
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { to, subject, message } = body;
+        const { to, subject, message, name } = body;
 
         if (!to || !subject || !message) {
             return NextResponse.json(
