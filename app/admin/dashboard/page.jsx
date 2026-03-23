@@ -26,7 +26,7 @@ import {
     Globe
 } from "lucide-react";
 
-const Sidebar = ({ activeTab, setActiveTab, handleLogout, isOpen, setIsOpen }) => {
+const Sidebar = ({ activeTab, setActiveTab, logout, isOpen, setIsOpen }) => {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -103,7 +103,7 @@ const Sidebar = ({ activeTab, setActiveTab, handleLogout, isOpen, setIsOpen }) =
                     </nav>
 
                     <button
-                        onClick={handleLogout}
+                        onClick={logout}
                         className="mt-auto flex items-center gap-4 px-6 py-4 rounded-2xl bg-white/5 text-white/70 hover:bg-red-500/10 hover:text-red-400 transition-all duration-300 relative z-10 group"
                     >
                         <div className="p-2 rounded-lg bg-white/5 group-hover:bg-red-500/20 transition-colors">
@@ -359,7 +359,7 @@ export default function AdminDashboard() {
             <Sidebar
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
-                handleLogout={handleLogout}
+                logout={logout}
                 isOpen={isSidebarOpen}
                 setIsOpen={setIsSidebarOpen}
             />
