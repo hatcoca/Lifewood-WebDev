@@ -267,7 +267,7 @@ export default function AdminDashboard() {
             });
 
             if (response.ok) {
-                if (activeTab === "messages") {
+                if (activeTab === "messages" || selectedItem.subject) {
                     await markMessageReplied(selectedItem.id);
                 }
                 alert("Email sent successfully!");
