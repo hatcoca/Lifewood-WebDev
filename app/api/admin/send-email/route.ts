@@ -13,7 +13,7 @@ export async function POST(request: Request) {
             );
         }
 
-        await sendAdminEmail({ to, subject, message });
+        await sendAdminEmail({ to, subject, message, name });
 
         return NextResponse.json({
             success: true,
