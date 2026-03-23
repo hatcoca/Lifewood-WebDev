@@ -175,9 +175,10 @@ export default function AdminDashboard() {
     const fetchData = async () => {
         setLoading(true);
         try {
+            // Use cache: 'no-store' to prevent stale data on Vercel
             const [msgRes, appRes] = await Promise.all([
-                fetch("/api/contact"),
-                fetch("/api/applications")
+                fetch("/api/contact", { cache: 'no-store' }),
+                fetch("/api/applications", { cache: 'no-store' })
             ]);
             const [msgData, appData] = await Promise.all([msgRes.json(), appRes.json()]);
             setMessages(Array.isArray(msgData) ? msgData : []);
@@ -209,12 +210,19 @@ export default function AdminDashboard() {
 
     const markMessageReplied = async (id) => {
         try {
+            // Optimistic UI update for immediate feedback
+            setMessages(prev => prev.map(m => m.id === id ? { ...m, status: 'replied' } : m));
+
             await fetch(`/api/contact/${id}`, {
-                method: "PATCH"
+                method: "PATCH",
+                cache: 'no-store'
             });
-            fetchData();
+            // Await full data synchronization
+            await fetchData();
         } catch (err) {
-            alert("Failed to update message");
+            console.error("Failed to mark message as replied:", err);
+            alert("Failed to update message status");
+            await fetchData(); // Rollback/Sync state on error
         }
     };
 
