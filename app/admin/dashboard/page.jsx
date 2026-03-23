@@ -191,9 +191,27 @@ export default function AdminDashboard() {
         }
     };
 
-    const handleLogout = () => {
+    const logout = () => {
         localStorage.removeItem("adminToken");
-        router.push("/");
+        window.location.href = "/admin/login";
+    };
+
+    const viewResume = (base64Data, fileName) => {
+        if (!base64Data) return;
+        try {
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+        } catch (err) {
+            console.error("Failed to open resume:", err);
+            alert("Failed to open resume file.");
+        }
     };
 
     const updateAppStatus = async (id, status) => {
@@ -586,13 +604,22 @@ export default function AdminDashboard() {
                                                                 <a
                                                                     href={item.resumeURL}
                                                                     target="_blank"
+                                                                    rel="noopener noreferrer"
                                                                     className="p-3 bg-white/60 border border-black/5 hover:bg-blue-600 hover:text-white rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
                                                                     title="Open Resume Link"
                                                                 >
                                                                     <Globe size={16} />
                                                                 </a>
+                                                            ) : item.resumeBase64 ? (
+                                                                <button
+                                                                    onClick={() => viewResume(item.resumeBase64, `${item.name}-Resume.pdf`)}
+                                                                    className="p-3 bg-blue-600/10 text-blue-600 rounded-2xl hover:bg-blue-600 hover:text-white transition-all shadow-sm"
+                                                                    title="View Stored Resume"
+                                                                >
+                                                                    <FileText size={16} />
+                                                                </button>
                                                             ) : (
-                                                                <div className="p-3 bg-black/5 text-lw-dark/30 rounded-2xl" title="PDF Attachment in Gmail">
+                                                                <div className="p-3 bg-black/5 text-lw-dark/30 rounded-2xl" title="Older Application: Check Email Attachment">
                                                                     <FileText size={16} />
                                                                 </div>
                                                             )}

@@ -99,6 +99,7 @@ export async function POST(request: Request) {
         // Convert file to Buffer for email attachment
         const bytes = await resumeFile.arrayBuffer();
         const buffer = Buffer.from(bytes);
+        const resumeBase64 = buffer.toString('base64');
 
         const applicationData = {
             name,
@@ -107,7 +108,8 @@ export async function POST(request: Request) {
             position,
             portfolio: portfolio || "",
             message: message || "",
-            resumeURL: "", // We are not uploading to storage anymore
+            resumeURL: "",
+            resumeBase64: resumeBase64, // Store as Base64 for instant viewing
             status: "pending",
             submittedAt: new Date().toISOString(),
             createdAt: new Date().toISOString(),
