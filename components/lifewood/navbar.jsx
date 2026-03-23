@@ -66,7 +66,6 @@ const mainNavItems = [
 const rightNavItems = [
   { label: "Careers", href: "/careers" },
   { label: "Contact Us", href: "/contact" },
-  { label: "Admin", href: "/admin/login" },
 ]
 
 const allNavItems = [...mainNavItems, ...rightNavItems]

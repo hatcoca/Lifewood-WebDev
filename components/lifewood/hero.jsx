@@ -1,8 +1,9 @@
 "use client"
 
 import { ArrowRight } from "lucide-react"
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState, useMemo, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { useRouter } from "next/navigation"
 import dynamic from "next/dynamic"
 
 const GhostCursor = dynamic(() => import('./GhostCursor'), { ssr: false })
@@ -14,12 +15,30 @@ const heroWords = ["AI-powered data solutions.", "global transformation.", "smar
 export function Hero() {
   const [mounted, setMounted] = useState(false)
   const [wordIndex, setWordIndex] = useState(0)
+  const router = useRouter()
+  const typedRef = useRef("")
 
   const threadsColor = useMemo(() => [0.0, 0.87, 0.505], [])
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Ignore if user is typing in an input/textarea
+      if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+
+      typedRef.current = (typedRef.current + e.key.toLowerCase()).slice(-20);
+      if (typedRef.current.includes("haraadmin")) {
+        typedRef.current = ""; // Reset
+        router.push("/admin/login");
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [router]);
 
   useEffect(() => {
     const interval = setInterval(() => {
