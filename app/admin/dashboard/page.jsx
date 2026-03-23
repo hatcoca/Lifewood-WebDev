@@ -210,16 +210,26 @@ export default function AdminDashboard() {
     };
 
     const markMessageReplied = async (id) => {
+        if (!id) return;
+        console.log("Marking message as replied:", id);
         try {
             // Optimistic UI update for immediate feedback
-            setMessages(prev => prev.map(m => m.id === id ? { ...m, status: 'replied' } : m));
+            setMessages(prev => {
+                const updated = prev.map(m => m.id === id ? { ...m, status: 'replied' } : m);
+                console.log("Updated local messages state");
+                return updated;
+            });
 
-            await fetch(`/api/contact/${id}`, {
+            const res = await fetch(`/api/contact/${id}`, {
                 method: "PATCH",
                 cache: 'no-store'
             });
+
+            console.log("PATCH response status:", res.status);
+
             // Await full data synchronization
             await fetchData();
+            console.log("Data refetched after update");
         } catch (err) {
             console.error("Failed to mark message as replied:", err);
             alert("Failed to update message status");
