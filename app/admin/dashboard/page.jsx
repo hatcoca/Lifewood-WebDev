@@ -23,15 +23,27 @@ import {
     Search,
     Menu as MenuIcon,
     Trash2,
-    Globe
+    Globe,
+    Folder,
+    FolderCheck,
+    FolderX,
+    ChevronDown
 } from "lucide-react";
 
-const Sidebar = ({ activeTab, setActiveTab, logout, isOpen, setIsOpen }) => {
+const Sidebar = ({ activeTab, setActiveTab, logout, isOpen, setIsOpen, appFilter, setAppFilter, applications }) => {
     const [mounted, setMounted] = useState(false);
+    const [isAcceptedExpanded, setIsAcceptedExpanded] = useState(true);
 
     useEffect(() => {
         setMounted(true);
     }, []);
+
+    // Extract unique roles from accepted applications
+    const acceptedRoles = Array.from(new Set(
+        applications
+            .filter(app => app.status === 'accepted' && app.position)
+            .map(app => app.position)
+    )).sort();
 
     return (
         <>
@@ -72,39 +84,101 @@ const Sidebar = ({ activeTab, setActiveTab, logout, isOpen, setIsOpen }) => {
                         <div className="text-[10px] uppercase tracking-[0.3em] text-white font-black">Admin Panel</div>
                     </div>
 
-                    <nav className="space-y-3 flex-1 relative z-10">
-                        <button
-                            onClick={() => { setActiveTab("overview"); setIsOpen(false); }}
-                            className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 ${activeTab === "overview" ? "glass-surface bg-white/20 text-white shadow-lg" : "text-white/70 hover:bg-white/5 hover:text-white"}`}
-                        >
-                            <div className={`p-2 rounded-lg ${activeTab === "overview" ? "bg-lw-green text-white" : "bg-white/5"}`}>
-                                <BarChart3 size={18} />
+                    <div className="flex-1 overflow-y-auto custom-scrollbar relative z-10 space-y-8 pr-2">
+                        {/* Main Navigation */}
+                        <nav className="space-y-3">
+                            <button
+                                onClick={() => { setActiveTab("overview"); setIsOpen(false); }}
+                                className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 ${activeTab === "overview" ? "glass-surface bg-white/20 text-white shadow-lg" : "text-white/70 hover:bg-white/5 hover:text-white"}`}
+                            >
+                                <div className={`p-2 rounded-lg ${activeTab === "overview" ? "bg-lw-green text-white" : "bg-white/5"}`}>
+                                    <BarChart3 size={18} />
+                                </div>
+                                <span className="font-bold text-sm">Overview</span>
+                            </button>
+                            <button
+                                onClick={() => { setActiveTab("messages"); setIsOpen(false); }}
+                                className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 ${activeTab === "messages" ? "glass-surface bg-white/20 text-white shadow-lg" : "text-white/70 hover:bg-white/5 hover:text-white"}`}
+                            >
+                                <div className={`p-2 rounded-lg ${activeTab === "messages" ? "bg-lw-green text-white" : "bg-white/5"}`}>
+                                    <MessageSquare size={18} />
+                                </div>
+                                <span className="font-bold text-sm">Messages</span>
+                            </button>
+                            <button
+                                onClick={() => { setActiveTab("applications"); setAppFilter({ status: 'all', role: 'all' }); setIsOpen(false); }}
+                                className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 ${activeTab === "applications" && appFilter.status === 'all' ? "glass-surface bg-white/20 text-white shadow-lg" : "text-white/70 hover:bg-white/5 hover:text-white"}`}
+                            >
+                                <div className={`p-2 rounded-lg ${activeTab === "applications" && appFilter.status === 'all' ? "bg-lw-green text-white" : "bg-white/5"}`}>
+                                    <Users size={18} />
+                                </div>
+                                <span className="font-bold text-sm">Applications</span>
+                            </button>
+                        </nav>
+
+                        {/* Application Folders Hierarchy */}
+                        {activeTab === "applications" && (
+                            <div className="space-y-4 pt-4 border-t border-white/10">
+                                <div className="px-6 text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mb-2">Application Folders</div>
+
+                                <div className="space-y-1">
+                                    {/* Accepted Folder */}
+                                    <div className="space-y-1">
+                                        <button
+                                            onClick={() => {
+                                                setAppFilter({ status: 'accepted', role: 'all' });
+                                                setIsAcceptedExpanded(!isAcceptedExpanded);
+                                            }}
+                                            className={`w-full flex items-center justify-between px-6 py-3 rounded-xl transition-all ${appFilter.status === 'accepted' ? "bg-green-500/20 text-green-400" : "text-white/60 hover:text-white"}`}
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <FolderCheck size={16} />
+                                                <span className="text-xs font-bold">Accepted</span>
+                                            </div>
+                                            <ChevronDown size={14} className={`transition-transform duration-300 ${isAcceptedExpanded ? "rotate-180" : ""}`} />
+                                        </button>
+
+                                        <AnimatePresence>
+                                            {isAcceptedExpanded && (
+                                                <motion.div
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: "auto", opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    className="overflow-hidden pl-4 space-y-1"
+                                                >
+                                                    {acceptedRoles.map(role => (
+                                                        <button
+                                                            key={role}
+                                                            onClick={() => setAppFilter({ status: 'accepted', role })}
+                                                            className={`w-full text-left px-8 py-2 text-[11px] font-bold rounded-lg transition-all ${appFilter.status === 'accepted' && appFilter.role === role ? "text-lw-green border-l-2 border-lw-green bg-lw-green/10" : "text-white/40 hover:text-white"}`}
+                                                        >
+                                                            {role}
+                                                        </button>
+                                                    ))}
+                                                    {acceptedRoles.length === 0 && (
+                                                        <div className="px-8 py-2 text-[10px] italic text-white/20">No accepted roles yet</div>
+                                                    )}
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+
+                                    {/* Rejected Folder */}
+                                    <button
+                                        onClick={() => setAppFilter({ status: 'rejected', role: 'all' })}
+                                        className={`w-full flex items-center gap-3 px-6 py-3 rounded-xl transition-all ${appFilter.status === 'rejected' ? "bg-red-500/20 text-red-400" : "text-white/60 hover:text-white"}`}
+                                    >
+                                        <FolderX size={16} />
+                                        <span className="text-xs font-bold">Rejected</span>
+                                    </button>
+                                </div>
                             </div>
-                            <span className="font-bold text-sm">Overview</span>
-                        </button>
-                        <button
-                            onClick={() => { setActiveTab("messages"); setIsOpen(false); }}
-                            className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 ${activeTab === "messages" ? "glass-surface bg-white/20 text-white shadow-lg" : "text-white/70 hover:bg-white/5 hover:text-white"}`}
-                        >
-                            <div className={`p-2 rounded-lg ${activeTab === "messages" ? "bg-lw-green text-white" : "bg-white/5"}`}>
-                                <MessageSquare size={18} />
-                            </div>
-                            <span className="font-bold text-sm">Messages</span>
-                        </button>
-                        <button
-                            onClick={() => { setActiveTab("applications"); setIsOpen(false); }}
-                            className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 ${activeTab === "applications" ? "glass-surface bg-white/20 text-white shadow-lg" : "text-white/70 hover:bg-white/5 hover:text-white"}`}
-                        >
-                            <div className={`p-2 rounded-lg ${activeTab === "applications" ? "bg-lw-green text-white" : "bg-white/5"}`}>
-                                <Users size={18} />
-                            </div>
-                            <span className="font-bold text-sm">Applications</span>
-                        </button>
-                    </nav>
+                        )}
+                    </div>
 
                     <button
                         onClick={logout}
-                        className="mt-auto flex items-center gap-4 px-6 py-4 rounded-2xl bg-white/5 text-white/70 hover:bg-red-500/10 hover:text-red-400 transition-all duration-300 relative z-10 group"
+                        className="mt-8 flex items-center gap-4 px-6 py-4 rounded-2xl bg-white/5 text-white/70 hover:bg-red-500/10 hover:text-red-400 transition-all duration-300 group shrink-0"
                     >
                         <div className="p-2 rounded-lg bg-white/5 group-hover:bg-red-500/20 transition-colors">
                             <LogOut size={18} />
@@ -162,6 +236,7 @@ export default function AdminDashboard() {
     const [sendingEmail, setSendingEmail] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [appFilter, setAppFilter] = useState({ status: 'all', role: 'all' });
     const router = useRouter();
 
     useEffect(() => {
@@ -334,11 +409,20 @@ export default function AdminDashboard() {
         }
     };
 
-    const filteredItems = (activeTab === "messages" ? messages : applications).filter(item =>
-        item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (activeTab === "applications" && item.position?.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+    const filteredItems = (activeTab === "messages" ? messages : applications).filter(item => {
+        const matchesSearch = item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (activeTab === "applications" && item.position?.toLowerCase().includes(searchTerm.toLowerCase()));
+
+        if (!matchesSearch) return false;
+
+        if (activeTab === "applications") {
+            if (appFilter.status !== 'all' && item.status !== appFilter.status) return false;
+            if (appFilter.role !== 'all' && item.position !== appFilter.role) return false;
+        }
+
+        return true;
+    });
 
     return (
         <div className="min-h-screen bg-[#f8f9fa] relative overflow-hidden font-sans selection:bg-lw-green/20 selection:text-lw-dark">
@@ -362,6 +446,9 @@ export default function AdminDashboard() {
                 logout={logout}
                 isOpen={isSidebarOpen}
                 setIsOpen={setIsSidebarOpen}
+                appFilter={appFilter}
+                setAppFilter={setAppFilter}
+                applications={applications}
             />
 
             <main className={`flex-1 transition-all duration-300 ${isSidebarOpen ? "lg:ml-72" : "lg:ml-72"} p-4 lg:p-10 overflow-x-hidden relative z-10`}>
