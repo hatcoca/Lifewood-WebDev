@@ -237,9 +237,9 @@ export async function sendAdminEmail(data: {
   message: string;
   name?: string;
 }) {
-  // Update: 2026-03-23T10:22:00 - Switch back to Hello [Name] as requested
+  // Update: 2026-03-23T10:32:00 - Final format with "Hi" and "Best regards"
   const greetingName = data.name ? data.name.trim() : "";
-  const greeting = greetingName ? `Hello ${greetingName},` : "Hello,";
+  const greeting = greetingName ? `Hi ${greetingName},` : "Hi,";
 
   const formattedMessage = `
     <div style="color: #2d3748; line-height: 2;">
@@ -247,8 +247,8 @@ export async function sendAdminEmail(data: {
       <div style="font-size: 16px; color: #4a5568; margin-bottom: 40px; white-space: pre-wrap;">${data.message}</div>
       
       <div style="padding: 30px; background-color: #f7fafc; border-radius: 16px; border-left: 6px solid ${BRAND_COLOR};">
-        <p style="margin: 0; font-weight: 800; color: ${BRAND_COLOR}; font-size: 16px;">The Lifewood Team</p>
-        <p style="margin: 5px 0 0 0; font-size: 13px; color: #718096; text-transform: uppercase; letter-spacing: 0.05em;">Empowering intelligence through human-centric data.</p>
+        <p style="margin: 0; font-weight: 600; color: #4a5568; font-size: 15px;">Best regards,</p>
+        <p style="margin: 8px 0 0 0; font-weight: 800; color: ${BRAND_COLOR}; font-size: 16px;">The Lifewood Team</p>
       </div>
     </div>
   `;

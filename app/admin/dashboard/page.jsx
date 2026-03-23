@@ -284,7 +284,7 @@ export default function AdminDashboard() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     to: selectedItem.email,
-                    subject: `Formal Response: Regarding ${cleanSubject}`,
+                    subject: `Re: ${cleanSubject}`,
                     message: replyBody,
                     name: selectedItem.name
                 })
@@ -560,7 +560,12 @@ export default function AdminDashboard() {
                                             <td className="px-8 py-7" onClick={(e) => e.stopPropagation()}>
                                                 <div className="flex gap-2">
                                                     <button
-                                                        onClick={() => { setSelectedItem(item); setShowReplyModal(true); }}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setSelectedItem(item);
+                                                            setReplyBody(`Thank you for reaching out. I've received your message and appreciate you taking the time to contact us.\n\nI will review your concern and get back to you as soon as possible.\n\nIf you have any additional details to share, feel free to reply to this email.`);
+                                                            setShowReplyModal(true);
+                                                        }}
                                                         className="p-3 bg-white/60 border border-black/5 hover:bg-lw-dark hover:text-white rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
                                                         title="Send Email"
                                                     >
