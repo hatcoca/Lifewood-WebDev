@@ -237,9 +237,9 @@ export async function sendAdminEmail(data: {
   message: string;
   name?: string;
 }) {
-  // Update: 2026-03-23T10:17:00 - Formalize greeting to use full name
-  const greetingName = data.name ? data.name.trim() : "Valued Customer";
-  const greeting = `Dear ${greetingName},`;
+  // Update: 2026-03-23T10:22:00 - Switch back to Hello [Name] as requested
+  const greetingName = data.name ? data.name.trim() : "";
+  const greeting = greetingName ? `Hello ${greetingName},` : "Hello,";
 
   const formattedMessage = `
     <div style="color: #2d3748; line-height: 2;">
@@ -257,7 +257,7 @@ export async function sendAdminEmail(data: {
     from: `"Lifewood Support" <${process.env.EMAIL_USER}>`,
     to: data.to,
     subject: data.subject,
-    html: getEmailTemplate("Official Response", formattedMessage),
+    html: getEmailTemplate("Message from Lifewood", formattedMessage),
   };
   await transporter.sendMail(mailOptions);
 }
