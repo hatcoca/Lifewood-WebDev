@@ -252,7 +252,7 @@ export async function sendAdminEmail(data: {
     from: `"Lifewood Support" <${process.env.EMAIL_USER}>`,
     to: data.to,
     subject: data.subject,
-    html: getEmailTemplate(data.subject, formattedMessage),
+    html: getEmailTemplate("Official Response", formattedMessage),
   };
   await transporter.sendMail(mailOptions);
 }

@@ -274,503 +274,506 @@ export default function AdminDashboard() {
     const handleSendReply = async (e) => {
         e.preventDefault();
         setSendingEmail(true);
-        try {
-            const response = await fetch("/api/admin/send-email", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    to: selectedItem.email,
-                    subject: `Re: ${selectedItem.subject || 'Your Application'}`,
-                    message: replyBody
-                })
-            });
+        const cleanSubject = (selectedItem.subject && selectedItem.subject.trim().length > 3)
+            ? selectedItem.subject
+            : (activeTab === "applications" ? "Your Application" : "Your Inquiry");
 
-            if (response.ok) {
-                if (activeTab === "messages" || selectedItem.subject) {
-                    await markMessageReplied(selectedItem.id);
-                }
-                alert("Email sent successfully!");
-                setShowReplyModal(false);
-                setReplyBody("");
-            } else {
-                alert("Failed to send email.");
+        const response = await fetch("/api/admin/send-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                to: selectedItem.email,
+                subject: `Formal Response: Regarding ${cleanSubject}`,
+                message: replyBody
+            })
+        });
+
+        if (response.ok) {
+            if (activeTab === "messages" || selectedItem.subject) {
+                await markMessageReplied(selectedItem.id);
             }
-        } catch (err) {
-            alert("Error connecting to server.");
-        } finally {
-            setSendingEmail(false);
+            alert("Email sent successfully!");
+            setShowReplyModal(false);
+            setReplyBody("");
+        } else {
+            alert("Failed to send email.");
         }
-    };
+    } catch (err) {
+        alert("Error connecting to server.");
+    } finally {
+        setSendingEmail(false);
+    }
+};
 
-    const getStatusColor = (status) => {
-        switch (status) {
-            case "accepted": return "bg-green-500/10 text-green-700 border border-green-500/20";
-            case "rejected": return "bg-red-500/10 text-red-700 border border-red-500/20";
-            case "reviewing": return "bg-blue-500/10 text-blue-700 border border-blue-500/20";
-            default: return "bg-lw-saffron/10 text-lw-saffron border border-lw-saffron/20";
-        }
-    };
+const getStatusColor = (status) => {
+    switch (status) {
+        case "accepted": return "bg-green-500/10 text-green-700 border border-green-500/20";
+        case "rejected": return "bg-red-500/10 text-red-700 border border-red-500/20";
+        case "reviewing": return "bg-blue-500/10 text-blue-700 border border-blue-500/20";
+        default: return "bg-lw-saffron/10 text-lw-saffron border border-lw-saffron/20";
+    }
+};
 
-    const filteredItems = (activeTab === "messages" ? messages : applications).filter(item =>
-        item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (activeTab === "applications" && item.position?.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+const filteredItems = (activeTab === "messages" ? messages : applications).filter(item =>
+    item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (activeTab === "applications" && item.position?.toLowerCase().includes(searchTerm.toLowerCase()))
+);
 
-    return (
-        <div className="min-h-screen bg-[#f8f9fa] relative overflow-hidden font-sans selection:bg-lw-green/20 selection:text-lw-dark">
-            {/* Dynamic Threads Background */}
-            <div className="fixed inset-0 z-0 opacity-60">
-                <Threads
-                    color={[0.015, 0.38, 0.25]}
-                    amplitude={1.2}
-                    distance={0.4}
-                    enableMouseInteraction={true}
-                />
-            </div>
-
-            {/* Background Blur Orbs */}
-            <div className="fixed top-[-10%] right-[-10%] w-[50%] h-[50%] bg-lw-green/10 blur-[120px] rounded-full z-0 animate-pulse"></div>
-            <div className="fixed bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-lw-saffron/5 blur-[100px] rounded-full z-0"></div>
-
-            <Sidebar
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                handleLogout={handleLogout}
-                isOpen={isSidebarOpen}
-                setIsOpen={setIsSidebarOpen}
+return (
+    <div className="min-h-screen bg-[#f8f9fa] relative overflow-hidden font-sans selection:bg-lw-green/20 selection:text-lw-dark">
+        {/* Dynamic Threads Background */}
+        <div className="fixed inset-0 z-0 opacity-60">
+            <Threads
+                color={[0.015, 0.38, 0.25]}
+                amplitude={1.2}
+                distance={0.4}
+                enableMouseInteraction={true}
             />
-
-            <main className={`flex-1 transition-all duration-300 ${isSidebarOpen ? "lg:ml-72" : "lg:ml-72"} p-4 lg:p-10 overflow-x-hidden relative z-10`}>
-                <header className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-12 mt-16 lg:mt-0">
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="flex items-center gap-4 w-full lg:w-auto"
-                    >
-                        <button
-                            onClick={() => setIsSidebarOpen(true)}
-                            className="p-3 bg-white/40 backdrop-blur-md rounded-2xl lg:hidden active:scale-90 transition-all border border-black/5"
-                        >
-                            <MenuIcon size={24} />
-                        </button>
-                        <Link href="/" className="lg:hidden mx-auto">
-                            <Image
-                                src="/logo.png"
-                                alt="Lifewood"
-                                width={110}
-                                height={30}
-                                className="transition-transform duration-300 active:scale-105"
-                            />
-                        </Link>
-                        <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lw-green/10 text-lw-green text-[10px] font-black uppercase tracking-widest mb-4">
-                                <span className="w-1.5 h-1.5 bg-lw-green rounded-full animate-pulse"></span>
-                                {activeTab === "overview" ? "Dashboard Stats" : "Admin Overview"}
-                            </div>
-                            <h2 className="text-4xl lg:text-5xl font-black tracking-tight text-lw-dark capitalize">
-                                {activeTab}
-                            </h2>
-                        </div>
-                    </motion.div>
-
-                    <div className="flex items-center gap-4 w-full lg:w-auto">
-                        <div className="relative group flex-1 lg:flex-none">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-lw-dark/30 group-focus-within:text-lw-green transition-colors" size={18} />
-                            <input
-                                type="text"
-                                placeholder="Search everything..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="pl-12 pr-6 py-4 bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl w-full lg:w-80 outline-none focus:bg-white focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 transition-all font-medium text-sm text-lw-dark placeholder-lw-dark/40 shadow-sm"
-                            />
-                        </div>
-                        <button
-                            onClick={fetchData}
-                            className="p-4 bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl text-lw-dark hover:bg-white hover:shadow-lg hover:shadow-black/5 transition-all group active:scale-95"
-                        >
-                            <RefreshCw size={20} className={loading ? "animate-spin text-lw-green" : "group-hover:rotate-180 transition-transform duration-500"} />
-                        </button>
-                    </div>
-                </header>
-
-                {/* Overview Statistics */}
-                {activeTab === "overview" && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8 lg:mb-10"
-                    >
-                        {[
-                            { title: "Total Messages", value: messages.length, icon: MessageSquare, color: "text-emerald-500", bg: "bg-emerald-500/15" },
-                            { title: "Pending Replies", value: messages.filter(m => m.status !== 'replied').length, icon: AlertCircle, color: "text-amber-500", bg: "bg-amber-500/15" },
-                            { title: "Total Applicants", value: applications.length, icon: Users, color: "text-sky-500", bg: "bg-sky-500/15" },
-                            { title: "Review Required", value: applications.filter(a => a.status === 'pending').length, icon: FileText, color: "text-rose-500", bg: "bg-rose-500/15" }
-                        ].map((stat, i) => (
-                            <div key={i} className="glass-surface bg-white/40 backdrop-blur-md p-6 lg:p-7 rounded-[2rem] border border-black/5 shadow-sm relative overflow-hidden group hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                                <div className={`absolute -right-6 -top-6 w-32 h-32 rounded-full ${stat.bg} blur-[60px] transition-all duration-700 group-hover:scale-150`}></div>
-                                <div className="flex justify-between items-start mb-6 relative z-10">
-                                    <div className={`p-4 rounded-full ${stat.bg} ${stat.color} shadow-inner`}>
-                                        <stat.icon size={22} strokeWidth={2.5} />
-                                    </div>
-                                </div>
-                                <div className="relative z-10">
-                                    <div className="text-4xl lg:text-5xl font-black text-lw-dark tracking-tighter mb-2">
-                                        {loading ? <span className="animate-pulse">---</span> : stat.value}
-                                    </div>
-                                    <div className="text-[10px] font-black uppercase tracking-widest text-lw-dark/40">{stat.title}</div>
-                                </div>
-                            </div>
-                        ))}
-                    </motion.div>
-                )}
-
-                {activeTab === "overview" && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-8"
-                    >
-                        {/* Recent Messages */}
-                        <div className="glass-surface p-1 lg:p-2 rounded-[2.3rem] lg:rounded-[2.5rem] shadow-[0_0_40px_rgba(250,204,21,0.5)] border-white/40 overflow-hidden flex flex-col h-full bg-white/40 backdrop-blur-md">
-                            <div className="px-8 py-6 border-b border-black/5 flex justify-between items-center bg-white/30 rounded-t-[2rem]">
-                                <h3 className="text-xl font-black text-lw-dark">Recent Messages</h3>
-                                <button onClick={() => setActiveTab("messages")} className="text-xs font-bold text-lw-green hover:underline">View All</button>
-                            </div>
-                            <div className="p-4 flex-1">
-                                {messages.slice(0, 5).map(msg => (
-                                    <div key={msg.id} className="p-4 border-b border-black/5 last:border-0 hover:bg-white/40 transition-colors rounded-xl flex justify-between items-start cursor-pointer" onClick={() => { setSelectedItem(msg); setShowViewModal(true); }}>
-                                        <div>
-                                            <div className="font-bold text-lw-dark">{msg.name}</div>
-                                            <div className="text-xs text-lw-dark/50 truncate max-w-[200px]">{msg.subject}</div>
-                                        </div>
-                                        <div className="text-[10px] font-bold text-lw-dark/40 bg-black/5 px-2 py-1 rounded-md">
-                                            {msg.createdAt || msg.submittedAt ? new Date(msg.createdAt || msg.submittedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '---'}
-                                        </div>
-                                    </div>
-                                ))}
-                                {messages.length === 0 && <div className="text-center p-8 text-lw-dark/40 text-sm font-bold">No recent messages</div>}
-                            </div>
-                        </div>
-
-                        {/* Recent Applications */}
-                        <div className="glass-surface p-1 lg:p-2 rounded-[2.3rem] lg:rounded-[2.5rem] shadow-[0_0_40px_rgba(250,204,21,0.5)] border-white/40 overflow-hidden flex flex-col h-full bg-white/40 backdrop-blur-md">
-                            <div className="px-8 py-6 border-b border-black/5 flex justify-between items-center bg-white/30 rounded-t-[2rem]">
-                                <h3 className="text-xl font-black text-lw-dark">Recent Applications</h3>
-                                <button onClick={() => setActiveTab("applications")} className="text-xs font-bold text-lw-green hover:underline">View All</button>
-                            </div>
-                            <div className="p-4 flex-1">
-                                {applications.slice(0, 5).map(app => (
-                                    <div key={app.id} className="p-4 border-b border-black/5 last:border-0 hover:bg-white/40 transition-colors rounded-xl flex justify-between items-start cursor-pointer" onClick={() => { setSelectedItem(app); setShowViewModal(true); }}>
-                                        <div>
-                                            <div className="font-bold text-lw-dark">{app.name}</div>
-                                            <div className="text-xs text-lw-green font-black uppercase tracking-wider">{app.position}</div>
-                                        </div>
-                                        <div className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md ${app.status === 'pending' ? 'bg-purple-500/10 text-purple-600' : app.status === 'accepted' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-black/5 text-lw-dark/40'}`}>
-                                            {app.status || 'pending'}
-                                        </div>
-                                    </div>
-                                ))}
-                                {applications.length === 0 && <div className="text-center p-8 text-lw-dark/40 text-sm font-bold">No recent applications</div>}
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
-
-                {loading ? (
-                    <div className="flex h-96 items-center justify-center">
-                        <div className="flex flex-col items-center gap-6">
-                            <div className="w-16 h-16 border-[6px] border-lw-green/20 border-t-lw-green rounded-full animate-spin"></div>
-                            <div className="text-sm font-black uppercase tracking-widest text-lw-green/40">Fetching Data...</div>
-                        </div>
-                    </div>
-                ) : activeTab !== "overview" ? (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="glass-surface p-1 lg:p-2 rounded-[2.3rem] lg:rounded-[2.5rem] shadow-[0_0_40px_rgba(250,204,21,0.5)] border-white/40 overflow-hidden"
-                    >
-                        <div className="overflow-x-auto custom-scrollbar rounded-[2rem]">
-                            <table className="w-full text-left min-w-[700px]">
-                                <thead className="bg-black/[0.03] border-b border-black/5">
-                                    <tr>
-                                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-lw-dark/40">Details</th>
-                                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-lw-dark/40">{activeTab === "messages" ? "Subject" : "Position"}</th>
-                                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-lw-dark/40">Timestamp</th>
-                                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-lw-dark/40">Status</th>
-                                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-lw-dark/40">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-black/5">
-                                    {filteredItems.map((item) => (
-                                        <tr
-                                            key={item.id}
-                                            className="group hover:bg-white/40 transition-all cursor-pointer transition-colors"
-                                            onClick={() => { setSelectedItem(item); setShowViewModal(true); }}
-                                        >
-                                            <td className="px-8 py-7">
-                                                <div className="font-black text-lw-dark leading-tight">{item.name}</div>
-                                                <div className="text-xs text-lw-dark/50 mt-1 font-medium">{item.email}</div>
-                                            </td>
-                                            <td className="px-8 py-7">
-                                                {activeTab === "messages" ? (
-                                                    <div className="max-w-xs">
-                                                        <div className="font-bold text-sm text-lw-dark truncate">{item.subject}</div>
-                                                        <p className="text-[11px] text-lw-dark/40 font-medium italic mt-0.5 truncate">{item.message}</p>
-                                                    </div>
-                                                ) : (
-                                                    <span className="px-3 py-1 bg-lw-green/5 text-lw-green rounded-lg text-xs font-black uppercase tracking-widest">
-                                                        {item.position}
-                                                    </span>
-                                                )}
-                                            </td>
-                                            <td className="px-8 py-7">
-                                                <div className="flex items-center gap-2 text-lw-dark/50 font-bold text-xs">
-                                                    <Clock size={12} className="text-lw-green/40" />
-                                                    {item.createdAt || item.submittedAt ? new Date(item.createdAt || item.submittedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A'}
-                                                </div>
-                                            </td>
-                                            <td className="px-8 py-7" onClick={(e) => e.stopPropagation()}>
-                                                {activeTab === "messages" ? (
-                                                    <span className={`px-4 py-1.5 rounded-full text-[10px] items-center gap-2 inline-flex font-black uppercase tracking-widest ${item.status === 'replied' ? 'bg-green-500/10 text-green-700 border border-green-500/20' : 'bg-blue-500/10 text-blue-700 border border-blue-500/20'}`}>
-                                                        <span className={`w-1.5 h-1.5 rounded-full ${item.status === 'replied' ? 'bg-green-500' : 'bg-blue-500'}`}></span>
-                                                        {item.status}
-                                                    </span>
-                                                ) : (
-                                                    <select
-                                                        value={item.status || 'pending'}
-                                                        onChange={(e) => updateAppStatus(item.id, e.target.value)}
-                                                        onClick={(e) => e.stopPropagation()}
-                                                        className={`text-[10px] font-black uppercase tracking-widest border-none focus:ring-4 focus:ring-lw-green/10 rounded-full px-4 py-1.5 cursor-pointer appearance-none ${getStatusColor(item.status)}`}
-                                                    >
-                                                        <option value="pending">Pending</option>
-                                                        <option value="reviewing">Reviewing</option>
-                                                        <option value="accepted">Accepted</option>
-                                                        <option value="rejected">Rejected</option>
-                                                    </select>
-                                                )}
-                                            </td>
-                                            <td className="px-8 py-7" onClick={(e) => e.stopPropagation()}>
-                                                <div className="flex gap-2">
-                                                    <button
-                                                        onClick={() => { setSelectedItem(item); setShowReplyModal(true); }}
-                                                        className="p-3 bg-white/60 border border-black/5 hover:bg-lw-dark hover:text-white rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
-                                                        title="Send Email"
-                                                    >
-                                                        <Mail size={16} />
-                                                    </button>
-                                                    {activeTab === "messages" && item.status !== 'replied' && (
-                                                        <button
-                                                            onClick={() => markMessageReplied(item.id)}
-                                                            className="p-3 bg-white/60 border border-black/5 hover:bg-green-600 hover:text-white rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
-                                                            title="Mark as Replied"
-                                                        >
-                                                            <CheckCircle2 size={16} />
-                                                        </button>
-                                                    )}
-                                                    {activeTab === "applications" && (
-                                                        <>
-                                                            {item.resumeURL ? (
-                                                                <a
-                                                                    href={item.resumeURL}
-                                                                    target="_blank"
-                                                                    className="p-3 bg-white/60 border border-black/5 hover:bg-blue-600 hover:text-white rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
-                                                                    title="Open Resume Link"
-                                                                >
-                                                                    <Globe size={16} />
-                                                                </a>
-                                                            ) : (
-                                                                <div className="p-3 bg-black/5 text-lw-dark/30 rounded-2xl" title="PDF Attachment in Gmail">
-                                                                    <FileText size={16} />
-                                                                </div>
-                                                            )}
-                                                            {item.status !== "accepted" && item.status !== "rejected" && (
-                                                                <div className="flex gap-2 border-l border-black/10 pl-2">
-                                                                    <button
-                                                                        onClick={() => updateAppStatus(item.id, 'accepted')}
-                                                                        className="p-3 bg-white/60 border border-black/5 hover:bg-green-600 hover:text-white text-green-600 rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
-                                                                        title="Accept Application"
-                                                                    >
-                                                                        <CheckCircle2 size={16} />
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() => updateAppStatus(item.id, 'rejected')}
-                                                                        className="p-3 bg-white/60 border border-black/5 hover:bg-red-600 hover:text-white text-red-600 rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
-                                                                        title="Reject Application"
-                                                                    >
-                                                                        <XCircle size={16} />
-                                                                    </button>
-                                                                </div>
-                                                            )}
-                                                        </>
-                                                    )}
-                                                    <div className="border-l border-black/10 pl-2 ml-1">
-                                                        <button
-                                                            onClick={() => activeTab === 'applications' ? deleteApplication(item.id) : deleteMessage(item.id)}
-                                                            className="p-3 bg-white/60 border border-black/5 hover:bg-red-600 hover:text-white text-lw-dark/40 rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
-                                                            title="Delete Permanently"
-                                                        >
-                                                            <Trash2 size={16} />
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                    {filteredItems.length === 0 && (
-                                        <tr><td colSpan="5" className="px-8 py-20 text-center font-bold text-lw-dark/20 uppercase tracking-[0.3em]">No records found</td></tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </motion.div>
-                ) : null}
-            </main>
-
-            {/* View Details Modal */}
-            <Modal
-                isOpen={showViewModal}
-                onClose={() => setShowViewModal(false)}
-                title={activeTab === "messages" ? "Message Summary" : "Candidate Profile"}
-                className="shadow-[0_0_40px_rgba(250,204,21,0.5)]"
-            >
-                {selectedItem && (
-                    <div className="space-y-8 lg:space-y-10">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-                            <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Full Name</label>
-                                <p className="text-lg lg:text-xl font-black text-lw-dark tracking-tight">{selectedItem.name}</p>
-                            </div>
-                            <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Email Address</label>
-                                <p className="text-lg lg:text-xl font-black text-lw-dark truncate tracking-tight">{selectedItem.email}</p>
-                            </div>
-                        </div>
-
-                        {activeTab === "messages" ? (
-                            <>
-                                <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Subject Line</label>
-                                    <p className="text-lg lg:text-xl font-bold text-lw-dark tracking-tight">{selectedItem.subject}</p>
-                                </div>
-                                <div className="p-6 lg:p-8 bg-white/60 backdrop-blur-md rounded-[2.5rem] shadow-sm border border-white/60 transition-all hover:bg-white/80 group">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-3 block ml-1 group-hover:text-lw-green transition-colors font-sans">Message Body</label>
-                                    <p className="text-lw-dark text-base lg:text-lg italic leading-relaxed whitespace-pre-wrap">"{selectedItem.message}"</p>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-                                    <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Phone Number</label>
-                                        <p className="text-lg lg:text-xl font-black text-lw-dark tracking-tight">{selectedItem.phone}</p>
-                                    </div>
-                                    <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Desired Position</label>
-                                        <p className="text-lg lg:text-xl font-black text-lw-green tracking-tight">{selectedItem.position}</p>
-                                    </div>
-                                </div>
-                                {selectedItem.portfolio && (
-                                    <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Portfolio URL</label>
-                                        <a href={selectedItem.portfolio} target="_blank" className="text-base lg:text-lg font-bold text-blue-600 hover:underline flex items-center gap-2 truncate tracking-tight">
-                                            {selectedItem.portfolio.replace(/^https?:\/\//, '')} <ArrowUpRight size={16} />
-                                        </a>
-                                    </div>
-                                )}
-                                <div className="p-6 lg:p-8 bg-white/60 backdrop-blur-md rounded-[2.5rem] shadow-sm border border-white/60 transition-all hover:bg-white/80 group">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-3 block ml-1 group-hover:text-lw-green transition-colors font-sans">Cover Letter</label>
-                                    <p className="text-lw-dark text-base lg:text-lg leading-relaxed whitespace-pre-wrap italic">"{selectedItem.message}"</p>
-                                </div>
-                                <div className="pt-4 lg:pt-6">
-                                    {selectedItem.resumeURL ? (
-                                        <a
-                                            href={selectedItem.resumeURL}
-                                            target="_blank"
-                                            className="inline-flex items-center gap-3 px-8 lg:px-10 py-4 lg:py-5 bg-lw-dark text-white rounded-3xl font-black text-[10px] lg:text-sm uppercase tracking-widest hover:bg-lw-green transition-all shadow-xl shadow-lw-dark/10 hover:shadow-lw-green/20"
-                                        >
-                                            <Globe size={18} /> View Resume Link
-                                        </a>
-                                    ) : (
-                                        <div className="p-5 lg:p-6 bg-amber-50 rounded-3xl border border-amber-200 text-amber-800 flex items-center gap-4">
-                                            <AlertCircle className="text-amber-500" size={24} />
-                                            <div>
-                                                <p className="font-black text-xs uppercase tracking-widest">PDF Attachment</p>
-                                                <p className="text-sm font-bold opacity-80">This candidate's resume was sent directly to your Gmail inbox as a PDF attachment.</p>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </>
-                        )}
-                        <div className="pt-8 lg:pt-10 flex flex-col lg:flex-row justify-end gap-4 lg:gap-5 border-t border-black/5">
-                            <button
-                                onClick={() => { setShowViewModal(false); setShowReplyModal(true); }}
-                                className="w-full lg:w-auto px-10 py-5 bg-lw-green text-white rounded-[2rem] font-black text-[10px] lg:text-sm uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-xl shadow-lw-green/20"
-                            >
-                                Send Reply
-                            </button>
-                        </div>
-                    </div>
-                )}
-            </Modal>
-
-            {/* Reply Modal */}
-            <Modal
-                isOpen={showReplyModal}
-                onClose={() => setShowReplyModal(false)}
-                title={`Reply to ${selectedItem?.name}`}
-            >
-                {selectedItem && (
-                    <form onSubmit={handleSendReply} className="space-y-8 lg:space-y-10">
-                        <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Recipient Email</label>
-                            <p className="text-lg lg:text-xl font-black text-lw-dark tracking-tight">{selectedItem.email}</p>
-                        </div>
-                        <div className="space-y-4">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4 block font-sans">Craft Your Response</label>
-                            <textarea
-                                required
-                                rows={8}
-                                value={replyBody}
-                                onChange={(e) => setReplyBody(e.target.value)}
-                                className="w-full p-6 lg:p-8 bg-white/40 backdrop-blur-md border border-white/60 rounded-[2.5rem] outline-none focus:bg-white/60 focus:ring-8 focus:ring-lw-green/10 focus:border-lw-green/30 transition-all font-medium text-base lg:text-lg leading-relaxed shadow-inner"
-                                placeholder="Type your professional reply here..."
-                            />
-                        </div>
-                        <div className="flex flex-col-reverse lg:flex-row justify-end gap-4 lg:gap-5">
-                            <button
-                                type="button"
-                                onClick={() => setShowReplyModal(false)}
-                                className="px-10 py-5 text-lw-dark/40 font-black text-[10px] lg:text-sm uppercase tracking-widest hover:text-lw-dark transition-colors"
-                            >
-                                Discard
-                            </button>
-                            <button
-                                disabled={sendingEmail}
-                                type="submit"
-                                className="px-10 lg:px-12 py-5 bg-lw-dark text-white rounded-[2rem] font-black text-[10px] lg:text-sm uppercase tracking-widest hover:bg-lw-green transition-all shadow-xl shadow-lw-dark/10 hover:shadow-lw-green/20 disabled:opacity-50 flex items-center justify-center gap-3"
-                            >
-                                {sendingEmail ? (
-                                    <>
-                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                        <span>Dispatching...</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Mail size={18} />
-                                        <span>Transmit Reply</span>
-                                    </>
-                                )}
-                            </button>
-                        </div>
-                    </form>
-                )}
-            </Modal>
         </div>
-    );
+
+        {/* Background Blur Orbs */}
+        <div className="fixed top-[-10%] right-[-10%] w-[50%] h-[50%] bg-lw-green/10 blur-[120px] rounded-full z-0 animate-pulse"></div>
+        <div className="fixed bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-lw-saffron/5 blur-[100px] rounded-full z-0"></div>
+
+        <Sidebar
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            handleLogout={handleLogout}
+            isOpen={isSidebarOpen}
+            setIsOpen={setIsSidebarOpen}
+        />
+
+        <main className={`flex-1 transition-all duration-300 ${isSidebarOpen ? "lg:ml-72" : "lg:ml-72"} p-4 lg:p-10 overflow-x-hidden relative z-10`}>
+            <header className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-12 mt-16 lg:mt-0">
+                <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="flex items-center gap-4 w-full lg:w-auto"
+                >
+                    <button
+                        onClick={() => setIsSidebarOpen(true)}
+                        className="p-3 bg-white/40 backdrop-blur-md rounded-2xl lg:hidden active:scale-90 transition-all border border-black/5"
+                    >
+                        <MenuIcon size={24} />
+                    </button>
+                    <Link href="/" className="lg:hidden mx-auto">
+                        <Image
+                            src="/logo.png"
+                            alt="Lifewood"
+                            width={110}
+                            height={30}
+                            className="transition-transform duration-300 active:scale-105"
+                        />
+                    </Link>
+                    <div>
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lw-green/10 text-lw-green text-[10px] font-black uppercase tracking-widest mb-4">
+                            <span className="w-1.5 h-1.5 bg-lw-green rounded-full animate-pulse"></span>
+                            {activeTab === "overview" ? "Dashboard Stats" : "Admin Overview"}
+                        </div>
+                        <h2 className="text-4xl lg:text-5xl font-black tracking-tight text-lw-dark capitalize">
+                            {activeTab}
+                        </h2>
+                    </div>
+                </motion.div>
+
+                <div className="flex items-center gap-4 w-full lg:w-auto">
+                    <div className="relative group flex-1 lg:flex-none">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-lw-dark/30 group-focus-within:text-lw-green transition-colors" size={18} />
+                        <input
+                            type="text"
+                            placeholder="Search everything..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="pl-12 pr-6 py-4 bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl w-full lg:w-80 outline-none focus:bg-white focus:ring-4 focus:ring-lw-green/10 focus:border-lw-green/30 transition-all font-medium text-sm text-lw-dark placeholder-lw-dark/40 shadow-sm"
+                        />
+                    </div>
+                    <button
+                        onClick={fetchData}
+                        className="p-4 bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl text-lw-dark hover:bg-white hover:shadow-lg hover:shadow-black/5 transition-all group active:scale-95"
+                    >
+                        <RefreshCw size={20} className={loading ? "animate-spin text-lw-green" : "group-hover:rotate-180 transition-transform duration-500"} />
+                    </button>
+                </div>
+            </header>
+
+            {/* Overview Statistics */}
+            {activeTab === "overview" && (
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8 lg:mb-10"
+                >
+                    {[
+                        { title: "Total Messages", value: messages.length, icon: MessageSquare, color: "text-emerald-500", bg: "bg-emerald-500/15" },
+                        { title: "Pending Replies", value: messages.filter(m => m.status !== 'replied').length, icon: AlertCircle, color: "text-amber-500", bg: "bg-amber-500/15" },
+                        { title: "Total Applicants", value: applications.length, icon: Users, color: "text-sky-500", bg: "bg-sky-500/15" },
+                        { title: "Review Required", value: applications.filter(a => a.status === 'pending').length, icon: FileText, color: "text-rose-500", bg: "bg-rose-500/15" }
+                    ].map((stat, i) => (
+                        <div key={i} className="glass-surface bg-white/40 backdrop-blur-md p-6 lg:p-7 rounded-[2rem] border border-black/5 shadow-sm relative overflow-hidden group hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                            <div className={`absolute -right-6 -top-6 w-32 h-32 rounded-full ${stat.bg} blur-[60px] transition-all duration-700 group-hover:scale-150`}></div>
+                            <div className="flex justify-between items-start mb-6 relative z-10">
+                                <div className={`p-4 rounded-full ${stat.bg} ${stat.color} shadow-inner`}>
+                                    <stat.icon size={22} strokeWidth={2.5} />
+                                </div>
+                            </div>
+                            <div className="relative z-10">
+                                <div className="text-4xl lg:text-5xl font-black text-lw-dark tracking-tighter mb-2">
+                                    {loading ? <span className="animate-pulse">---</span> : stat.value}
+                                </div>
+                                <div className="text-[10px] font-black uppercase tracking-widest text-lw-dark/40">{stat.title}</div>
+                            </div>
+                        </div>
+                    ))}
+                </motion.div>
+            )}
+
+            {activeTab === "overview" && (
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-8"
+                >
+                    {/* Recent Messages */}
+                    <div className="glass-surface p-1 lg:p-2 rounded-[2.3rem] lg:rounded-[2.5rem] shadow-[0_0_40px_rgba(250,204,21,0.5)] border-white/40 overflow-hidden flex flex-col h-full bg-white/40 backdrop-blur-md">
+                        <div className="px-8 py-6 border-b border-black/5 flex justify-between items-center bg-white/30 rounded-t-[2rem]">
+                            <h3 className="text-xl font-black text-lw-dark">Recent Messages</h3>
+                            <button onClick={() => setActiveTab("messages")} className="text-xs font-bold text-lw-green hover:underline">View All</button>
+                        </div>
+                        <div className="p-4 flex-1">
+                            {messages.slice(0, 5).map(msg => (
+                                <div key={msg.id} className="p-4 border-b border-black/5 last:border-0 hover:bg-white/40 transition-colors rounded-xl flex justify-between items-start cursor-pointer" onClick={() => { setSelectedItem(msg); setShowViewModal(true); }}>
+                                    <div>
+                                        <div className="font-bold text-lw-dark">{msg.name}</div>
+                                        <div className="text-xs text-lw-dark/50 truncate max-w-[200px]">{msg.subject}</div>
+                                    </div>
+                                    <div className="text-[10px] font-bold text-lw-dark/40 bg-black/5 px-2 py-1 rounded-md">
+                                        {msg.createdAt || msg.submittedAt ? new Date(msg.createdAt || msg.submittedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '---'}
+                                    </div>
+                                </div>
+                            ))}
+                            {messages.length === 0 && <div className="text-center p-8 text-lw-dark/40 text-sm font-bold">No recent messages</div>}
+                        </div>
+                    </div>
+
+                    {/* Recent Applications */}
+                    <div className="glass-surface p-1 lg:p-2 rounded-[2.3rem] lg:rounded-[2.5rem] shadow-[0_0_40px_rgba(250,204,21,0.5)] border-white/40 overflow-hidden flex flex-col h-full bg-white/40 backdrop-blur-md">
+                        <div className="px-8 py-6 border-b border-black/5 flex justify-between items-center bg-white/30 rounded-t-[2rem]">
+                            <h3 className="text-xl font-black text-lw-dark">Recent Applications</h3>
+                            <button onClick={() => setActiveTab("applications")} className="text-xs font-bold text-lw-green hover:underline">View All</button>
+                        </div>
+                        <div className="p-4 flex-1">
+                            {applications.slice(0, 5).map(app => (
+                                <div key={app.id} className="p-4 border-b border-black/5 last:border-0 hover:bg-white/40 transition-colors rounded-xl flex justify-between items-start cursor-pointer" onClick={() => { setSelectedItem(app); setShowViewModal(true); }}>
+                                    <div>
+                                        <div className="font-bold text-lw-dark">{app.name}</div>
+                                        <div className="text-xs text-lw-green font-black uppercase tracking-wider">{app.position}</div>
+                                    </div>
+                                    <div className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md ${app.status === 'pending' ? 'bg-purple-500/10 text-purple-600' : app.status === 'accepted' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-black/5 text-lw-dark/40'}`}>
+                                        {app.status || 'pending'}
+                                    </div>
+                                </div>
+                            ))}
+                            {applications.length === 0 && <div className="text-center p-8 text-lw-dark/40 text-sm font-bold">No recent applications</div>}
+                        </div>
+                    </div>
+                </motion.div>
+            )}
+
+            {loading ? (
+                <div className="flex h-96 items-center justify-center">
+                    <div className="flex flex-col items-center gap-6">
+                        <div className="w-16 h-16 border-[6px] border-lw-green/20 border-t-lw-green rounded-full animate-spin"></div>
+                        <div className="text-sm font-black uppercase tracking-widest text-lw-green/40">Fetching Data...</div>
+                    </div>
+                </div>
+            ) : activeTab !== "overview" ? (
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="glass-surface p-1 lg:p-2 rounded-[2.3rem] lg:rounded-[2.5rem] shadow-[0_0_40px_rgba(250,204,21,0.5)] border-white/40 overflow-hidden"
+                >
+                    <div className="overflow-x-auto custom-scrollbar rounded-[2rem]">
+                        <table className="w-full text-left min-w-[700px]">
+                            <thead className="bg-black/[0.03] border-b border-black/5">
+                                <tr>
+                                    <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-lw-dark/40">Details</th>
+                                    <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-lw-dark/40">{activeTab === "messages" ? "Subject" : "Position"}</th>
+                                    <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-lw-dark/40">Timestamp</th>
+                                    <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-lw-dark/40">Status</th>
+                                    <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-lw-dark/40">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-black/5">
+                                {filteredItems.map((item) => (
+                                    <tr
+                                        key={item.id}
+                                        className="group hover:bg-white/40 transition-all cursor-pointer transition-colors"
+                                        onClick={() => { setSelectedItem(item); setShowViewModal(true); }}
+                                    >
+                                        <td className="px-8 py-7">
+                                            <div className="font-black text-lw-dark leading-tight">{item.name}</div>
+                                            <div className="text-xs text-lw-dark/50 mt-1 font-medium">{item.email}</div>
+                                        </td>
+                                        <td className="px-8 py-7">
+                                            {activeTab === "messages" ? (
+                                                <div className="max-w-xs">
+                                                    <div className="font-bold text-sm text-lw-dark truncate">{item.subject}</div>
+                                                    <p className="text-[11px] text-lw-dark/40 font-medium italic mt-0.5 truncate">{item.message}</p>
+                                                </div>
+                                            ) : (
+                                                <span className="px-3 py-1 bg-lw-green/5 text-lw-green rounded-lg text-xs font-black uppercase tracking-widest">
+                                                    {item.position}
+                                                </span>
+                                            )}
+                                        </td>
+                                        <td className="px-8 py-7">
+                                            <div className="flex items-center gap-2 text-lw-dark/50 font-bold text-xs">
+                                                <Clock size={12} className="text-lw-green/40" />
+                                                {item.createdAt || item.submittedAt ? new Date(item.createdAt || item.submittedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A'}
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-7" onClick={(e) => e.stopPropagation()}>
+                                            {activeTab === "messages" ? (
+                                                <span className={`px-4 py-1.5 rounded-full text-[10px] items-center gap-2 inline-flex font-black uppercase tracking-widest ${item.status === 'replied' ? 'bg-green-500/10 text-green-700 border border-green-500/20' : 'bg-blue-500/10 text-blue-700 border border-blue-500/20'}`}>
+                                                    <span className={`w-1.5 h-1.5 rounded-full ${item.status === 'replied' ? 'bg-green-500' : 'bg-blue-500'}`}></span>
+                                                    {item.status}
+                                                </span>
+                                            ) : (
+                                                <select
+                                                    value={item.status || 'pending'}
+                                                    onChange={(e) => updateAppStatus(item.id, e.target.value)}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    className={`text-[10px] font-black uppercase tracking-widest border-none focus:ring-4 focus:ring-lw-green/10 rounded-full px-4 py-1.5 cursor-pointer appearance-none ${getStatusColor(item.status)}`}
+                                                >
+                                                    <option value="pending">Pending</option>
+                                                    <option value="reviewing">Reviewing</option>
+                                                    <option value="accepted">Accepted</option>
+                                                    <option value="rejected">Rejected</option>
+                                                </select>
+                                            )}
+                                        </td>
+                                        <td className="px-8 py-7" onClick={(e) => e.stopPropagation()}>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => { setSelectedItem(item); setShowReplyModal(true); }}
+                                                    className="p-3 bg-white/60 border border-black/5 hover:bg-lw-dark hover:text-white rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
+                                                    title="Send Email"
+                                                >
+                                                    <Mail size={16} />
+                                                </button>
+                                                {activeTab === "messages" && item.status !== 'replied' && (
+                                                    <button
+                                                        onClick={() => markMessageReplied(item.id)}
+                                                        className="p-3 bg-white/60 border border-black/5 hover:bg-green-600 hover:text-white rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
+                                                        title="Mark as Replied"
+                                                    >
+                                                        <CheckCircle2 size={16} />
+                                                    </button>
+                                                )}
+                                                {activeTab === "applications" && (
+                                                    <>
+                                                        {item.resumeURL ? (
+                                                            <a
+                                                                href={item.resumeURL}
+                                                                target="_blank"
+                                                                className="p-3 bg-white/60 border border-black/5 hover:bg-blue-600 hover:text-white rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
+                                                                title="Open Resume Link"
+                                                            >
+                                                                <Globe size={16} />
+                                                            </a>
+                                                        ) : (
+                                                            <div className="p-3 bg-black/5 text-lw-dark/30 rounded-2xl" title="PDF Attachment in Gmail">
+                                                                <FileText size={16} />
+                                                            </div>
+                                                        )}
+                                                        {item.status !== "accepted" && item.status !== "rejected" && (
+                                                            <div className="flex gap-2 border-l border-black/10 pl-2">
+                                                                <button
+                                                                    onClick={() => updateAppStatus(item.id, 'accepted')}
+                                                                    className="p-3 bg-white/60 border border-black/5 hover:bg-green-600 hover:text-white text-green-600 rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
+                                                                    title="Accept Application"
+                                                                >
+                                                                    <CheckCircle2 size={16} />
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => updateAppStatus(item.id, 'rejected')}
+                                                                    className="p-3 bg-white/60 border border-black/5 hover:bg-red-600 hover:text-white text-red-600 rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
+                                                                    title="Reject Application"
+                                                                >
+                                                                    <XCircle size={16} />
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </>
+                                                )}
+                                                <div className="border-l border-black/10 pl-2 ml-1">
+                                                    <button
+                                                        onClick={() => activeTab === 'applications' ? deleteApplication(item.id) : deleteMessage(item.id)}
+                                                        className="p-3 bg-white/60 border border-black/5 hover:bg-red-600 hover:text-white text-lw-dark/40 rounded-2xl shadow-sm transition-all duration-300 active:scale-90"
+                                                        title="Delete Permanently"
+                                                    >
+                                                        <Trash2 size={16} />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {filteredItems.length === 0 && (
+                                    <tr><td colSpan="5" className="px-8 py-20 text-center font-bold text-lw-dark/20 uppercase tracking-[0.3em]">No records found</td></tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </motion.div>
+            ) : null}
+        </main>
+
+        {/* View Details Modal */}
+        <Modal
+            isOpen={showViewModal}
+            onClose={() => setShowViewModal(false)}
+            title={activeTab === "messages" ? "Message Summary" : "Candidate Profile"}
+            className="shadow-[0_0_40px_rgba(250,204,21,0.5)]"
+        >
+            {selectedItem && (
+                <div className="space-y-8 lg:space-y-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                        <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Full Name</label>
+                            <p className="text-lg lg:text-xl font-black text-lw-dark tracking-tight">{selectedItem.name}</p>
+                        </div>
+                        <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Email Address</label>
+                            <p className="text-lg lg:text-xl font-black text-lw-dark truncate tracking-tight">{selectedItem.email}</p>
+                        </div>
+                    </div>
+
+                    {activeTab === "messages" ? (
+                        <>
+                            <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Subject Line</label>
+                                <p className="text-lg lg:text-xl font-bold text-lw-dark tracking-tight">{selectedItem.subject}</p>
+                            </div>
+                            <div className="p-6 lg:p-8 bg-white/60 backdrop-blur-md rounded-[2.5rem] shadow-sm border border-white/60 transition-all hover:bg-white/80 group">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-3 block ml-1 group-hover:text-lw-green transition-colors font-sans">Message Body</label>
+                                <p className="text-lw-dark text-base lg:text-lg italic leading-relaxed whitespace-pre-wrap">"{selectedItem.message}"</p>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                                <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Phone Number</label>
+                                    <p className="text-lg lg:text-xl font-black text-lw-dark tracking-tight">{selectedItem.phone}</p>
+                                </div>
+                                <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Desired Position</label>
+                                    <p className="text-lg lg:text-xl font-black text-lw-green tracking-tight">{selectedItem.position}</p>
+                                </div>
+                            </div>
+                            {selectedItem.portfolio && (
+                                <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Portfolio URL</label>
+                                    <a href={selectedItem.portfolio} target="_blank" className="text-base lg:text-lg font-bold text-blue-600 hover:underline flex items-center gap-2 truncate tracking-tight">
+                                        {selectedItem.portfolio.replace(/^https?:\/\//, '')} <ArrowUpRight size={16} />
+                                    </a>
+                                </div>
+                            )}
+                            <div className="p-6 lg:p-8 bg-white/60 backdrop-blur-md rounded-[2.5rem] shadow-sm border border-white/60 transition-all hover:bg-white/80 group">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-3 block ml-1 group-hover:text-lw-green transition-colors font-sans">Cover Letter</label>
+                                <p className="text-lw-dark text-base lg:text-lg leading-relaxed whitespace-pre-wrap italic">"{selectedItem.message}"</p>
+                            </div>
+                            <div className="pt-4 lg:pt-6">
+                                {selectedItem.resumeURL ? (
+                                    <a
+                                        href={selectedItem.resumeURL}
+                                        target="_blank"
+                                        className="inline-flex items-center gap-3 px-8 lg:px-10 py-4 lg:py-5 bg-lw-dark text-white rounded-3xl font-black text-[10px] lg:text-sm uppercase tracking-widest hover:bg-lw-green transition-all shadow-xl shadow-lw-dark/10 hover:shadow-lw-green/20"
+                                    >
+                                        <Globe size={18} /> View Resume Link
+                                    </a>
+                                ) : (
+                                    <div className="p-5 lg:p-6 bg-amber-50 rounded-3xl border border-amber-200 text-amber-800 flex items-center gap-4">
+                                        <AlertCircle className="text-amber-500" size={24} />
+                                        <div>
+                                            <p className="font-black text-xs uppercase tracking-widest">PDF Attachment</p>
+                                            <p className="text-sm font-bold opacity-80">This candidate's resume was sent directly to your Gmail inbox as a PDF attachment.</p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </>
+                    )}
+                    <div className="pt-8 lg:pt-10 flex flex-col lg:flex-row justify-end gap-4 lg:gap-5 border-t border-black/5">
+                        <button
+                            onClick={() => { setShowViewModal(false); setShowReplyModal(true); }}
+                            className="w-full lg:w-auto px-10 py-5 bg-lw-green text-white rounded-[2rem] font-black text-[10px] lg:text-sm uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-xl shadow-lw-green/20"
+                        >
+                            Send Reply
+                        </button>
+                    </div>
+                </div>
+            )}
+        </Modal>
+
+        {/* Reply Modal */}
+        <Modal
+            isOpen={showReplyModal}
+            onClose={() => setShowReplyModal(false)}
+            title={`Reply to ${selectedItem?.name}`}
+        >
+            {selectedItem && (
+                <form onSubmit={handleSendReply} className="space-y-8 lg:space-y-10">
+                    <div className="p-5 lg:p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm transition-all hover:bg-white/60 group">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block ml-1 group-hover:text-lw-green transition-colors font-sans">Recipient Email</label>
+                        <p className="text-lg lg:text-xl font-black text-lw-dark tracking-tight">{selectedItem.email}</p>
+                    </div>
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4 block font-sans">Craft Your Response</label>
+                        <textarea
+                            required
+                            rows={8}
+                            value={replyBody}
+                            onChange={(e) => setReplyBody(e.target.value)}
+                            className="w-full p-6 lg:p-8 bg-white/40 backdrop-blur-md border border-white/60 rounded-[2.5rem] outline-none focus:bg-white/60 focus:ring-8 focus:ring-lw-green/10 focus:border-lw-green/30 transition-all font-medium text-base lg:text-lg leading-relaxed shadow-inner"
+                            placeholder="Type your professional reply here..."
+                        />
+                    </div>
+                    <div className="flex flex-col-reverse lg:flex-row justify-end gap-4 lg:gap-5">
+                        <button
+                            type="button"
+                            onClick={() => setShowReplyModal(false)}
+                            className="px-10 py-5 text-lw-dark/40 font-black text-[10px] lg:text-sm uppercase tracking-widest hover:text-lw-dark transition-colors"
+                        >
+                            Discard
+                        </button>
+                        <button
+                            disabled={sendingEmail}
+                            type="submit"
+                            className="px-10 lg:px-12 py-5 bg-lw-dark text-white rounded-[2rem] font-black text-[10px] lg:text-sm uppercase tracking-widest hover:bg-lw-green transition-all shadow-xl shadow-lw-dark/10 hover:shadow-lw-green/20 disabled:opacity-50 flex items-center justify-center gap-3"
+                        >
+                            {sendingEmail ? (
+                                <>
+                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                    <span>Dispatching...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Mail size={18} />
+                                    <span>Transmit Reply</span>
+                                </>
+                            )}
+                        </button>
+                    </div>
+                </form>
+            )}
+        </Modal>
+    </div>
+);
 }
 
 function ArrowUpRight({ size, className }) {
