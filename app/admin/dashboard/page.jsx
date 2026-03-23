@@ -22,7 +22,8 @@ import {
     RefreshCw,
     Search,
     Menu as MenuIcon,
-    Trash2
+    Trash2,
+    Globe
 } from "lucide-react";
 
 const Sidebar = ({ activeTab, setActiveTab, handleLogout, isOpen, setIsOpen }) => {
