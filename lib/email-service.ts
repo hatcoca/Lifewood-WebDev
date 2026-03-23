@@ -292,7 +292,7 @@ export async function sendApplicationStatusUpdate(data: {
     </div>
   ` : `
     <div style="color: #2d3748; line-height: 1.8;">
-      <p style="font-size: 18px; font-weight: 700; color: #1a202c; margin-bottom: 20px;">Hello ${data.fullName.split(' ')[0]},</p>
+      <p style="font-size: 18px; font-weight: 700; color: #1a202c; margin-bottom: 20px;">Hi ${data.fullName.split(' ')[0]},</p>
       <p style="font-size: 16px; margin-bottom: 25px;">
         Thank you very much for your interest in the <strong>${data.position}</strong> position at Lifewood and for the time you spent sharing your background with us.
       </p>

@@ -44,19 +44,23 @@ export async function PATCH(request: Request) {
         }
 
         const appData = appDoc.data();
+        console.log(`Updating application ${id} status to: ${status}`);
+
         await db.collection("applications").doc(id).update({ status });
 
         // Trigger email notification if status is accepted or rejected
         if (status === "accepted" || status === "rejected") {
             try {
+                console.log(`Attempting to send ${status} email to: ${appData?.email}`);
                 await sendApplicationStatusUpdate({
                     fullName: appData?.name || "Candidate",
                     email: appData?.email,
                     position: appData?.position || "the requested position",
                     status: status as "accepted" | "rejected"
                 });
+                console.log(`Successfully sent ${status} email to: ${appData?.email}`);
             } catch (emailErr) {
-                console.error("Failed to send status update email:", emailErr);
+                console.error(`Failed to send ${status} email to ${appData?.email}:`, emailErr);
                 // We don't return error here because the DB update was successful
             }
         }
