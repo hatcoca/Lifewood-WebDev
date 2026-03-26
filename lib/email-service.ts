@@ -145,6 +145,7 @@ export async function sendContactNotification(data: {
   };
 
   await transporter.sendMail(mailOptions);
+  console.log(`STMP: Contact notification sent to admin for ${data.email}`);
 }
 
 export async function sendApplicationNotification(data: {
@@ -328,3 +329,44 @@ export async function sendApplicationStatusUpdate(data: {
 }
 
 
+export async function sendContactConfirmation(data: {
+  name: string;
+  email: string;
+  subject: string;
+}) {
+  const htmlContent = `
+    <div style="color: #2d3748; line-height: 1.8;">
+      <p style="font-size: 18px; font-weight: 700; color: #1a202c; margin-bottom: 25px;">Hi ${data.name.split(' ')[0]},</p>
+      
+      <p style="font-size: 16px; margin-bottom: 25px;">
+        Thank you for reaching out to Lifewood! We've received your message regarding <strong>"${data.subject}"</strong> and wanted to let you know that our team is already on it.
+      </p>
+      
+      <div style="background-color: #f7fafc; border-radius: 16px; padding: 25px; border: 1px solid #e2e8f0; margin-bottom: 30px;">
+        <p style="margin: 0; color: #4a5568; font-size: 14px; line-height: 1.6;">
+          <strong>What's next?</strong><br/>
+          One of our representatives will review your inquiry and get back to you within 1-2 business days. We appreciate your patience and interest in our data solutions.
+        </p>
+      </div>
+
+      <p style="font-size: 15px; color: #4a5568; margin-bottom: 35px;">
+        In the meantime, feel free to explore our <a href="https://lifewood.com/services" style="color: ${BRAND_COLOR}; text-decoration: none; font-weight: 600;">latest services</a> and case studies on our website.
+      </p>
+
+      <div style="padding: 30px; background-color: #f7fafc; border-radius: 16px; border-left: 6px solid ${BRAND_COLOR};">
+        <p style="margin: 0; font-weight: 600; color: #4a5568; font-size: 15px;">Best regards,</p>
+        <p style="margin: 8px 0 0 0; font-weight: 800; color: ${BRAND_COLOR}; font-size: 16px;">The Lifewood Team</p>
+      </div>
+    </div>
+  `;
+
+  const mailOptions = {
+    from: `"Lifewood Support" <${process.env.EMAIL_USER}>`,
+    to: data.email,
+    subject: `We've received your message: ${data.subject}`,
+    html: getEmailTemplate("Thank You for Contacting Us", htmlContent),
+  };
+
+  await transporter.sendMail(mailOptions);
+  console.log(`STMP: Contact confirmation sent to user ${data.email}`);
+}

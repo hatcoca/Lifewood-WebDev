@@ -33,7 +33,7 @@ export default function ContactPage() {
       const data = await response.json();
 
       if (response.ok) {
-        setStatus({ type: "success", message: "Message sent successfully! Check your email for confirmation." });
+        setStatus({ type: "success", message: data.message || "Message sent successfully! Check your email for confirmation." });
         setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
         // If the API returned specific validation errors, show the first one

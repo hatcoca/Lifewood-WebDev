@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import { getFirestore } from "@/lib/firebaseAdmin";
-import { sendContactNotification } from "@/lib/email-service";
+import { sendContactNotification, sendContactConfirmation } from "@/lib/email-service";
 
 export async function GET() {
   try {
@@ -51,16 +51,25 @@ export async function POST(request: Request) {
     const db = getFirestore();
     await db.collection("contacts").add(submission);
 
-    // Send Email Notification
+    // Send Email Notifications
     try {
+      // 1. Notify Admin
       await sendContactNotification(submission);
+
+      // 2. Confirm to User (NEW)
+      await sendContactConfirmation({
+        name: submission.name,
+        email: submission.email,
+        subject: submission.subject
+      });
     } catch (emailError) {
-      console.error("Failed to send contact email notification:", emailError);
+      console.error("Failed to send contact email notifications:", emailError);
+      // We don't fail the request if emails fail, but we log it
     }
 
     return NextResponse.json({
       success: true,
-      message: "Thank you for reaching out! We will get back to you within 1-2 business days.",
+      message: "Message sent successfully! Check your email for confirmation.",
     });
   } catch (error: any) {
     console.error("Contact API Error:", error);
